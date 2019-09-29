@@ -390,6 +390,8 @@ class MySceneGraph {
         //At least one view
         if (numViews == 0)
             return "at least one view must be defined";
+        else if (numViews > 8)
+            this.onXMLMinorError("too many views defined; WebGL imposes a limit of 8 views");
 
         this.log("Parsed views");
         return null;
@@ -572,24 +574,28 @@ class MySceneGraph {
             var textureId = this.reader.getString(children[i], 'id');
             if (textureId == null)
                 return "no ID defined for texture";
-            // Checks for repeated IDs.
-            if (this.textures[textureId] != null)
-                return "ID must be unique for each view (conflict: ID = " + textureId + ")";
+            // Checks for repeated IDs. 
+            if (this.textures[textureId] != null) //NOT WORKING
+                return "ID must be unique for each texture (conflict: ID = " + textureId + ")";
 
-            //get texture file ink 
+            // Get texture file ink 
             var file = this.reader.getString(children[i], 'file');
             if (file == null)
-                return "no ID defined for texture";
-            // Checks for repeated IDs.
-            if (this.textures[file] != null)
-                return "ID must be unique for each view (conflict: ID = " + file + ")";
+                return "no file defined for texture";
+            // Checks for repeated files.
+            if (this.textures[file] != null) //NOT WORKING
+                return "file name must be unique for each texture (conflict: Name = " + file + ")";
 
-            //TODO CHECK FILE
+            //Check if it is a valid file
+            if (file.length < 4)
+                return "invalid file";
+            var extension = file.substring(file.length-4);
+            if (extension != ".jpg" && extension != ".png")
+                return "invalid file: " + extension;
+
             aux.push(...[textureId, file]);
             this.textures.push(aux);
         }
-
-        console.log(this.textures);
 
         this.log("Parsed textures");
 
