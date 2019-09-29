@@ -2,58 +2,57 @@
  * MySphere
  * @constructor
  * @param scene - Reference to MyScene object
- * @param x - Scale of rectangle in X
- * @param y - Scale of rectangle in Y
+ * @param radius - Radius of the sphere
+ * @param slices - Number of divisions around axis
+ * @param stacks - Number of divisions between poles
  */
 class MySphere extends CGFobject {
-	constructor(scene, id, x1, x2, y1, y2) {
+	constructor(scene, id, radius, slices, stacks) {
 		super(scene);
-		this.x1 = x1;
-		this.x2 = x2;
-		this.y1 = y1;
-		this.y2 = y2;
+		this.radius = radius;
+		this.slices = slices;
+		this.stacks = stacks;
 
 		this.initBuffers();
 	}
 	
 	initBuffers() {
-		this.vertices = [
-			this.x1, this.y1, 0,	//0
-			this.x2, this.y1, 0,	//1
-			this.x1, this.y2, 0,	//2
-			this.x2, this.y2, 0		//3
-		];
+		var d_theta = (Math.PI/2)/this.slices;
+		var d_phi = (2*Math.PI)/this.stacks;
 
-		//Counter-clockwise reference of vertices
-		this.indices = [
-			0, 1, 2,
-			1, 3, 2
-		];
+		var theta = 0;
+		var phi = 0;
 
-		//Facing Z positive
-		this.normals = [
-			0, 0, 1,
-			0, 0, 1,
-			0, 0, 1,
-			0, 0, 1
-		];
-		
-		/*
-		Texture coords (s,t)
-		+----------> s
-        |
-        |
-		|
-		v
-        t
-        */
+		this.vertices = [];
+		this.normals = [];
+		this.indices = [];
 
-		this.texCoords = [
-			0, 1,
-			1, 1,
-			0, 0,
-			1, 0
-		]
+		for (var i = 0; i < this.slices; i++) {
+			for (var j = 0; j < this.stacks; j++) {
+
+				//Normals
+				var nx = Math.cos(theta)*Math.cos(phi);
+				var ny = Math.cos(theta)*Math.sin(phi);
+				var nz = Math.sin(theta);
+
+				//Coordinates
+				var x = this.radius*nx;
+				var y = this.radius*ny;
+				var z = this.radius*nz;
+
+				//Storing values
+				this.vertices.push(x, y, z);
+				this.normals.push(nx, ny, nz);
+
+				//Preparing next iteration
+				theta += d_theta;
+			}
+
+			//Preparing next iteration
+			phi += d_phi;
+		}
+
+		this.texCoords = []
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	}
