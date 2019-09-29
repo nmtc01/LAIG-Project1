@@ -223,159 +223,179 @@ class MySceneGraph {
     }
 
 
-    /**
+/**
      * Parses the <views> block.
      * @param {view block element} viewsNode
      */
     parseView(viewsNode) {
+
         //Get view id
-        this.views = [];
-        var children = viewsNode.children;
-
-        var idDefaultView = this.reader.getString(viewsNode, "default");
-
+        var idDefaultView = this.reader.getString(viewsNode, 'default')
         if (idDefaultView == null)
             return "no view defined for scene";
 
+        //Get views
+        this.views = [];
+        var children = viewsNode.children;
         var grandChildren = [];
-        var nodeNames = [];
 
+        //Any number of views
         var numViews = 0;
-
-        //Any number of views 
         for (var i = 0; i < children.length; i++) {
 
-            //Storing view info 
-            var global = [];
-            var attributeNames = [];
-            var attributeTypes = [];
+            //View info
+            var view_info = [];
 
-            if (children[i].nodeName != "perspective" && children[i].nodeName != "ortho") {
+            //Get name of the current view
+            if (children[i].nodeName != "perspective" && children[i] != "ortho") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
             }
-            else {
-                attributeNames.push(...["from", "to"]);
-                attributeTypes.push(...["position", "position"]);
-            }
 
-            // Get id of the current view.
+            //Get id of the current view
             var viewId = this.reader.getString(children[i], 'id');
             if (viewId == null)
                 return "no ID defined for view";
-            // Checks for repeated IDs.
+            //Check for repeated ids
             if (this.views[viewId] != null)
                 return "ID must be unique for each view (conflict: ID = " + viewId + ")";
 
-            //get view near and far 
+            //Get view near and far
             var near = this.reader.getFloat(children[i], 'near');
             var far = this.reader.getFloat(children[i], 'far');
-
-            //check if near is smaller than far
+            //Check if far is greater than near
             if (near >= far)
                 return "Near must be smaller than far";
 
-            global.push(far);
-            global.push(near);
-            global.push(children[i].nodeName);
-            grandChildren = children[i].children;
+            //Storing info so far of general node
+            view_info.push(children[i].nodeName);
+            view_info.push(near);
+            view_info.push(far);
 
-            nodeNames = [];
-            for (var j = 0; j < grandChildren.length; j++) {
-                nodeNames.push(grandChildren[j].nodeName);
+            //Divind the storage in two different options of views
+            if (children[i].nodeName == "perspective"){
+
+                //Get view angle and store it
+                var angle = this.reader.getFloat(children[i], 'angle');
+                if (angle == null)
+                    return "no angle defined for view";
+                view_info.push(angle);
+
             }
+            else {
 
-            for (var j = 0; j < attributeNames.length; j++) {
-                var attributeIndex = nodeNames.indexOf(attributeNames[j]);
-
-                if (attributeIndex != -1) {
-                    if (attributeTypes[j] == "position")
-                        var aux = this.parseCoordinates3D(grandChildren[attributeIndex], "view position for ID" + viewId);
-
-                    if (!Array.isArray(aux))
-                        return aux;
-
-                    global.push(aux);
-                }
-                else
-                    return "view " + attributeNames[i] + " undefined for ID = " + viewId;
-            }
-            // Gets the additional attributes of the orthos view
-            if (children[i].nodeName == "orthos") {
+                //Get the additional attributes of the orthos view and store them
                 var left = this.reader.getFloat(children[i], 'left');
                 var right = this.reader.getFloat(children[i], 'right');
                 var top = this.reader.getFloat(children[i], 'top');
                 var bottom = this.reader.getFloat(children[i], 'bottom');
+                if (left == null || right == null || top == null || bottom == null)
+                    return "missing attributes on ortho view";
+                view_info.push(...[left, right, top, bottom]);
 
-                for (var j = 0; j < grandChildren.length; j++) {
-                    if (grandChildren[j].nodeName == "up") {
-                        var upIndex = nodeNames.indexOf("up");
+            }
+            
+            //Get view grandChildren info
+            grandChildren = children[i].children;
+            var nodeNames = [];
+            var attributes = [];
+            var last_name = "";
+            var up_attribute = [];
 
-                        // Retrieves the orthos view up.
-                        var upView = [];
-                        if (upIndex != -1) {
-                            var aux = this.parseCoordinates3D(grandChildren[upIndex], "up view for ID " + viewId);
-                            if (!Array.isArray(aux))
-                                return aux;
+            for (var j = 0; j < grandChildren.length; j++){
 
-                            upView = aux;
+                //Get grandChild name
+                var name = grandChildren[j].nodeName;
+                if (name == null) {
+                    this.onXMLMinorError("unknown tag <" + grandChildren[j].nodeName + ">");
+                    continue;
+                }
+
+                //Checking correct order
+                switch(name){
+                    case "from":
+                    {
+                        if (last_name == "") {
+
+                            //Get Attributes
+                            var position = this.parseCoordinates3D(grandChildren[j], "view position for ID" + viewId);
+
+                            nodeNames.push(name);
+                            attributes.push(position);
+
+                            last_name = "from";
                         }
-                        else
-                            return "light target undefined for ID = " + viewId;
+                        else {
+                            nodeNames = [];
+                            attributes = [];
+                            return "Incorrect order of tags";
+                        }
                         break;
                     }
+                    case "to":
+                    {
+                        if (last_name == "from") {
+                            
+                            //Get Attributes
+                            var position = this.parseCoordinates3D(grandChildren[j], "view position for ID" + viewId);
+
+                            nodeNames.push(name);
+                            attributes.push(position);
+
+                            last_name = "to";
+
+                            if (children[i].nodeName == "ortho")
+                                up_attribute.push(...[0, 1, 0]);
+                        }
+                        else {
+                            nodeNames = [];
+                            attributes = [];
+                            return "Incorrect order of tags";
+                        }
+                        break;
+                    }
+                    case "up":
+                    {
+                        if (last_name == "to" && children[i].nodeName == "ortho") {
+
+                            //Get Attributes
+                            up_attribute = this.parseCoordinates3D(grandChildren[j], "view position for ID" + viewId);
+
+                            nodeNames.push(name);
+                            attributes.push(up_attribute);
+
+                            last_name = "up";
+                        }
+                        else {
+                            nodeNames = [];
+                            attributes = [];
+                            return "Incorrect order of tags";
+                        }
+                        break;
+                    }
+                    default:
+                        this.onXMLMinorError("unknown tag <" + grandChildren[j].nodeName + ">");
+                        break;
                 }
-                global.push(...[left, right, top, bottom, upView])
             }
-            this.views[viewId] = global;
+
+            //Store info
+            view_info.push(nodeNames);
+            view_info.push(attributes);
+
+            //Store view
+            this.views[viewId] = view_info;
             numViews++;
         }
 
+        //At least one view
         if (numViews == 0)
             return "at least one view must be defined";
-        else if (numViews > 8)
-            this.onXMLMinorError("too many views defined; WebGL imposes a limit of 8 views"); //TODO
-
 
         this.log("Parsed views");
         return null;
     }
 
-    /**
-     * Parses the <ambient> node.
-     * @param {ambient block element} ambientsNode
-     */
-    parseAmbient(ambientsNode) {
-
-        var children = ambientsNode.children;
-
-        this.ambient = [];
-        this.background = [];
-
-        var nodeNames = [];
-
-        for (var i = 0; i < children.length; i++)
-            nodeNames.push(children[i].nodeName);
-
-        var ambientIndex = nodeNames.indexOf("ambient");
-        var backgroundIndex = nodeNames.indexOf("background");
-
-        var color = this.parseColor(children[ambientIndex], "ambient");
-        if (!Array.isArray(color))
-            return color;
-        else
-            this.ambient = color;
-
-        color = this.parseColor(children[backgroundIndex], "background");
-        if (!Array.isArray(color))
-            return color;
-        else
-            this.background = color;
-
-        this.log("Parsed ambient");
-
-        return null;
-    }
 
     /**
      * Parses the <light> node.
@@ -1015,7 +1035,7 @@ class MySceneGraph {
 
                 },
                 children:{
-                    primitiveID, 
+                    //primitiveID, 
                     componentref
                 }
             }
