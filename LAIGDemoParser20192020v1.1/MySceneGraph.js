@@ -564,6 +564,8 @@ class MySceneGraph {
 
         for (var i = 0; i < children.length; i++) {
 
+            var aux = []; //to store texture info
+
             if (children[i].nodeName != "texture") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
@@ -572,28 +574,33 @@ class MySceneGraph {
             var textureId = this.reader.getString(children[i], 'id');
             if (textureId == null)
                 return "no ID defined for texture";
-            // Checks for repeated IDs. 
-            if (this.textures[textureId] != null) 
-                return "ID must be unique for each texture (conflict: ID = " + textureId + ")";
 
             // Get texture file ink 
             var file = this.reader.getString(children[i], 'file');
             if (file == null)
                 return "no file defined for texture";
+
             // Checks for repeated files.
-            if (this.textures[file] != null) 
-                return "file name must be unique for each texture (conflict: Name = " + file + ")";
+            for (var k = 0; k < this.textures.length; k++) {
+                var id = this.textures[k][0];
+                var f = this.textures[k][1];
+                if (this.textures[k][0] == textureId) 
+                    return "ID must be unique for each texture (conflict: ID = " + textureId + ")";
+                if (this.textures[k][1] == file)
+                    return "file name must be unique for each texture (conflict: Name = " + file + ")";
+            }
 
             //Check if it is a valid file
             if (file.length < 4)
                 return "invalid file";
             var extension = file.substring(file.length-4);
             if (extension != ".jpg" && extension != ".png")
-                return "invalid file: " + extension;
+                return "invalid file extension: " + file;
 
-            this.textures[textureId] = file;
+            aux.push(...[textureId, file]);
+            this.textures.push(aux);
         }
-        
+
         this.log("Parsed textures");
 
         return null;
