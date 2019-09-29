@@ -565,6 +565,7 @@ class MySceneGraph {
         for (var i = 0; i < children.length; i++) {
 
             var aux = []; //to store texture info
+            var valid = true; //valid texture
 
             if (children[i].nodeName != "texture") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
@@ -591,24 +592,34 @@ class MySceneGraph {
             }
 
             //Check if it is a valid file
-            if (file.length < 4)
-                return "invalid file";
+            if (file.length < 4) {
+                this.onXMLMinorError("invalid file: " + file);
+                valid = false;
+            }
             var extension = file.substring(file.length-4);
-            if (extension != ".jpg" && extension != ".png")
-                return "invalid file extension: " + file;
+            if (extension != ".jpg" && extension != ".png" && valid) {
+                this.onXMLMinorError("invalid file extension: " + file);
+                valid = false;
+            }
 
             //Check if file exists
-            var xhr = new XMLHttpRequest();
-            xhr.open('HEAD', file, false);
-            xhr.send();
+            if (valid) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('HEAD', file, false);
+                xhr.send();
              
-            if (xhr.status == "404") {
-                this.onXMLMinorError("unexisting file: " + file);
-            } 
-            else {
+                if (xhr.status == "404") {
+                    this.onXMLMinorError("unexisting file: " + file);
+                    valid = false;
+                } 
+            }
+
+            //Store valid texture
+            if (valid) {
                 aux.push(...[textureId, file]);
                 this.textures.push(aux);
             }
+            
         }
 
         this.log("Parsed textures");
