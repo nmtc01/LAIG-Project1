@@ -34,6 +34,9 @@ class MySceneGraph {
         this.axisCoords['y'] = [0, 1, 0];
         this.axisCoords['z'] = [0, 0, 1];
 
+        //utilities for compoents 
+        this.newTransformationID = 0;
+
         // File reading 
         this.reader = new CGFXMLreader();
 
@@ -272,7 +275,7 @@ class MySceneGraph {
             view_info.push(far);
 
             //Divind the storage in two different options of views
-            if (children[i].nodeName == "perspective"){
+            if (children[i].nodeName == "perspective") {
 
                 //Get view angle and store it
                 var angle = this.reader.getFloat(children[i], 'angle');
@@ -293,7 +296,7 @@ class MySceneGraph {
                 view_info.push(...[left, right, top, bottom]);
 
             }
-            
+
             //Get view grandChildren info
             grandChildren = children[i].children;
             var nodeNames = [];
@@ -301,7 +304,7 @@ class MySceneGraph {
             var last_name = "";
             var up_attribute = [];
 
-            for (var j = 0; j < grandChildren.length; j++){
+            for (var j = 0; j < grandChildren.length; j++) {
 
                 //Get grandChild name
                 var name = grandChildren[j].nodeName;
@@ -311,67 +314,67 @@ class MySceneGraph {
                 }
 
                 //Checking correct order
-                switch(name){
+                switch (name) {
                     case "from":
-                    {
-                        if (last_name == "") {
+                        {
+                            if (last_name == "") {
 
-                            //Get Attributes
-                            var position = this.parseCoordinates3D(grandChildren[j], "view position for ID" + viewId);
+                                //Get Attributes
+                                var position = this.parseCoordinates3D(grandChildren[j], "view position for ID" + viewId);
 
-                            nodeNames.push(name);
-                            attributes.push(position);
+                                nodeNames.push(name);
+                                attributes.push(position);
 
-                            last_name = "from";
+                                last_name = "from";
+                            }
+                            else {
+                                nodeNames = [];
+                                attributes = [];
+                                return "Incorrect order of tags";
+                            }
+                            break;
                         }
-                        else {
-                            nodeNames = [];
-                            attributes = [];
-                            return "Incorrect order of tags";
-                        }
-                        break;
-                    }
                     case "to":
-                    {
-                        if (last_name == "from") {
-                            
-                            //Get Attributes
-                            var position = this.parseCoordinates3D(grandChildren[j], "view position for ID" + viewId);
+                        {
+                            if (last_name == "from") {
 
-                            nodeNames.push(name);
-                            attributes.push(position);
+                                //Get Attributes
+                                var position = this.parseCoordinates3D(grandChildren[j], "view position for ID" + viewId);
 
-                            last_name = "to";
+                                nodeNames.push(name);
+                                attributes.push(position);
 
-                            if (children[i].nodeName == "ortho")
-                                up_attribute.push(...[0, 1, 0]);
+                                last_name = "to";
+
+                                if (children[i].nodeName == "ortho")
+                                    up_attribute.push(...[0, 1, 0]);
+                            }
+                            else {
+                                nodeNames = [];
+                                attributes = [];
+                                return "Incorrect order of tags";
+                            }
+                            break;
                         }
-                        else {
-                            nodeNames = [];
-                            attributes = [];
-                            return "Incorrect order of tags";
-                        }
-                        break;
-                    }
                     case "up":
-                    {
-                        if (last_name == "to" && children[i].nodeName == "ortho") {
+                        {
+                            if (last_name == "to" && children[i].nodeName == "ortho") {
 
-                            //Get Attributes
-                            up_attribute = this.parseCoordinates3D(grandChildren[j], "view position for ID" + viewId);
+                                //Get Attributes
+                                up_attribute = this.parseCoordinates3D(grandChildren[j], "view position for ID" + viewId);
 
-                            nodeNames.push(name);
-                            attributes.push(up_attribute);
+                                nodeNames.push(name);
+                                attributes.push(up_attribute);
 
-                            last_name = "up";
+                                last_name = "up";
+                            }
+                            else {
+                                nodeNames = [];
+                                attributes = [];
+                                return "Incorrect order of tags";
+                            }
+                            break;
                         }
-                        else {
-                            nodeNames = [];
-                            attributes = [];
-                            return "Incorrect order of tags";
-                        }
-                        break;
-                    }
                     default:
                         this.onXMLMinorError("unknown tag <" + grandChildren[j].nodeName + ">");
                         break;
@@ -397,10 +400,10 @@ class MySceneGraph {
         return null;
     }
 
-     /**
-     * Parses the <ambient> node.
-     * @param {ambient block element} ambientsNode
-     */
+    /**
+    * Parses the <ambient> node.
+    * @param {ambient block element} ambientsNode
+    */
     parseAmbient(ambientsNode) {
 
         var children = ambientsNode.children;
@@ -585,7 +588,7 @@ class MySceneGraph {
             for (var k = 0; k < this.textures.length; k++) {
                 var id = this.textures[k][0];
                 var f = this.textures[k][1];
-                if (this.textures[k][0] == textureId) 
+                if (this.textures[k][0] == textureId)
                     return "ID must be unique for each texture (conflict: ID = " + textureId + ")";
                 if (this.textures[k][1] == file)
                     return "file name must be unique for each texture (conflict: Name = " + file + ")";
@@ -596,7 +599,7 @@ class MySceneGraph {
                 this.onXMLMinorError("invalid file: " + file);
                 valid = false;
             }
-            var extension = file.substring(file.length-4);
+            var extension = file.substring(file.length - 4);
             if (extension != ".jpg" && extension != ".png" && valid) {
                 this.onXMLMinorError("invalid file extension: " + file);
                 valid = false;
@@ -607,11 +610,11 @@ class MySceneGraph {
                 var xhr = new XMLHttpRequest();
                 xhr.open('HEAD', file, false);
                 xhr.send();
-             
+
                 if (xhr.status == "404") {
                     this.onXMLMinorError("unexisting file: " + file);
                     valid = false;
-                } 
+                }
             }
 
             //Store valid texture
@@ -619,11 +622,10 @@ class MySceneGraph {
                 aux.push(...[textureId, file]);
                 this.textures.push(aux);
             }
-            
+
         }
 
         this.log("Parsed textures");
-
         return null;
     }
 
@@ -668,7 +670,6 @@ class MySceneGraph {
                 return "Shininess of the appearance. MUST BE positive, non-zero ( shininess : " + shininess + ")";
 
             global.push(...[materialID, shininess]);
-
             grandChildren = children[i].children;
 
             nodeNames = [];
@@ -692,13 +693,9 @@ class MySceneGraph {
             }
             this.materials[materialID] = global;
         }
-
-        console.log(this.materials);
-
         this.log("Parsed materials");
         return null;
     }
-
     /**
      * Parses the <transformations> block.
      * @param {transformations block element} transformationsNode
@@ -730,48 +727,45 @@ class MySceneGraph {
             grandChildren = children[i].children;
             // Specifications for the current transformation.
 
+            //create unit matrix 
             var transfMatrix = mat4.create();
+            //var transfMatrix = mat4.identity(); 
 
             for (var j = 0; j < grandChildren.length; j++) {
+
                 switch (grandChildren[j].nodeName) {
                     case 'translate':
                         var coordinates = this.parseCoordinates3D(grandChildren[j], "translate transformation for ID " + transformationID);
                         if (!Array.isArray(coordinates))
                             return coordinates;
-
+                        console.log("ola");
                         transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
                         break;
                     case 'scale':
                         var coordinates = this.parseCoordinates3D(grandChildren[j], "translate transformation for ID " + transformationID);
                         if (!Array.isArray(coordinates))
                             return coordinates;
+
                         transfMatrix = mat4.scale(transfMatrix, transfMatrix, coordinates);
+
                         break;
                     case 'rotate':
                         var axis = this.reader.getString(grandChildren[j], 'axis');
                         if (axis != "x" && axis != "y" && axis != "z")
                             return "invalid rotation axis";
-                        switch (axis) {
-                            case 'x':
-                                var axis_matrix = [1, 0, 0] //TODO VER SE ISTO É CORRETO!
-                                break;
-                            case 'y':
-                                var axis_matrix = [0, 1, 0]
-                                break;
-                            case 'z':
-                                var axis_matrix = [0, 0, 1]
-                                break;
-                        }
-
+                       
                         var angle = this.reader.getFloat(grandChildren[j], 'angle');
-                        transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, axis_matrix);
+                        transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, this.axisCoords[axis]);
                         break;
                 }
+                console.log(transfMatrix);
             }
+
             this.transformations[transformationID] = transfMatrix;
         }
 
         this.log("Parsed transformations");
+        //this.log(this.transformations);
         return null;
     }
 
@@ -899,7 +893,7 @@ class MySceneGraph {
                     //if (!(x2 != null && !isNaN(x2) && y2 > y1))
                     // return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
 
-                    var triangle = new MyTringle(this.scene, primitiveId, x1, x2, x3, y1, y2 ,y3, z1, z2, z3);
+                    var triangle = new MyTringle(this.scene, primitiveId, x1, x2, x3, y1, y2, y3, z1, z2, z3);
 
                     this.primitives[primitiveId] = triangle;
 
@@ -1015,6 +1009,9 @@ class MySceneGraph {
         var grandgrandChildren = [];
         var nodeNames = [];
 
+        //TODO check for the root 
+        //TODO define tranformationrefID?
+
         // Any number of components.
         for (var i = 0; i < children.length; i++) {
 
@@ -1035,52 +1032,84 @@ class MySceneGraph {
             grandChildren = children[i].children;
 
             nodeNames = [];
+
+            //process grandchilder ramifications 
             for (var j = 0; j < grandChildren.length; j++) {
                 nodeNames.push(grandChildren[j].nodeName);
             }
 
+            //save component infos
             var transformationIndex = nodeNames.indexOf("transformation");
             var materialsIndex = nodeNames.indexOf("materials");
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
 
             this.onXMLMinorError("To do: Parse components.");
-            // Transformations -- Obrigatorio - deve conter uma ref de transf anterior
-            if(transformationIndex != -1){
-                grandgrandChildren = grandChildren[transformationIndex].children;
-                for( var k = 0; k < grandgrandChildren.length; k++){
-                    if(grandgrandChildren[k].nodeName == 'transformationref'){
-                        //TODO check if it exists
-                        var transformationref = this.reader.getString(grandgrandChildren[i],'id');
-                        break; 
-                    }else{
-                        //create a new transformation 
-                        console.log("criar nova tranformacao"); 
-                    }
-                }
+            // Transformations -- Bloco pode ficar sem conteudo
+            grandgrandChildren = grandChildren[transformationIndex].children;
+            
+            if (grandgrandChildren[0].nodeName == "transformationref") {
+                var transformationRefID = this.getString(grandgrandChildren[0], 'id');
+                //check if that reference exists 
+                if (this.transformations[transformationRefID] == null)
+                    return "Tranformation id does has not been declared";
+                transformationRefID=this.newTransformationID;
+            } else {
+                //create new tranformation
+                console.log("criar nova tranformacao");
 
-            }else return "Component must have at leats onde texture";
+                this.newTransformationID++;
+                var mat = mat4.create();
+
+                 for (var j = 0;  j < grandgrandChildren.length; j++) {
+                    //if is a reference, save the ref name 
+                    switch (grandgrandChildren[j].nodeName) {
+                        case 'translate':
+                            var coordinates = this.parseCoordinates3D(grandgrandChildren[j], "translate transformation for ID " + this.newTransformationID);
+                            if (!Array.isArray(coordinates))
+                                return coordinates;
+                            mat = mat4.translate(mat, mat, coordinates);
+                            break;
+                        case 'scale':
+                            var coordinates = this.parseCoordinates3D(grandgrandChildren[j], "translate transformation for ID " + this.ewTransformationID);
+                            if (!Array.isArray(coordinates))
+                                return coordinates;
+                            mat = mat4.scale(mat, mat, coordinates);
+                            break;
+                        case 'rotate':
+                            var axis = this.reader.getString(grandgrandChildren[j], 'axis');
+                            if (axis != "x" && axis != "y" && axis != "z")
+                                return "invalid rotation axis";
+                            var angle = this.reader.getFloat(grandgrandChildren[j], 'angle');
+                            mat = mat4.rotate(mat, mat, angle, this.axisCoords[axis]);
+                    }
+                    console.log(mat);
+
+                    this.transformations[this.newTransformationID] = mat;
+                    transformationRefID = this.newTransformationID;
+                }
+            }
             // Materials -- Obrigatorio 
-            if(materialsIndex != -1){
+            if (materialsIndex != -1) {
                 grandgrandChildren = grandChildren[materialsIndex].children;
-                var component_materials=[]; 
-                for( var k = 0; k <grandgrandChildren.length; k++){
-                    if(grandgrandChildren[k].nodeName != 'material')
+                var component_materials = [];
+                for (var k = 0; k < grandgrandChildren.length; k++) {
+                    if (grandgrandChildren[k].nodeName != 'material')
                         return "Material child should be caled <material/>"
-                    var materialID = this.reader.getString(grandgrandChildren[k],'id')
+                    var materialID = this.reader.getString(grandgrandChildren[k], 'id')
 
                     //IF MATERIAL IS INHERITABLE 
-                    if(materialID == 'inherit' ){
+                    if (materialID == 'inherit') {
                         //TODO CHECK IF INHERITABLE
                         //LATER IT CAN BE CHANGED FOR THE FATHER MATERIAL 
                         //EVENTUALLY DIRECTLY INPUTED INTO THE STRUCTURE 
-                        component_materials=[]; 
-                        component_materials.push(materialID); 
-                        break; 
+                        component_materials = [];
+                        component_materials.push(materialID);
+                        break;
                     }
-                    
+
                     //USED TO ITERATE THROUGH THE m/M KEYS TO CHANGE MAT
-                    component_materials[k]=materialID; 
+                    component_materials[k] = materialID;
 
                 }
             }
@@ -1090,9 +1119,9 @@ class MySceneGraph {
             // Children
 
             //store the data and pass it as a structure into the array 
-            const component = { // node 
+            const component = { //node 
                 componentID,
-                transformationref,
+                transformationRefID,
                 component_materials,
                 texture: {
 
@@ -1102,7 +1131,7 @@ class MySceneGraph {
                     componentref
                 }*/
             }
-            this.components[component.componentID]= component;
+            this.components[component.componentID] = component;
         }
     }
 
