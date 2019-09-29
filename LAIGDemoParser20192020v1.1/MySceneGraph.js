@@ -765,7 +765,6 @@ class MySceneGraph {
 
                         var angle = this.reader.getFloat(grandChildren[j], 'angle');
                         transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, axis_matrix);
-                        console.log(transfMatrix);
                         break;
                 }
             }
