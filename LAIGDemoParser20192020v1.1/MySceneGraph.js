@@ -753,7 +753,7 @@ class MySceneGraph {
                         var axis = this.reader.getString(grandChildren[j], 'axis');
                         if (axis != "x" && axis != "y" && axis != "z")
                             return "invalid rotation axis";
-                       
+
                         var angle = this.reader.getFloat(grandChildren[j], 'angle');
                         transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, this.axisCoords[axis]);
                         break;
@@ -1044,85 +1044,82 @@ class MySceneGraph {
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
 
-            this.onXMLMinorError("To do: Parse components.");
+
             // Transformations -- Bloco pode ficar sem conteudo
-            grandgrandChildren = grandChildren[transformationIndex].children;
-            
-            if (grandgrandChildren[0].nodeName == "transformationref") {
-                var transformationRefID = this.getString(grandgrandChildren[0], 'id');
-                //check if that reference exists 
-                if (this.transformations[transformationRefID] == null)
-                    return "Tranformation id does has not been declared";
-                transformationRefID=this.newTransformationID;
-            } else {
-                //create new tranformation
-                console.log("criar nova tranformacao");
+            if (transformationIndex != -1) {
+                grandgrandChildren = grandChildren[transformationIndex].children;
 
-                this.newTransformationID++;
-                var mat = mat4.create();
-
-                 for (var j = 0;  j < grandgrandChildren.length; j++) {
-                    //if is a reference, save the ref name 
-                    switch (grandgrandChildren[j].nodeName) {
-                        case 'translate':
-                            var coordinates = this.parseCoordinates3D(grandgrandChildren[j], "translate transformation for ID " + this.newTransformationID);
-                            if (!Array.isArray(coordinates))
-                                return coordinates;
-                            mat = mat4.translate(mat, mat, coordinates);
-                            break;
-                        case 'scale':
-                            var coordinates = this.parseCoordinates3D(grandgrandChildren[j], "translate transformation for ID " + this.ewTransformationID);
-                            if (!Array.isArray(coordinates))
-                                return coordinates;
-                            mat = mat4.scale(mat, mat, coordinates);
-                            break;
-                        case 'rotate':
-                            var axis = this.reader.getString(grandgrandChildren[j], 'axis');
-                            if (axis != "x" && axis != "y" && axis != "z")
-                                return "invalid rotation axis";
-                            var angle = this.reader.getFloat(grandgrandChildren[j], 'angle');
-                            mat = mat4.rotate(mat, mat, angle, this.axisCoords[axis]);
-                    }
-                    console.log(mat);
-
-                    this.transformations[this.newTransformationID] = mat;
+                if (grandgrandChildren[0].nodeName == "transformationref") {
+                    var transformationRefID = this.getString(grandgrandChildren[0], 'id');
+                    //check if that reference exists 
+                    if (this.transformations[transformationRefID] == null)
+                        return "Tranformation id does has not been declared";
                     transformationRefID = this.newTransformationID;
+                } else {
+                    //create new tranformation
+                    console.log("criar nova tranformacao");
+
+                    this.newTransformationID++;
+                    var mat = mat4.create();
+
+                    for (var j = 0; j < grandgrandChildren.length; j++) {
+                        //if is a reference, save the ref name 
+                        switch (grandgrandChildren[j].nodeName) {
+                            case 'translate':
+                                var coordinates = this.parseCoordinates3D(grandgrandChildren[j], "translate transformation for ID " + this.newTransformationID);
+                                if (!Array.isArray(coordinates))
+                                    return coordinates;
+                                mat = mat4.translate(mat, mat, coordinates);
+                                break;
+                            case 'scale':
+                                var coordinates = this.parseCoordinates3D(grandgrandChildren[j], "translate transformation for ID " + this.ewTransformationID);
+                                if (!Array.isArray(coordinates))
+                                    return coordinates;
+                                mat = mat4.scale(mat, mat, coordinates);
+                                break;
+                            case 'rotate':
+                                var axis = this.reader.getString(grandgrandChildren[j], 'axis');
+                                if (axis != "x" && axis != "y" && axis != "z")
+                                    return "invalid rotation axis";
+                                var angle = this.reader.getFloat(grandgrandChildren[j], 'angle');
+                                mat = mat4.rotate(mat, mat, angle, this.axisCoords[axis]);
+                        }
+                        console.log(mat);
+
+                        this.transformations[this.newTransformationID] = mat;
+                        transformationRefID = this.newTransformationID;
+                    }
                 }
-            }
+            }else return "tranformation module not declared";
             // Materials -- Obrigatorio 
             if (materialsIndex != -1) {
                 grandgrandChildren = grandChildren[materialsIndex].children;
                 var component_materials = [];
+
                 for (var k = 0; k < grandgrandChildren.length; k++) {
                     if (grandgrandChildren[k].nodeName != 'material')
                         return "Material child should be caled <material/>"
                     var materialID = this.reader.getString(grandgrandChildren[k], 'id')
-
                     //IF MATERIAL IS INHERITABLE 
                     if (materialID == 'inherit') {
-                        //TODO CHECK IF INHERITABLE
-                        //LATER IT CAN BE CHANGED FOR THE FATHER MATERIAL 
-                        //EVENTUALLY DIRECTLY INPUTED INTO THE STRUCTURE 
-                        component_materials = [];
+                        //TODO if root doesnt work
                         component_materials.push(materialID);
-                        break;
                     }
-
-                    //USED TO ITERATE THROUGH THE m/M KEYS TO CHANGE MAT
-                    component_materials[k] = materialID;
-
+                    if(this.materials[materialID] == null){
+                        return "material declared doesnt exist";
+                    }else component_materials.push(materialID);
                 }
-            }
+            }else return "materials module not declared";
             // Texture -- Obrigatorio
-
+           
 
             // Children
 
             //store the data and pass it as a structure into the array 
             const component = { //node 
                 componentID,
-                transformationRefID,
                 component_materials,
+                transformationRefID,
                 texture: {
 
                 },
