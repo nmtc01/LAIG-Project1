@@ -222,8 +222,7 @@ class MySceneGraph {
         return null;
     }
 
-
-/**
+    /**
      * Parses the <views> block.
      * @param {view block element} viewsNode
      */
@@ -391,6 +390,8 @@ class MySceneGraph {
         //At least one view
         if (numViews == 0)
             return "at least one view must be defined";
+        else if (numViews > 8)
+            this.onXMLMinorError("too many views defined; WebGL imposes a limit of 8 views");
 
         this.log("Parsed views");
         return null;
@@ -563,7 +564,7 @@ class MySceneGraph {
 
         for (var i = 0; i < children.length; i++) {
 
-            var aux = []; //to store tex info
+            var aux = []; //to store texture info
 
             if (children[i].nodeName != "texture") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
@@ -573,24 +574,32 @@ class MySceneGraph {
             var textureId = this.reader.getString(children[i], 'id');
             if (textureId == null)
                 return "no ID defined for texture";
-            // Checks for repeated IDs.
-            if (this.textures[textureId] != null)
-                return "ID must be unique for each view (conflict: ID = " + textureId + ")";
 
-            //get texture file ink 
+            // Get texture file ink 
             var file = this.reader.getString(children[i], 'file');
             if (file == null)
-                return "no ID defined for texture";
-            // Checks for repeated IDs.
-            if (this.textures[file] != null)
-                return "ID must be unique for each view (conflict: ID = " + file + ")";
+                return "no file defined for texture";
 
-            //TODO CHECK FILE
+            // Checks for repeated files.
+            for (var k = 0; k < this.textures.length; k++) {
+                var id = this.textures[k][0];
+                var f = this.textures[k][1];
+                if (this.textures[k][0] == textureId) 
+                    return "ID must be unique for each texture (conflict: ID = " + textureId + ")";
+                if (this.textures[k][1] == file)
+                    return "file name must be unique for each texture (conflict: Name = " + file + ")";
+            }
+
+            //Check if it is a valid file
+            if (file.length < 4)
+                return "invalid file";
+            var extension = file.substring(file.length-4);
+            if (extension != ".jpg" && extension != ".png")
+                return "invalid file extension: " + file;
+
             aux.push(...[textureId, file]);
             this.textures.push(aux);
         }
-
-        console.log(this.textures);
 
         this.log("Parsed textures");
 
@@ -740,7 +749,6 @@ class MySceneGraph {
                 }
             }
             this.transformations[transformationID] = transfMatrix;
-            console.log(this.transformations);
         }
 
         this.log("Parsed transformations");
@@ -1062,20 +1070,19 @@ class MySceneGraph {
             // Children
 
             //store the data and pass it as a structure into the array 
-            const component = {
+            const component = { // node 
                 componentID,
                 transformationref,
                 component_materials,
                 texture: {
 
                 },
-                children:{
-                    //primitiveID, 
-                    //componentref
-                }
+                /*children:{
+                    primitiveID, 
+                    componentref
+                }*/
             }
             this.components[component.componentID]= component;
-            console.log(this.components); 
         }
     }
 
@@ -1196,7 +1203,6 @@ class MySceneGraph {
      */
     displayScene() {
         //To do: Create display loop for transversing the scene graph
-
 
         //To test the parsing/creation of the primitives, call the display function directly
         this.primitives['demoRectangle'].display();
