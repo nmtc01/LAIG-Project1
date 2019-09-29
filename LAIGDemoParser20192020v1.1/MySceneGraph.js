@@ -564,8 +564,6 @@ class MySceneGraph {
 
         for (var i = 0; i < children.length; i++) {
 
-            var aux = []; //to store texture info
-
             if (children[i].nodeName != "texture") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
@@ -575,7 +573,7 @@ class MySceneGraph {
             if (textureId == null)
                 return "no ID defined for texture";
             // Checks for repeated IDs. 
-            if (this.textures[textureId] != null) //NOT WORKING
+            if (this.textures[textureId] != null) 
                 return "ID must be unique for each texture (conflict: ID = " + textureId + ")";
 
             // Get texture file ink 
@@ -583,7 +581,7 @@ class MySceneGraph {
             if (file == null)
                 return "no file defined for texture";
             // Checks for repeated files.
-            if (this.textures[file] != null) //NOT WORKING
+            if (this.textures[file] != null) 
                 return "file name must be unique for each texture (conflict: Name = " + file + ")";
 
             //Check if it is a valid file
@@ -593,10 +591,9 @@ class MySceneGraph {
             if (extension != ".jpg" && extension != ".png")
                 return "invalid file: " + extension;
 
-            aux.push(...[textureId, file]);
-            this.textures.push(aux);
+            this.textures[textureId] = file;
         }
-
+        
         this.log("Parsed textures");
 
         return null;
