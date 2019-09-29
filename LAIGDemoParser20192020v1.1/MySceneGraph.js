@@ -597,8 +597,18 @@ class MySceneGraph {
             if (extension != ".jpg" && extension != ".png")
                 return "invalid file extension: " + file;
 
-            aux.push(...[textureId, file]);
-            this.textures.push(aux);
+            //Check if file exists
+            var xhr = new XMLHttpRequest();
+            xhr.open('HEAD', file, false);
+            xhr.send();
+             
+            if (xhr.status == "404") {
+                this.onXMLMinorError("unexisting file: " + file);
+            } 
+            else {
+                aux.push(...[textureId, file]);
+                this.textures.push(aux);
+            }
         }
 
         this.log("Parsed textures");
