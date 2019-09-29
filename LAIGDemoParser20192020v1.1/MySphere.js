@@ -27,8 +27,8 @@ class MySphere extends CGFobject {
 		this.normals = [];
 		this.indices = [];
 
-		for (var i = 0; i < this.slices; i++) {
-			for (var j = 0; j < this.stacks; j++) {
+		for (var i = 0; i <= this.slices; i++) {
+			for (var j = 0; j <= this.stacks; j++) {
 
 				//Normals
 				var nx = Math.cos(theta)*Math.cos(phi);
@@ -43,13 +43,16 @@ class MySphere extends CGFobject {
 				//Storing values
 				this.vertices.push(x, y, z);
 				this.normals.push(nx, ny, nz);
+				this.indices.push((i+1)*(this.stacks+1) + j, i*(this.stacks+1) + j+1, i*(this.stacks+1) + j);
+				this.indices.push(i*(this.stacks+1) + j+1, (i+1)*(this.stacks+1) + j, (i+1)*(this.stacks+1) + j+1);
 
 				//Preparing next iteration
 				theta += d_theta;
 			}
 
 			//Preparing next iteration
-			phi += d_phi;
+			theta = 0;
+			phi += d_phi; 
 		}
 
 		this.texCoords = []

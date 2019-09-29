@@ -693,6 +693,7 @@ class MySceneGraph {
             }
             this.materials[materialID] = global;
         }
+
         this.log("Parsed materials");
         return null;
     }
@@ -947,13 +948,12 @@ class MySceneGraph {
                         return "unable to parse slices of the primitive coordinates for ID = " + primitiveId;
 
                     //stacks
-                    var stacks = this.reader.getInteger(grandChildren[0], 'staks');
+                    var stacks = this.reader.getInteger(grandChildren[0], 'stacks');
                     if (!(stacks != null && !isNaN(stacks)))
                         return "unable to parse stacks of the primitive coordinates for ID = " + primitiveId;
 
                     //TODO
-                    // var torus = new MySphere(this.scene, primitiveId, radius, slices, stacks);
-                    var sphere = new MySphere(this.scene, primitiveId, 0, 0, 0, 0);
+                    var sphere = new MySphere(this.scene, primitiveId, radius, slices, stacks);
 
                     this.primitives[primitiveId] = sphere;
 
@@ -1251,11 +1251,11 @@ class MySceneGraph {
         //To do: Create display loop for transversing the scene graph
 
         //To test the parsing/creation of the primitives, call the display function directly
-        this.primitives['demoRectangle'].display();
-        /*
-        this.primitives['myTriangle'].display();
-        this.primitives['myCylinder'].display();
+        //this.primitives['demoRectangle'].display();
+        
+        //this.primitives['myTriangle'].display();
+        //this.primitives['myCylinder'].display();
         this.primitives['mySphere'].display();
-        this.primitives['myTorus'].display();*/
+        //this.primitives['myTorus'].display();
     }
 }
