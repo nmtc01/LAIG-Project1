@@ -797,7 +797,7 @@ class MySceneGraph {
             // Get id of the current primitive.
             var primitiveId = this.reader.getString(children[i], 'id');
             if (primitiveId == null)
-                return "no ID defined for texture";
+                return "no ID defined for primitive";
 
             // Checks for repeated IDs.
             if (this.primitives[primitiveId] != null)
@@ -810,7 +810,7 @@ class MySceneGraph {
                 (grandChildren[0].nodeName != 'rectangle' && grandChildren[0].nodeName != 'triangle' &&
                     grandChildren[0].nodeName != 'cylinder' && grandChildren[0].nodeName != 'sphere' &&
                     grandChildren[0].nodeName != 'torus')) {
-                return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere or torus)"
+                return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere or torus)";
             }
 
             // Specifications for the current primitive.
