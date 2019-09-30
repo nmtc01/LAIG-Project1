@@ -43,9 +43,7 @@ class MySphere extends CGFobject {
 				//Storing values
 				this.vertices.push(x, y, z);
 				this.normals.push(nx, ny, nz);
-				this.indices.push((i+1)*(this.stacks+1) + j, i*(this.stacks+1) + j+1, i*(this.stacks+1) + j);
-				this.indices.push(i*(this.stacks+1) + j+1, (i+1)*(this.stacks+1) + j, (i+1)*(this.stacks+1) + j+1);
-
+				
 				//Preparing next iteration
 				theta += d_theta;
 			}
@@ -53,6 +51,17 @@ class MySphere extends CGFobject {
 			//Preparing next iteration
 			theta = 0;
 			phi += d_phi; 
+		}
+
+		for (var i = 0; i < this.slices; i++) {
+			for (var j = 0; j < this.stacks; j++) {
+				let p1 = i * (this.stacks+1) + j;
+				let p2 = p1 + (this.stacks+1);
+				//Storing indices
+				this.indices.push(
+					p1, p2, p1 + 1, p1 + 1, p2, p2 + 1
+				);
+			}
 		}
 
 		this.texCoords = []
