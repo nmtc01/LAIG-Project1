@@ -52,7 +52,7 @@
             <rectangle x1="-0.5" y1="-1" x2="0.5" y2="1" />
         </primitive>-->
         <primitive id="mySphere">
-            <sphere radius="1" slices="10" stacks="5" />
+            <sphere radius="1" slices="4" stacks="3" />
         </primitive>    
     </primitives>
 
