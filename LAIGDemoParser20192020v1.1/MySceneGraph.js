@@ -243,16 +243,15 @@ class MySceneGraph {
 
         //Any number of views
         var numViews = 0;
-        for (var i = 0; i < children.length; i++) {
 
-            //View info
-            var view_info = [];
+        for (var i = 0; i < children.length; i++) {
 
             //Get name of the current view
             if (children[i].nodeName != "perspective" && children[i] != "ortho") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
             }
+            var type = children[i].nodeName;
 
             //Get id of the current view
             var viewId = this.reader.getString(children[i], 'id');
@@ -269,11 +268,6 @@ class MySceneGraph {
             if (near >= far)
                 return "Near must be smaller than far";
 
-            //Storing info so far of general node
-            view_info.push(children[i].nodeName);
-            view_info.push(near);
-            view_info.push(far);
-
             //Divind the storage in two different options of views
             if (children[i].nodeName == "perspective") {
 
@@ -281,7 +275,6 @@ class MySceneGraph {
                 var angle = this.reader.getFloat(children[i], 'angle');
                 if (angle == null)
                     return "no angle defined for view";
-                view_info.push(angle);
 
             }
             else {
@@ -302,7 +295,7 @@ class MySceneGraph {
             var nodeNames = [];
             var attributes = [];
             var last_name = "";
-            var up_attribute = [];
+            var up = [];
 
             for (var j = 0; j < grandChildren.length; j++) {
 
@@ -320,10 +313,9 @@ class MySceneGraph {
                             if (last_name == "") {
 
                                 //Get Attributes
-                                var position = this.parseCoordinates3D(grandChildren[j], "view position for ID" + viewId);
+                                var from= this.parseCoordinates3D(grandChildren[j], "view position for ID" + viewId);
 
                                 nodeNames.push(name);
-                                attributes.push(position);
 
                                 last_name = "from";
                             }
@@ -339,15 +331,15 @@ class MySceneGraph {
                             if (last_name == "from") {
 
                                 //Get Attributes
-                                var position = this.parseCoordinates3D(grandChildren[j], "view position for ID" + viewId);
+                                var to = this.parseCoordinates3D(grandChildren[j], "view position for ID" + viewId);
 
                                 nodeNames.push(name);
-                                attributes.push(position);
+
 
                                 last_name = "to";
 
                                 if (children[i].nodeName == "ortho")
-                                    up_attribute.push(...[0, 1, 0]);
+                                    up.push(...[0, 1, 0]);
                             }
                             else {
                                 nodeNames = [];
@@ -361,10 +353,7 @@ class MySceneGraph {
                             if (last_name == "to" && children[i].nodeName == "ortho") {
 
                                 //Get Attributes
-                                up_attribute = this.parseCoordinates3D(grandChildren[j], "view position for ID" + viewId);
-
-                                nodeNames.push(name);
-                                attributes.push(up_attribute);
+                                var up = this.parseCoordinates3D(grandChildren[j], "view position for ID" + viewId);
 
                                 last_name = "up";
                             }
@@ -381,10 +370,40 @@ class MySceneGraph {
                 }
             }
 
-            //Store info
-            view_info.push(nodeNames);
-            view_info.push(attributes);
+            //we choose to switch this to an array like struct so that 
+            //it can easilly be understandable on array index manipulation
 
+            //Store info  const 
+            var view_info ={};
+            switch(children[i].nodeName){
+                case 'perspective':
+                      view_info = {
+                            viewId,
+                            type,
+                            near,
+                            far,
+                            angle,
+                            from,
+                            to
+                        }
+                    break;
+                case 'orthos':
+                    view_info = {
+                            viewId,
+                            type,
+                            near,
+                            far,
+                            left,
+                            right,
+                            top,
+                            bottom,
+                            from,
+                            to,
+                            up
+                        }
+                    break;
+            }
+    
             //Store view
             this.views[viewId] = view_info;
             numViews++;

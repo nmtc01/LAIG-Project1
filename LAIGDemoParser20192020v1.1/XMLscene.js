@@ -23,7 +23,7 @@ class XMLscene extends CGFscene {
 
         this.sceneInited = false;
 
-        this.initCameras();
+        this.initDefaultCamera();
 
         this.enableTextures(true);
 
@@ -36,30 +36,33 @@ class XMLscene extends CGFscene {
         this.setUpdatePeriod(100);
     }
 
+    initDefaultCamera(){
+         //default camera 
+        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+    }
     /**
      * Initializes the scene cameras.
      */
     initCameras() {
-        //default camera 
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
-        
+        //array to store enabled cameras, got from from views
         this.cameras = [];
-
-        var i = 0 ; 
         //TODO explode porque nao identifica views e nao consigo perceber porque...
-        for(var key in this.graph/*.views*/){
+        for(var key in this.graph.views){
             if (this.graph.views.hasOwnProperty(key)) {
-               var view = this.views[key];  
-               // if(this.view )
+               var view = this.graph.views[key];  
+               console.log(view.near);
 
+               //TODO contion to check if is an orho or perpestive camera, using type passed on the array
                 var auxCam = new CGFcamera(view.angle*DEGREE_TO_RAD,view.near,view.far, 
                     vec3.fromValues(...Object.values(view.from)), vec3.fromValues(...Object.values(view.to)));
-                
+               
+                    console.log(auxCam);
                     this.cameras.push(auxCam); 
             }
         }
+        
         if(this.cameras.length != 0 )
-            this.camera= this.cameras[0]; 
+            this.camera= this.cameras[0];       
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
@@ -123,6 +126,8 @@ class XMLscene extends CGFscene {
         this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
 
         this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
+
+        this.initCameras();
 
         this.initLights();
 
