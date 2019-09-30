@@ -17,28 +17,28 @@ class MySphere extends CGFobject {
 	}
 	
 	initBuffers() {
-		var d_theta = (Math.PI/2)/this.slices;
-		var d_phi = (2*Math.PI)/this.stacks;
+		let d_theta = (Math.PI/2)/this.slices;
+		let d_phi = (2*Math.PI)/this.stacks;
 
-		var theta = 0;
-		var phi = 0;
+		let theta = 0;
+		let phi = 0;
 
 		this.vertices = [];
 		this.normals = [];
 		this.indices = [];
 
-		for (var i = 0; i <= this.slices; i++) {
-			for (var j = 0; j <= this.stacks; j++) {
+		for (let i = 0; i <= this.slices; i++) {
+			for (let j = 0; j <= this.stacks; j++) {
 
 				//Normals
-				var nx = Math.cos(theta)*Math.cos(phi);
-				var ny = Math.cos(theta)*Math.sin(phi);
-				var nz = Math.sin(theta);
+				let nx = Math.cos(theta)*Math.cos(phi);
+				let ny = Math.cos(theta)*Math.sin(phi);
+				let nz = Math.sin(theta);
 
 				//Coordinates
-				var x = this.radius*nx;
-				var y = this.radius*ny;
-				var z = this.radius*nz;
+				let x = this.radius*nx;
+				let y = this.radius*ny;
+				let z = this.radius*nz;
 
 				//Storing values
 				this.vertices.push(x, y, z);
@@ -53,8 +53,8 @@ class MySphere extends CGFobject {
 			phi += d_phi; 
 		}
 
-		for (var i = 0; i < this.slices; i++) {
-			for (var j = 0; j < this.stacks; j++) {
+		for (let i = 0; i < this.slices; i++) {
+			for (let j = 0; j < this.stacks; j++) {
 				let p1 = i * (this.stacks+1) + j;
 				let p2 = p1 + (this.stacks+1);
 				//Storing indices
