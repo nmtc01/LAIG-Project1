@@ -1298,7 +1298,7 @@ class MySceneGraph {
 
         //this.primitives['myTriangle'].display();
         //this.primitives['myCylinder'].display();
-        //this.primitives['mySphere'].display();
+        this.primitives['mySphere'].display();
         //this.primitives['myTorus'].display();
     }
 }
