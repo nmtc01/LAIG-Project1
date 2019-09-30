@@ -620,7 +620,7 @@ class MySceneGraph {
             //Store valid texture
             if (valid) {
                 aux.push(...[textureId, file]);
-                this.textures.push(aux);
+                this.textures[textureId] = aux;
             }
 
         }
@@ -1057,8 +1057,6 @@ class MySceneGraph {
                     transformationRefID = this.newTransformationID;
                 } else {
                     //create new tranformation
-                    console.log("criar nova tranformacao");
-
                     this.newTransformationID++;
                     var mat = mat4.create();
 
@@ -1084,19 +1082,17 @@ class MySceneGraph {
                                 var angle = this.reader.getFloat(grandgrandChildren[j], 'angle');
                                 mat = mat4.rotate(mat, mat, angle, this.axisCoords[axis]);
                         }
-                        console.log(mat);
-
                         this.transformations[this.newTransformationID] = mat;
                         transformationRefID = this.newTransformationID;
                     }
                 }
-            }else return "tranformation module not declared";
+            } else return "tranformation block must be declared";
             // Materials -- Obrigatorio 
             if (materialsIndex != -1) {
                 grandgrandChildren = grandChildren[materialsIndex].children;
                 var component_materials = [];
 
-                for (var k = 0; k < grandgrandChildren.length; k++) {
+                for (let k = 0; k < grandgrandChildren.length; k++) {
                     if (grandgrandChildren[k].nodeName != 'material')
                         return "Material child should be caled <material/>"
                     var materialID = this.reader.getString(grandgrandChildren[k], 'id')
@@ -1105,15 +1101,59 @@ class MySceneGraph {
                         //TODO if root doesnt work
                         component_materials.push(materialID);
                     }
-                    if(this.materials[materialID] == null){
+                    if (this.materials[materialID] == null) {
                         return "material declared doesnt exist";
-                    }else component_materials.push(materialID);
+                    } else component_materials.push(materialID);
                 }
-            }else return "materials module not declared";
+            } else return "materials block must be declared";
             // Texture -- Obrigatorio
-           
+            if (textureIndex != -1) {
+
+                var textID = this.reader.getString(grandChildren[textureIndex], 'id');
+                if (textID != 'ihnerit' && textID != 'none') {
+                    if (this.textures[textID] == null)
+                        return "texture block must be declared";
+                }
+                var length_s = 0;
+                var length_t = 0;
+
+                if (this.reader.hasAttribute(grandChildren[textureIndex], 'length_s')) {
+                    length_s = this.reader.getFloat(grandChildren[textureIndex], 'length_s');
+                }
+
+                if (this.reader.hasAttribute(grandChildren[textureIndex], 'length_t')) {
+                    length_t = this.reader.getFloat(grandChildren[textureIndex], 'length_t');
+                }
+
+            } else return "texture module not declared"
 
             // Children
+            if (childrenIndex != -1) {
+
+                grandgrandChildren = grandChildren[childrenIndex].children;
+                if (grandgrandChildren.length == 0)
+                    return "Component - children, must have ate least one component/primitive ref"
+                var componentrefIDs = {};
+                var primitiverefIDs = {};
+
+                for (let k = 0; k < grandgrandChildren.length; k++) {
+                    var auxID = this.reader.getString(grandgrandChildren[k], 'id');
+                    switch (grandgrandChildren[k].nodeName) {
+                        case 'componentref':
+                            if (this.components[auxID] == null)
+                                return "Component refenced on component does not exist"
+                            componentrefIDs[auxID] = auxID;
+                            break;
+                        case 'primitiveref':
+                            if (this.primitives[auxID] == null)
+                                return "Primitive refenced  on component does not exist"
+                            primitiverefIDs[auxID]= auxID;
+                            break;
+                    }
+                }
+
+            } else "children block must be declared"
+
 
             //store the data and pass it as a structure into the array 
             const component = { //node 
@@ -1121,13 +1161,16 @@ class MySceneGraph {
                 component_materials,
                 transformationRefID,
                 texture: {
-
+                    textID,
+                    length_s,
+                    length_t
                 },
-                /*children:{
-                    primitiveID, 
-                    componentref
-                }*/
+                children: {
+                    componentrefIDs,
+                    primitiverefIDs
+                }
             }
+            console.log(component);
             this.components[component.componentID] = component;
         }
     }
@@ -1251,11 +1294,11 @@ class MySceneGraph {
         //To do: Create display loop for transversing the scene graph
 
         //To test the parsing/creation of the primitives, call the display function directly
-        //this.primitives['demoRectangle'].display();
-        
+        this.primitives['demoRectangle'].display();
+
         //this.primitives['myTriangle'].display();
         //this.primitives['myCylinder'].display();
-        this.primitives['mySphere'].display();
+        //this.primitives['mySphere'].display();
         //this.primitives['myTorus'].display();
     }
 }
