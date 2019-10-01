@@ -22,6 +22,7 @@ class MySphere extends CGFobject {
 
 		let theta = Math.PI/2;
 		let phi = 0;
+		let nr_vertices = 0;
 
 		this.vertices = [];
 		this.normals = [];
@@ -42,6 +43,7 @@ class MySphere extends CGFobject {
 
 				//Storing values
 				this.vertices.push(x, y, z);
+				nr_vertices++;
 				this.normals.push(nx, ny, nz);
 				
 				//Preparing next iteration
@@ -52,6 +54,7 @@ class MySphere extends CGFobject {
 			phi = 0;
 			theta += d_theta;
 		}
+		console.log("nr_vertices: " + nr_vertices);
 
 		for (let i = 0; i < 2*this.stacks; i++) {
 			for (let j = 0; j < this.slices; j++) {
@@ -63,6 +66,7 @@ class MySphere extends CGFobject {
 				);
 			}
 		}
+		console.log("indices: " + this.indices);
 
 		this.texCoords = []
 		this.primitiveType = this.scene.gl.TRIANGLES;
