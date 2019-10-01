@@ -54,7 +54,6 @@ class MySphere extends CGFobject {
 			phi = 0;
 			theta += d_theta;
 		}
-		console.log("nr_vertices: " + nr_vertices);
 
 		for (let i = 0; i < 2*this.stacks; i++) {
 			for (let j = 0; j < this.slices; j++) {
@@ -66,7 +65,6 @@ class MySphere extends CGFobject {
 				);
 			}
 		}
-		console.log("indices: " + this.indices);
 
 		this.texCoords = []
 		this.primitiveType = this.scene.gl.TRIANGLES;
