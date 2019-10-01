@@ -241,13 +241,14 @@ class MySceneGraph {
         var children = viewsNode.children;
         var grandChildren = [];
 
+        console.log(children);
         //Any number of views
         var numViews = 0;
 
         for (var i = 0; i < children.length; i++) {
 
             //Get name of the current view
-            if (children[i].nodeName != "perspective" && children[i] != "ortho") {
+            if (children[i].nodeName != "perspective" && children[i].nodeName != "ortho") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
             }
@@ -270,7 +271,6 @@ class MySceneGraph {
 
             //Divind the storage in two different options of views
             if (children[i].nodeName == "perspective") {
-
                 //Get view angle and store it
                 var angle = this.reader.getFloat(children[i], 'angle');
                 if (angle == null)
@@ -278,22 +278,18 @@ class MySceneGraph {
 
             }
             else {
-
-                //Get the additional attributes of the orthos view and store them
+                //Get the additional attributes of the ortho view and store them
                 var left = this.reader.getFloat(children[i], 'left');
                 var right = this.reader.getFloat(children[i], 'right');
                 var top = this.reader.getFloat(children[i], 'top');
                 var bottom = this.reader.getFloat(children[i], 'bottom');
                 if (left == null || right == null || top == null || bottom == null)
                     return "missing attributes on ortho view";
-                view_info.push(...[left, right, top, bottom]);
-
             }
 
             //Get view grandChildren info
             grandChildren = children[i].children;
             var nodeNames = [];
-            var attributes = [];
             var last_name = "";
             var up = [];
 
@@ -378,8 +374,8 @@ class MySceneGraph {
             switch(children[i].nodeName){
                 case 'perspective':
                       view_info = {
-                            viewId,
                             type,
+                            viewId,
                             near,
                             far,
                             angle,
@@ -387,10 +383,10 @@ class MySceneGraph {
                             to
                         }
                     break;
-                case 'orthos':
+                case 'ortho':
                     view_info = {
-                            viewId,
                             type,
+                            viewId,
                             near,
                             far,
                             left,
@@ -403,8 +399,7 @@ class MySceneGraph {
                         }
                     break;
             }
-    
-            //Store view
+            //Store views
             this.views[viewId] = view_info;
             numViews++;
         }
@@ -412,9 +407,7 @@ class MySceneGraph {
         //At least one view
         if (numViews == 0)
             return "at least one view must be defined";
-        else if (numViews > 8)
-            this.onXMLMinorError("too many views defined; WebGL imposes a limit of 8 views");
-
+    
         this.log("Parsed views");
         return null;
     }

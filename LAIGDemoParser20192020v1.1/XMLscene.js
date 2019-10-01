@@ -36,8 +36,8 @@ class XMLscene extends CGFscene {
         this.setUpdatePeriod(100);
     }
 
-    initDefaultCamera(){
-         //default camera 
+    initDefaultCamera() {
+        //default camera 
         this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
     }
     /**
@@ -47,22 +47,31 @@ class XMLscene extends CGFscene {
         //array to store enabled cameras, got from from views
         this.cameras = [];
         //TODO explode porque nao identifica views e nao consigo perceber porque...
-        for(var key in this.graph.views){
+        for (var key in this.graph.views) {
             if (this.graph.views.hasOwnProperty(key)) {
-               var view = this.graph.views[key];  
-               console.log(view.near);
-
-               //TODO contion to check if is an orho or perpestive camera, using type passed on the array
-                var auxCam = new CGFcamera(view.angle*DEGREE_TO_RAD,view.near,view.far, 
-                    vec3.fromValues(...Object.values(view.from)), vec3.fromValues(...Object.values(view.to)));
-               
-                    console.log(auxCam);
-                    this.cameras.push(auxCam); 
+                var view = this.graph.views[key];
+                console.log(view.type);
+                switch (view.type) {
+                    case ('perspective'):
+                        {
+                            var auxCam = new CGFcamera(view.angle * DEGREE_TO_RAD, view.near, view.far,
+                                vec3.fromValues(...Object.values(view.from)), vec3.fromValues(...Object.values(view.to)));
+                            this.cameras.push(auxCam);
+                            break;
+                        }
+                    case ('ortho'):
+                        {
+                            var auxCam = new CGFcameraOrtho(view.left, view.right, view.bottom, view.top, view.near, view.far, 
+                                vec3.fromValues(...Object.values(view.from)),  vec3.fromValues(...Object.values(view.to)),  vec3.fromValues(...Object.values(view.up)));
+                            this.cameras.push(auxCam);
+                            break;
+                        }
+                }
             }
         }
-        
-        if(this.cameras.length != 0 )
-            this.camera= this.cameras[0];       
+
+        if (this.cameras.length != 0)
+            this.camera = this.cameras[0];
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
@@ -103,11 +112,11 @@ class XMLscene extends CGFscene {
         }
     }
 
-    initTextures(){
-        this.textures=[]; 
-        for(var key in this.graph.textures){
+    initTextures() {
+        this.textures = [];
+        for (var key in this.graph.textures) {
             var texture = this.graph.textures[key];
-            this.textures.push(texture); 
+            this.textures.push(texture);
         }
     }
 
@@ -127,7 +136,7 @@ class XMLscene extends CGFscene {
 
         this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
 
-        //this.initCameras();
+        this.initCameras();
 
         this.initLights();
 
