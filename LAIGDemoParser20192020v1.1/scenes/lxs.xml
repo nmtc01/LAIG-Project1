@@ -77,10 +77,10 @@
     </transformations>
 
     <primitives>
+        <!--
         <primitive id="myRectangle">
             <rectangle x1="-0.5" y1="-1" x2="0.5" y2="1" />
         </primitive >
-        <!--
         <primitive id="myTriangle">
              <triangle   x1="ff" y1="ff" z1="ff"
                         x2="ff" y2="ff" z2="ff"

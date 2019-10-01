@@ -17,18 +17,18 @@ class MySphere extends CGFobject {
 	}
 	
 	initBuffers() {
-		let d_theta = (Math.PI/2)/this.slices;
-		let d_phi = (2*Math.PI)/this.stacks;
+		let d_phi = (2*Math.PI)/this.slices;
+		let d_theta = (Math.PI/2)/this.stacks;
 
-		let theta = 0;
+		let theta = Math.PI/2;
 		let phi = 0;
 
 		this.vertices = [];
 		this.normals = [];
 		this.indices = [];
 
-		for (let i = 0; i <= this.slices; i++) {
-			for (let j = 0; j <= this.stacks; j++) {
+		for (let i = 0; i <= 2*this.stacks; i++) {
+			for (let j = 0; j <= this.slices; j++) {
 
 				//Normals
 				let nx = Math.cos(theta)*Math.cos(phi);
@@ -45,18 +45,18 @@ class MySphere extends CGFobject {
 				this.normals.push(nx, ny, nz);
 				
 				//Preparing next iteration
-				theta += d_theta;
+				phi += d_phi;
 			}
 
 			//Preparing next iteration
-			theta = 0;
-			phi += d_phi; 
+			phi = 0;
+			theta += d_theta;
 		}
 
-		for (let i = 0; i < this.slices; i++) {
-			for (let j = 0; j < this.stacks; j++) {
-				let p1 = i * (this.stacks+1) + j;
-				let p2 = p1 + (this.stacks+1);
+		for (let i = 0; i < 2*this.stacks; i++) {
+			for (let j = 0; j < this.slices; j++) {
+				let p1 = i * (this.slices+1) + j;
+				let p2 = p1 + (this.slices+1);
 				//Storing indices
 				this.indices.push(
 					p1, p2, p1 + 1, p1 + 1, p2, p2 + 1
