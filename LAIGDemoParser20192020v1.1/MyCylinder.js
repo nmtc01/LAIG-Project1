@@ -1,4 +1,4 @@
-/**TODO
+/**
  * MyCylinder.js
  * @constructor
  * @param scene - Reference to MyScene object
@@ -26,6 +26,8 @@ class MyCylinder extends CGFobject {
 		this.vertices = [];
 		this.indices = [];
 		this.normals = [];
+
+		
 
 		this.texCoords = [];
 		this.primitiveType = this.scene.gl.TRIANGLES;
