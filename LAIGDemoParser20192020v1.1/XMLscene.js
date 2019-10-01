@@ -34,6 +34,12 @@ class XMLscene extends CGFscene {
 
         this.axis = new CGFaxis(this);
         this.setUpdatePeriod(100);
+
+        //interface utils
+
+        //save index of the selected item 
+        this.selectedLight = 0; 
+        this.selectedCamera = 0; 
     }
 
     initDefaultCamera() {
@@ -46,6 +52,7 @@ class XMLscene extends CGFscene {
     initCameras() {
         //array to store enabled cameras, got from from views
         this.cameras = [];
+        this.cameraIDs = [];
         //TODO explode porque nao identifica views e nao consigo perceber porque...
         for (var key in this.graph.views) {
             if (this.graph.views.hasOwnProperty(key)) {
@@ -57,6 +64,7 @@ class XMLscene extends CGFscene {
                             var auxCam = new CGFcamera(view.angle * DEGREE_TO_RAD, view.near, view.far,
                                 vec3.fromValues(...Object.values(view.from)), vec3.fromValues(...Object.values(view.to)));
                             this.cameras.push(auxCam);
+                            this.cameraIDs.push(view.viewId);
                             break;
                         }
                     case ('ortho'):
@@ -64,14 +72,21 @@ class XMLscene extends CGFscene {
                             var auxCam = new CGFcameraOrtho(view.left, view.right, view.bottom, view.top, view.near, view.far, 
                                 vec3.fromValues(...Object.values(view.from)),  vec3.fromValues(...Object.values(view.to)),  vec3.fromValues(...Object.values(view.up)));
                             this.cameras.push(auxCam);
+                            this.cameraIDs.push(view.viewId);
                             break;
                         }
                 }
             }
         }
 
-        if (this.cameras.length != 0)
-            this.camera = this.cameras[0];
+        if (this.cameras.length != 0){
+            this.selectedCamera = 0;
+            this.camera = this.cameras[this.selectedCamera];
+        }
+    }
+    //Update camera upon change on interface
+    updateCameras(val){
+        this.camera = this.cameras[val];
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
@@ -110,6 +125,10 @@ class XMLscene extends CGFscene {
                 i++;
             }
         }
+    }
+    //Update Lights upon change on interface
+    updateLights(){
+
     }
 
     initTextures() {

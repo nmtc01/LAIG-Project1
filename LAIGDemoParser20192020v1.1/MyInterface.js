@@ -21,8 +21,10 @@ class MyInterface extends CGFinterface {
         this.gui = new dat.GUI();
 
         // add a group of controls (and open/expand by defult)
-       // this.gui.add(this.scene, 'selectedView', this.scene.lightIDs).name('Select View')
-
+        // this.gui.add(this.scene, 'selectedView', this.scene.lightIDs).name('Select View')
+        this.gui.add(this.scene, 'selectedCamera', this.scene.cameraIDs)
+            .name('Select Camera: ')
+            .onChange(val => this.scene.updateCameras(val));
 
         this.initKeys();
 
@@ -33,19 +35,19 @@ class MyInterface extends CGFinterface {
      * initKeys
      */
 
-     //TODO - tecla m/M deve mudar os materials da cena 
+    //TODO - tecla m/M deve mudar os materials da cena 
     initKeys() {
-        this.scene.gui=this;
-        this.processKeyboard=function(){};
-        this.activeKeys={};
+        this.scene.gui = this;
+        this.processKeyboard = function () { };
+        this.activeKeys = {};
     }
 
     processKeyDown(event) {
-        this.activeKeys[event.code]=true;
+        this.activeKeys[event.code] = true;
     };
 
     processKeyUp(event) {
-        this.activeKeys[event.code]=false;
+        this.activeKeys[event.code] = false;
     };
 
     isKeyPressed(keyCode) {
