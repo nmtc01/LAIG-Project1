@@ -2,10 +2,7 @@
     <scene root="demoRoot" axis_length="5"/>
 
     <views default="defaultCamera">
-        <perspective id="defaultCamera" near="10" far="15" angle="45"> 
-        <!-- TODO nuno experimenta mudar isto sff pa ver 
-        se a camera te der titl por na dar pa mexer vai ao XMLscene.js l:130 e comenta
-        -->
+        <perspective id="defaultCamera" near="10" far="15" angle="45">
             <from x="10" y="4" z="10" />
             <to x="0" y="-2" z="0" />
         </perspective>
@@ -50,9 +47,12 @@
        <!--<primitive id="demoRectangle"> 
             <rectangle x1="-0.5" y1="-1" x2="0.5" y2="1" />
         </primitive>-->
-        <primitive id="mySphere">
-            <sphere radius="1" slices="30" stacks="30" />
-        </primitive>    
+        <!--<primitive id="mySphere">
+            <sphere radius="2" slices="25" stacks="25" />
+        </primitive>-->
+        <primitive id="myCylinder">
+            <cylinder base="1" top="1" height="3" slices="3" stacks="1" />  
+        </primitive>  
     </primitives>
 
     <components>
@@ -67,7 +67,8 @@
             <texture id="demoTexture"/>
             <children>
                 <!--<primitiveref id="demoRectangle" />-->
-                <primitiveref id="mySphere">
+                <!--<primitiveref id="mySphere">-->
+                <primitiveref id="myCylinder" />
             </children>
         </component>
     </components>

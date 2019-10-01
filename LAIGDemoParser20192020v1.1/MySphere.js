@@ -2,6 +2,7 @@
  * MySphere
  * @constructor
  * @param scene - Reference to MyScene object
+ * @param id - Sphere id
  * @param radius - Radius of the sphere
  * @param slices - Number of divisions around axis
  * @param stacks - Number of divisions between poles
@@ -22,7 +23,6 @@ class MySphere extends CGFobject {
 
 		let theta = Math.PI/2;
 		let phi = 0;
-		let nr_vertices = 0;
 
 		this.vertices = [];
 		this.normals = [];
@@ -43,7 +43,6 @@ class MySphere extends CGFobject {
 
 				//Storing values
 				this.vertices.push(x, y, z);
-				nr_vertices++;
 				this.normals.push(nx, ny, nz);
 				
 				//Preparing next iteration

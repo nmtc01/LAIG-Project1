@@ -785,7 +785,7 @@ class MySceneGraph {
         }
 
         this.log("Parsed transformations");
-        //this.log(this.transformations);
+
         return null;
     }
 
@@ -942,13 +942,11 @@ class MySceneGraph {
                         return "unable to parse slices of the primitive coordinates for ID = " + primitiveId;
 
                     //stacks
-                    var stacks = this.reader.getInteger(grandChildren[0], 'staks');
+                    var stacks = this.reader.getInteger(grandChildren[0], 'stacks');
                     if (!(stacks != null && !isNaN(stacks)))
                         return "unable to parse stacks of the primitive coordinates for ID = " + primitiveId;
 
-                    //TODO
-                    // var cylinder = new MyCylinder(this.scene, primitiveId, base, top, height, stacks);
-                    var cylinder = new MyCylinder(this.scene, primitiveId, 0, 0, 0, 0);
+                    var cylinder = new MyCylinder(this.scene, primitiveId, base, top, height, slices, stacks);
 
                     this.primitives[primitiveId] = cylinder;
 
@@ -971,7 +969,6 @@ class MySceneGraph {
                     if (!(stacks != null && !isNaN(stacks)))
                         return "unable to parse stacks of the primitive coordinates for ID = " + primitiveId;
 
-                    //TODO
                     var sphere = new MySphere(this.scene, primitiveId, radius, slices, stacks);
 
                     this.primitives[primitiveId] = sphere;
@@ -1316,8 +1313,8 @@ class MySceneGraph {
         //this.primitives['demoRectangle'].display();
 
         //this.primitives['myTriangle'].display();
-        //this.primitives['myCylinder'].display();
-        this.primitives['mySphere'].display();
+        this.primitives['myCylinder'].display();
+        //this.primitives['mySphere'].display();
         //this.primitives['myTorus'].display();
     }
 }
