@@ -22,12 +22,46 @@ class MyCylinder extends CGFobject {
 	}
 	
 	initBuffers() {
+		let d_theta = (Math.PI/2)/this.stacks;
+		let d_stack = this.height/this.stacks;
+
+		let theta = Math.PI/2;
 
 		this.vertices = [];
-		this.indices = [];
 		this.normals = [];
+		this.indices = [];
 
-		
+		for (let i = 0; i < this.stacks; i += d_stack) {
+			for (let j = 0; j < this.slices; j++) {
+
+				//Normals
+				let nx = Math.cos(theta);
+				let ny = Math.sin(theta);
+
+				//Coordinates
+				let x = this.base*nx;
+				let y = this.base*ny;
+				let z = i;
+
+				//Storing values
+				this.vertices.push(x, y, z);
+				this.normals.push(nx, ny, 0);
+				
+				//Preparing next iteration
+				theta += d_theta;
+			}
+		}
+
+		for (let i = 0; i < this.stacks; i += d_stack) {
+			for (let j = 0; j < this.slices; j++) {
+				let p1 = i * (this.slices+1) + j;
+				let p2 = p1 + (this.slices+1);
+				//Storing indices
+				this.indices.push(
+					p1, p2, p1 + 1, p1 + 1, p2, p2 + 1
+				);
+			}
+		}
 
 		this.texCoords = [];
 		this.primitiveType = this.scene.gl.TRIANGLES;
