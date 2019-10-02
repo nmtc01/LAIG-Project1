@@ -38,7 +38,7 @@ class MyCylinder extends CGFobject {
 			for (let j = 0; j < this.slices; j++) {
 
 				//Normals
-				let nx = Math.cos(theta); //missing z
+				let nx = Math.cos(theta); 
 				let ny = Math.sin(theta);
 
 				//Coordinates
