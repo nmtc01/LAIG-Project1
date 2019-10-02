@@ -24,7 +24,7 @@ class MyCylinder extends CGFobject {
 	initBuffers() {
 		let d_theta = (2*Math.PI)/this.slices;
 		let d_stack = this.height/this.stacks;
-		let d_radius = this.top/this.base*this.stacks; //mal
+		let d_radius = (d_stack*this.top)/(this.height*this.base); //mal
 		
 		let theta = 0;
 		let nr_vertices = 0;
@@ -54,6 +54,8 @@ class MyCylinder extends CGFobject {
 				//Preparing next iteration
 				theta += d_theta;
 			}
+
+			//Preparing next iteration
 			radius *= d_radius;
 			theta = 0;
 		}
@@ -70,7 +72,7 @@ class MyCylinder extends CGFobject {
 				p4 = p4%nr_vertices;
 
 				//Storing indices
-				if (j < this.slices-1)
+				if (j < this.slices-1) //mal
 					this.indices.push(p1, p3, p2, p3, p4, p2);
 				else this.indices.push(p1, p4, p2, p4, p3, p2);
 			}
