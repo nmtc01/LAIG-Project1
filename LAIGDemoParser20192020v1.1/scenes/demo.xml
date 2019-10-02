@@ -76,8 +76,8 @@
             <texture id="demoTexture"/>
             <children>
                 <!--<primitiveref id="demoRectangle" />-->
-                <primitiveref id="mySphere"/>
-                <!--<primitiveref id="myCylinder" />-->
+                <!--<primitiveref id="mySphere"/>-->
+                <primitiveref id="myCylinder" />
             </children>
         </component>
     </components>
