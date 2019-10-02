@@ -19,12 +19,7 @@ class MyInterface extends CGFinterface {
         //  http://workshop.chromeexperiments.com/examples/gui
 
         this.gui = new dat.GUI();
-
-        // add a group of controls (and open/expand by defult)
-        // this.gui.add(this.scene, 'selectedView', this.scene.lightIDs).name('Select View')
-        this.gui.add(this.scene, 'selectedCamera', this.scene.cameraIDs)
-            .name('Select Camera: ')
-            .onChange(val => this.scene.updateCameras(val));
+        // add a group of controls (and open/expand by defult
 
         this.initKeys();
 
@@ -52,5 +47,11 @@ class MyInterface extends CGFinterface {
 
     isKeyPressed(keyCode) {
         return this.activeKeys[keyCode] || false;
+    }
+
+    updateInterface(){
+        this.gui.add(this.scene, 'selectedCamera',this.scene.cameraIDs)
+            .name('Select Camera:')
+            .onChange(val => this.scene.updateCameras(val));        
     }
 }

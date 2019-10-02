@@ -38,8 +38,8 @@ class XMLscene extends CGFscene {
         //interface utils
 
         //save index of the selected item 
-        this.selectedLight = 0; 
-        this.selectedCamera = 0; 
+        this.selectedLight = 0;
+        this.selectedCamera = 0;
     }
 
     initDefaultCamera() {
@@ -51,42 +51,47 @@ class XMLscene extends CGFscene {
      */
     initCameras() {
         //array to store enabled cameras, got from from views
-        this.cameras = [];
+        this.cameras = {};
         this.cameraIDs = [];
+        let aux = true; 
         //TODO explode porque nao identifica views e nao consigo perceber porque...
         for (var key in this.graph.views) {
             if (this.graph.views.hasOwnProperty(key)) {
                 var view = this.graph.views[key];
-                console.log(view.type);
                 switch (view.type) {
                     case ('perspective'):
                         {
                             var auxCam = new CGFcamera(view.angle * DEGREE_TO_RAD, view.near, view.far,
                                 vec3.fromValues(...Object.values(view.from)), vec3.fromValues(...Object.values(view.to)));
-                            this.cameras.push(auxCam);
+                            this.cameras[view.viewId] = auxCam;
                             this.cameraIDs.push(view.viewId);
                             break;
                         }
                     case ('ortho'):
                         {
-                            var auxCam = new CGFcameraOrtho(view.left, view.right, view.bottom, view.top, view.near, view.far, 
-                                vec3.fromValues(...Object.values(view.from)),  vec3.fromValues(...Object.values(view.to)),  vec3.fromValues(...Object.values(view.up)));
-                            this.cameras.push(auxCam);
+                            var auxCam = new CGFcameraOrtho(view.left, view.right, view.bottom, view.top, view.near, view.far,
+                                vec3.fromValues(...Object.values(view.from)), vec3.fromValues(...Object.values(view.to)), vec3.fromValues(...Object.values(view.up)));
+                            this.cameras[view.viewId] = auxCam;
                             this.cameraIDs.push(view.viewId);
                             break;
                         }
                 }
+                //set the first camera passed
+                if(aux){
+                    console.log(view.viewId);
+                    this.camera = this.cameras[view.viewId];
+                    aux=false;
+                }
+    
             }
         }
-
-        if (this.cameras.length != 0){
-            this.selectedCamera = 0;
-            this.camera = this.cameras[this.selectedCamera];
-        }
+    
+        if (this.cameras.length != 0) 
+           return "no cameras were defined";
     }
     //Update camera upon change on interface
-    updateCameras(val){
-        this.camera = this.cameras[val];
+    updateCameras(val) {
+      this.camera = this.cameras[val];
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
@@ -127,7 +132,7 @@ class XMLscene extends CGFscene {
         }
     }
     //Update Lights upon change on interface
-    updateLights(){
+    updateLights() {
 
     }
 
@@ -155,11 +160,16 @@ class XMLscene extends CGFscene {
 
         this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
 
+
+        //UTIL - descomentar para nao dares lock a camera!
         this.initCameras();
 
         this.initLights();
 
         this.initTextures();
+
+        //update UI usuing sata structures passed 
+        this.interface.updateInterface();
 
         this.sceneInited = true;
     }
