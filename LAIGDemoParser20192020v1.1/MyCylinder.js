@@ -24,7 +24,7 @@ class MyCylinder extends CGFobject {
 	initBuffers() {
 		let d_theta = (2*Math.PI)/this.slices;
 		let d_stack = this.height/this.stacks;
-		let d_radius = (d_stack*this.top)/(this.height*this.base); //mal
+		let d_radius = (d_stack*this.top)/(this.height*this.base); // este calculo esta mal
 		
 		let theta = 0;
 		let nr_vertices = 0;
@@ -49,7 +49,7 @@ class MyCylinder extends CGFobject {
 				//Storing values
 				this.vertices.push(x, y, z);
 				nr_vertices++;
-				this.normals.push(nx, ny, 0);
+				this.normals.push(nx, ny, 0); //depois dos outros dois problemas estarem resolvidos, calcular nz
 				
 				//Preparing next iteration
 				theta += d_theta;
@@ -72,9 +72,9 @@ class MyCylinder extends CGFobject {
 				p4 = p4%nr_vertices;
 
 				//Storing indices
-				if (j < this.slices-1) //mal
-					this.indices.push(p1, p3, p2, p3, p4, p2);
-				else this.indices.push(p1, p4, p2, p4, p3, p2);
+				if (j%(this.slices-1) == 0 && j > 0) // ultima face esta mal, ver melhor esta condicao
+					this.indices.push(p1, p4, p2, p4, p3, p2);
+				else this.indices.push(p1, p3, p2, p3, p4, p2);
 			}
 		}
 
