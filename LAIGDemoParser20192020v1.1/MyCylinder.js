@@ -24,7 +24,7 @@ class MyCylinder extends CGFobject {
 	initBuffers() {
 		let d_theta = (2*Math.PI)/this.slices;
 		let d_stack = this.height/this.stacks;
-		let d_radius = (d_stack*this.top)/(this.height*this.base);
+		let d_radius = this.top/this.base*this.stacks; //mal
 		
 		let theta = 0;
 		let nr_vertices = 0;
@@ -38,7 +38,7 @@ class MyCylinder extends CGFobject {
 			for (let j = 0; j < this.slices; j++) {
 
 				//Normals
-				let nx = Math.cos(theta);
+				let nx = Math.cos(theta); //missing z
 				let ny = Math.sin(theta);
 
 				//Coordinates
@@ -48,7 +48,6 @@ class MyCylinder extends CGFobject {
 
 				//Storing values
 				this.vertices.push(x, y, z);
-				console.log("vertices: " + nr_vertices + "  |  " + x + "," + y + "," + z);
 				nr_vertices++;
 				this.normals.push(nx, ny, 0);
 				

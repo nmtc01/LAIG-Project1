@@ -160,9 +160,7 @@ class XMLscene extends CGFscene {
 
         this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
 
-
-        //UTIL - descomentar para nao dares lock a camera!
-        this.initCameras();
+        //this.initCameras();
 
         this.initLights();
 
