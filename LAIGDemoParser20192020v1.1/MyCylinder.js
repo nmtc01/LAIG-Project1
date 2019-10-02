@@ -22,16 +22,19 @@ class MyCylinder extends CGFobject {
 	}
 	
 	initBuffers() {
-		let d_theta = (Math.PI/2)/this.stacks;
+		let d_theta = (2*Math.PI)/this.slices;
 		let d_stack = this.height/this.stacks;
-
-		let theta = Math.PI/2;
+		let d_radius = (d_stack*this.top)/(this.height*this.base);
+		
+		let theta = 0;
+		let nr_vertices = 0;
+		let radius = this.base;
 
 		this.vertices = [];
 		this.normals = [];
 		this.indices = [];
 
-		for (let i = 0; i < this.stacks; i += d_stack) {
+		for (let i = 0; i <= this.stacks; i++) {
 			for (let j = 0; j < this.slices; j++) {
 
 				//Normals
@@ -39,27 +42,38 @@ class MyCylinder extends CGFobject {
 				let ny = Math.sin(theta);
 
 				//Coordinates
-				let x = this.base*nx;
-				let y = this.base*ny;
-				let z = i;
+				let x = radius*nx;
+				let y = radius*ny;
+				let z = i*d_stack;
 
 				//Storing values
 				this.vertices.push(x, y, z);
+				console.log("vertices: " + nr_vertices + "  |  " + x + "," + y + "," + z);
+				nr_vertices++;
 				this.normals.push(nx, ny, 0);
 				
 				//Preparing next iteration
 				theta += d_theta;
 			}
+			radius *= d_radius;
+			theta = 0;
 		}
 
-		for (let i = 0; i < this.stacks; i += d_stack) {
+		for (let i = 0; i < this.stacks; i ++) {
 			for (let j = 0; j < this.slices; j++) {
-				let p1 = i * (this.slices+1) + j;
-				let p2 = p1 + (this.slices+1);
+				let p1 = i * this.slices + j;
+				let p2 = p1 + this.slices;
+				let p3 = p1 + 1;
+				let p4 = p2 + 1;
+				p1 = p1%nr_vertices;
+				p2 = p2%nr_vertices;
+				p3 = p3%nr_vertices;
+				p4 = p4%nr_vertices;
+
 				//Storing indices
-				this.indices.push(
-					p1, p2, p1 + 1, p1 + 1, p2, p2 + 1
-				);
+				if (j < this.slices-1)
+					this.indices.push(p1, p3, p2, p3, p4, p2);
+				else this.indices.push(p1, p4, p2, p4, p3, p2);
 			}
 		}
 
