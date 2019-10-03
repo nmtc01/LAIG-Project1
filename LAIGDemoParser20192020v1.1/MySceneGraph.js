@@ -3,15 +3,13 @@ var DEGREE_TO_RAD = Math.PI / 180;
 // Order of the groups in the XML document.
 var SCENE_INDEX = 0;
 var VIEWS_INDEX = 1;
-var AMBIENT_INDEX = 2;
+var GLOBALS_INDEX = 2;
 var LIGHTS_INDEX = 3;
 var TEXTURES_INDEX = 4;
 var MATERIALS_INDEX = 5;
 var TRANSFORMATIONS_INDEX = 6;
 var PRIMITIVES_INDEX = 7;
 var COMPONENTS_INDEX = 8;
-
-//TODO mudar tag ambient para globals 
 
 /**
  * MySceneGraph class, representing the scene graph.
@@ -117,15 +115,15 @@ class MySceneGraph {
                 return error;
         }
 
-        // <ambient>
-        if ((index = nodeNames.indexOf("ambient")) == -1)
-            return "tag <ambient> missing";
+        // <globals>
+        if ((index = nodeNames.indexOf("globals")) == -1)
+            return "tag <globals> missing";
         else {
-            if (index != AMBIENT_INDEX)
-                this.onXMLMinorError("tag <ambient> out of order");
+            if (index != GLOBALS_INDEX)
+                this.onXMLMinorError("tag <gloabals> out of order");
 
-            //Parse ambient block
-            if ((error = this.parseAmbient(nodes[index])) != null)
+            //Parse globals block
+            if ((error = this.parseGlobals(nodes[index])) != null)
                 return error;
         }
 
@@ -415,14 +413,14 @@ class MySceneGraph {
     }
 
     /**
-    * Parses the <ambient> node.
-    * @param {ambient block element} ambientsNode
+    * Parses the <globals> node.
+    * @param {globals block element} globalsNode
     */
-    parseAmbient(ambientsNode) {
+    parseGlobals(globalsNode) {
 
-        var children = ambientsNode.children;
+        var children = globalsNode.children;
 
-        this.ambient = [];
+        this.globals = [];
         this.background = [];
 
         var nodeNames = [];
@@ -430,14 +428,14 @@ class MySceneGraph {
         for (var i = 0; i < children.length; i++)
             nodeNames.push(children[i].nodeName);
 
-        var ambientIndex = nodeNames.indexOf("ambient");
+        var globalsIndex = nodeNames.indexOf("ambient");
         var backgroundIndex = nodeNames.indexOf("background");
 
-        var color = this.parseColor(children[ambientIndex], "ambient");
+        var color = this.parseColor(children[globalsIndex], "ambient");
         if (!Array.isArray(color))
             return color;
         else
-            this.ambient = color;
+            this.globals = color;
 
         color = this.parseColor(children[backgroundIndex], "background");
         if (!Array.isArray(color))
@@ -445,7 +443,7 @@ class MySceneGraph {
         else
             this.background = color;
 
-        this.log("Parsed ambient");
+        this.log("Parsed globals");
 
         return null;
     }
@@ -753,7 +751,8 @@ class MySceneGraph {
                         var coordinates = this.parseCoordinates3D(grandChildren[j], "translate transformation for ID " + transformationID);
                         if (!Array.isArray(coordinates))
                             return coordinates;
-                        console.log("ola");
+                        console.log(coordinates);
+                        console.log(transfMatrix);
                         transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
                         break;
                     case 'scale':
@@ -1062,15 +1061,15 @@ class MySceneGraph {
                 //TODO  caso transformacao, sej afeita no componente criar uma matri nova e guardar a matriz na struct component
                 //e nao usar desta maneira com um indix incremanetak a guardar no array das tranformacoes 
                 grandgrandChildren = grandChildren[transformationIndex].children;
-
+                
                 if (grandgrandChildren[0].nodeName == "transformationref") {
-                    var transformationRefID = this.getString(grandgrandChildren[0], 'id');
+                    var transfref = this.reader.getString(grandgrandChildren[0], 'id');
                     //check if that reference exists 
-                    if (this.transformations[transformationRefID] == null)
-                        return "Tranformation id does has not been declared";
-                    transformationRefID = this.newTransformationID;
+                    if (this.transformations[transfref] == null)
+                        return "Transformation id does has not been declared";
+                    var transformationRefID = this.transformations[transfref];
                 } else {
-                    //create new tranformation
+                    //create new transformation
                     this.newTransformationID++;
                     var mat = mat4.create();
 
@@ -1100,7 +1099,7 @@ class MySceneGraph {
                         transformationRefID = this.newTransformationID;
                     }
                 }
-            } else return "tranformation block must be declared";
+            } else return "transformation block must be declared";
             // Materials -- Obrigatorio 
             if (materialsIndex != -1) {
                 grandgrandChildren = grandChildren[materialsIndex].children;
@@ -1328,6 +1327,11 @@ class MySceneGraph {
         //this.primitives['myTriangle'].display();
         //this.primitives['myCylinder'].display();
         //this.primitives['mySphere'].display();
+        this.scene.pushMatrix();
+        this.scene.setMatrix(this.transformations['testTransform']);
+        this.scene.applyViewMatrix();
         this.primitives['myTorus'].display();
+        this.scene.popMatrix();
+
     }
 }
