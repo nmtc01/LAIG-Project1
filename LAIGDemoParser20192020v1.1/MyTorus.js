@@ -6,54 +6,72 @@
  * @param y - Scale of rectangle in Y
  */
 class MyTorus extends CGFobject {
-	constructor(scene, id, x1, x2, y1, y2) {
+	constructor(scene, id, inner, outer, slices, loops) {
 		super(scene);
-		this.x1 = x1;
-		this.x2 = x2;
-		this.y1 = y1;
-		this.y2 = y2;
+		this.inner = inner;
+		this.outer = outer;
+		this.slices = slices;
+		this.loops = loops;
 
 		this.initBuffers();
 	}
-	
+
 	initBuffers() {
-		this.vertices = [
-			this.x1, this.y1, 0,	//0
-			this.x2, this.y1, 0,	//1
-			this.x1, this.y2, 0,	//2
-			this.x2, this.y2, 0		//3
-		];
 
-		//Counter-clockwise reference of vertices
-		this.indices = [
-			0, 1, 2,
-			1, 3, 2
-		];
+		let d_phi = (2 * Math.PI) / this.loops;
+		let d_theta = (2 * Math.PI) / this.slices;
 
-		//Facing Z positive
-		this.normals = [
-			0, 0, 1,
-			0, 0, 1,
-			0, 0, 1,
-			0, 0, 1
-		];
-		
-		/*
-		Texture coords (s,t)
-		+----------> s
-        |
-        |
-		|
-		v
-        t
-        */
+		let theta = 0;
+		let phi = 0;
 
-		this.texCoords = [
-			0, 1,
-			1, 1,
-			0, 0,
-			1, 0
-		]
+		this.vertices = [];
+		this.indices = [];
+		this.normals = [];
+
+		//create vertices and normals 
+		for (let i = 0; i <= this.slices; i++) {
+			for (let j = 0; j <= this.loops; j++) {
+ 
+				//Normals
+				let nx = Math.cos(theta) * Math.cos(phi);
+				let ny = Math.cos(theta) * Math.sin(phi);
+				let nz = Math.sin(theta);
+
+				//Coords
+				let x = (this.outer + this.inner * Math.cos(theta)) * Math.cos(phi);
+				let y = (this.outer + this.inner * Math.cos(theta)) * Math.sin(phi);
+				let z = this.inner* Math.sin(theta);
+
+				this.vertices.push(x, y, z);
+				this.normals.push(nx, ny, nz);
+theta += d_theta;
+				
+			}
+			phi += d_phi;
+			
+			theta = 0;
+		}
+		//create index
+
+		for (let i = 0; i < this.slices; i++) {
+			for (let j = 0; j < this.slices; j++) {
+				let p1 = i * (this.slices + 1) + j;
+				let p2 = p1 + (this.slices + 1);
+				//Storing indices
+				this.indices.push(
+					p1, p2, p1 + 1, p1 + 1, p2, p2 + 1
+				);
+				
+
+			}
+		}
+/*
+		this.indices.push(
+			0,1,2
+
+		);
+*/
+		this.texCoords = []; //TODO
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	}

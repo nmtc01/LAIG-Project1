@@ -33,9 +33,9 @@ class MyTriangle extends CGFobject {
 		var v1 = [this.x2-this.x1, this.y2-this.y1, this.z2-this.z1];
 		var v2 = [this.x3-this.x1, this.y3-this.y1, this.z3-this.z1];
 
-		var nx= v1[1]*v2[2] - v1[2]*v2[1];
-		var ny= v1[2]*v2[0] - v1[0]*v2[2];
-		var nz= v1[0]*v2[1] - v1[1]*v2[0];
+		this.nx= v1[1]*v2[2] - v1[2]*v2[1];
+		this.ny= v1[2]*v2[0] - v1[0]*v2[2];
+		this.nz= v1[0]*v2[1] - v1[1]*v2[0];
 
 		this.initBuffers();
 	}
@@ -54,9 +54,9 @@ class MyTriangle extends CGFobject {
 
 		//Facing Z positive
 		this.normals = [
-			nx,ny,nz,
-			nx,ny,nz,
-			nx,ny,nz
+			this.nx,this.ny,this.nz,
+			this.nx,this.ny,this.nz,
+			this.nx,this.ny,this.nz
 		];
 		
 		/*

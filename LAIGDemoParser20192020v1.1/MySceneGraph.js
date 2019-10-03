@@ -11,6 +11,8 @@ var TRANSFORMATIONS_INDEX = 6;
 var PRIMITIVES_INDEX = 7;
 var COMPONENTS_INDEX = 8;
 
+//TODO mudar tag ambient para globals 
+
 /**
  * MySceneGraph class, representing the scene graph.
  */
@@ -906,7 +908,7 @@ class MySceneGraph {
                     //if (!(x2 != null && !isNaN(x2) && y2 > y1))
                     // return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
 
-                    var triangle = new MyTringle(this.scene, primitiveId, x1, x2, x3, y1, y2, y3, z1, z2, z3);
+                    var triangle = new MyTriangle(this.scene, primitiveId, x1, x2, x3, y1, y2, y3, z1, z2, z3);
 
                     this.primitives[primitiveId] = triangle;
 
@@ -991,8 +993,7 @@ class MySceneGraph {
                         return "unable to parse loops of the primitive coordinates for ID = " + primitiveId;
 
                     //TODO
-                    // var torus = new MyTorus(this.scene, primitiveId, inner, outer, slices, loops);
-                    var torus = new MyTorus(this.scene, primitiveId, 0, 0, 0, 0);
+                    var torus = new MyTorus(this.scene, primitiveId, inner, outer, slices, loops);
 
                     this.primitives[primitiveId] = torus;
 
@@ -1005,6 +1006,7 @@ class MySceneGraph {
         return null;
     }
 
+    //TODO inves de guardar arrays de staring guardar o this.obeject 
     /**
    * Parses the <components> block.
    * @param {components block element} componentsNode
@@ -1056,6 +1058,9 @@ class MySceneGraph {
 
             // Transformations -- Bloco pode ficar sem conteudo
             if (transformationIndex != -1) {
+
+                //TODO  caso transformacao, sej afeita no componente criar uma matri nova e guardar a matriz na struct component
+                //e nao usar desta maneira com um indix incremanetak a guardar no array das tranformacoes 
                 grandgrandChildren = grandChildren[transformationIndex].children;
 
                 if (grandgrandChildren[0].nodeName == "transformationref") {
@@ -1145,6 +1150,7 @@ class MySceneGraph {
                 var componentrefIDs = {};
                 var primitiverefIDs = {};
 
+
                 for (let k = 0; k < grandgrandChildren.length; k++) {
                     var auxID = this.reader.getString(grandgrandChildren[k], 'id');
                     switch (grandgrandChildren[k].nodeName) {
@@ -1162,7 +1168,6 @@ class MySceneGraph {
                 }
 
             } else "children block must be declared"
-
 
             //store the data and pass it as a structure into the array 
             const component = { //node 
@@ -1300,14 +1305,29 @@ class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
-        //To do: Create display loop for transversing the scene graph
+        //TODO: Create display loop for transversing the scene graph
+
+        /* Pseudo code 
+
+        pushmatrix();
+        process(root,default,null,null,null){
+            process(node,activechild,textures,ls,lt)
+            ...
+            multmatrix(node,matrix); //local ao no'
+            for(each child){
+                pushmatrix();
+                processchild(child,...);
+                popmatrix();
+            }
+        }
+        */
+
 
         //To test the parsing/creation of the primitives, call the display function directly
         //this.primitives['demoRectangle'].display();
-
         //this.primitives['myTriangle'].display();
-        this.primitives['myCylinder'].display();
+        //this.primitives['myCylinder'].display();
         //this.primitives['mySphere'].display();
-        //this.primitives['myTorus'].display();
+        this.primitives['myTorus'].display();
     }
 }
