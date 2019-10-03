@@ -72,7 +72,8 @@ class MyCylinder extends CGFobject {
 				p4 = p4%nr_vertices;
 
 				//Storing indices
-				if (j%(this.slices-1) == 0 && j > 0) // ultima face esta mal, ver melhor esta condicao
+				// ultima face esta mal, ver melhor esta condicao
+				if (j == this.slices-1)
 					this.indices.push(p1, p4, p2, p4, p3, p2);
 				else this.indices.push(p1, p3, p2, p3, p4, p2);
 			}
