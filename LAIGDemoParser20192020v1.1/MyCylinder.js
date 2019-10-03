@@ -50,9 +50,7 @@ class MyCylinder extends CGFobject {
 				//Storing values
 				this.vertices.push(x, y, z);
 				nr_vertices++;
-				if (this.base >= this.top)
-					this.normals.push(nx, ny, nz); 
-				else this.normals.push(nx, ny, -nz);
+				this.normals.push(nx, ny, nz); 
 				
 				//Preparing next iteration
 				theta += d_theta;
