@@ -24,7 +24,7 @@ class MyCylinder extends CGFobject {
 	initBuffers() {
 		let d_theta = (2*Math.PI)/this.slices;
 		let d_stack = this.height/this.stacks;
-		let d_radius = (d_stack*this.top)/(this.height*this.base); // este calculo esta mal
+		let d_radius = (this.base-this.top)/this.height;
 		
 		let theta = 0;
 		let nr_vertices = 0;
@@ -49,14 +49,14 @@ class MyCylinder extends CGFobject {
 				//Storing values
 				this.vertices.push(x, y, z);
 				nr_vertices++;
-				this.normals.push(nx, ny, 0); //depois dos outros dois problemas estarem resolvidos, calcular nz
+				this.normals.push(nx, ny, 0); //depois do outro problema estar resolvido, calcular nz
 				
 				//Preparing next iteration
 				theta += d_theta;
 			}
 
 			//Preparing next iteration
-			radius *= d_radius;
+			radius -= d_radius;
 			theta = 0;
 		}
 
