@@ -29,6 +29,7 @@ class MyCylinder extends CGFobject {
 		let theta = 0;
 		let nr_vertices = 0;
 		let radius = this.base;
+		let nz = (this.base-this.top)/this.height;
 
 		this.vertices = [];
 		this.normals = [];
@@ -49,7 +50,9 @@ class MyCylinder extends CGFobject {
 				//Storing values
 				this.vertices.push(x, y, z);
 				nr_vertices++;
-				this.normals.push(nx, ny, 0); //depois do outro problema estar resolvido, calcular nz
+				if (this.base >= this.top)
+					this.normals.push(nx, ny, nz); 
+				else this.normals.push(nx, ny, -nz);
 				
 				//Preparing next iteration
 				theta += d_theta;
