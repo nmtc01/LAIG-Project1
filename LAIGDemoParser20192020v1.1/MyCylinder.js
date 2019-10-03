@@ -66,13 +66,8 @@ class MyCylinder extends CGFobject {
 				let p2 = p1 + this.slices;
 				let p3 = p1 + 1;
 				let p4 = p2 + 1;
-				/*p1 = p1%nr_vertices;
-				p2 = p2%nr_vertices;
-				p3 = p3%nr_vertices;*
-				p4 = p4%nr_vertices;*/
 
 				//Storing indices
-				// ultima face esta mal, ver melhor esta condicao
 				if (j == this.slices-1) {
 					p4 = p4 - 2*this.slices;
 					this.indices.push(p1, p4, p2, p4, p3, p2);
