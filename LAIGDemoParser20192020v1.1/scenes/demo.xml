@@ -51,9 +51,7 @@
 
     <transformations>
         <transformation id="testTransform">
-            <translate x="2" y="1" z="1" />
-            <scale x="2" y="1" z="1" />
-            <rotate axis="z" angle="90" />
+            <translate x="5" y="0" z="0" />
         </transformation>
     </transformations>
 
@@ -68,18 +66,18 @@
             <cylinder base="3" top="1" height="3" slices="10" stacks="1" />
         </primitive>
         <primitive id="mySphere">
-            <sphere radius="2" slices="25" stacks="25" />
+            <sphere radius="2" slices="50" stacks="25" />
         </primitive>
         <primitive id="myTorus">
-            <torus inner="1" outer="2" slices="25" loops="25" />
+            <torus inner="1" outer="2" slices="50" loops="50" />
         </primitive>
     </primitives>
 
     <components>
         <component id="demoRoot">
             <transformation>
-                <translate x="0" y="0" z="2" />
-                <scale x="2" y="1" z="1" />
+                <translate x="0" y="0" z="5" />
+                <scale x="2" y="1" z="2" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -89,6 +87,7 @@
                 <primitiveref id="myTorus" />
             </children>
         </component>
+        
         <component id="testSphere">
             <transformation>
                  <transformationref id="testTransform" />
@@ -98,9 +97,10 @@
             </materials>
             <texture id="vidralTexture"/>
             <children>
-                <primitiveref id="mySphere"/>
+                <primitiveref id="myTorus"/>
             </children>
         </component>
+<!--
         <component id="testInheritance">
             <transformation>
                 <translate x="0" y="0" z="-3" />
@@ -113,6 +113,7 @@
                 <componentref id="testSphere" />
             </children>
         </component>
+        -->
 
     </components>
 </lxs>

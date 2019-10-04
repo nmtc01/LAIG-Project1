@@ -995,12 +995,10 @@ class MySceneGraph {
                     var torus = new MyTorus(this.scene, primitiveId, inner, outer, slices, loops);
 
                     this.primitives[primitiveId] = torus;
-
                     break;
 
             }
         }
-
         this.log("Parsed primitives");
         return null;
     }
@@ -1067,12 +1065,10 @@ class MySceneGraph {
                     //check if that reference exists 
                     if (this.transformations[transfref] == null)
                         return "Transformation id does has not been declared";
-                    var transformationRefID = this.transformations[transfref];
+                    var transformation = this.transformations[transfref];
                 } else {
                     //create new transformation
-                    this.newTransformationID++;
                     var mat = mat4.create();
-
                     for (var j = 0; j < grandgrandChildren.length; j++) {
                         //if is a reference, save the ref name 
                         switch (grandgrandChildren[j].nodeName) {
@@ -1095,8 +1091,7 @@ class MySceneGraph {
                                 var angle = this.reader.getFloat(grandgrandChildren[j], 'angle');
                                 mat = mat4.rotate(mat, mat, angle, this.axisCoords[axis]);
                         }
-                        this.transformations[this.newTransformationID] = mat;
-                        transformationRefID = this.newTransformationID;
+                        transformation = mat;
                     }
                 }
             } else return "transformation block must be declared";
@@ -1146,8 +1141,8 @@ class MySceneGraph {
                 grandgrandChildren = grandChildren[childrenIndex].children;
                 if (grandgrandChildren.length == 0)
                     return "Component - children, must have ate least one component/primitive ref"
-                var componentrefIDs = {};
-                var primitiverefIDs = {};
+                var componentrefIDs = [];
+                var primitiverefIDs = [];
 
 
                 for (let k = 0; k < grandgrandChildren.length; k++) {
@@ -1156,12 +1151,12 @@ class MySceneGraph {
                         case 'componentref':
                             if (this.components[auxID] == null)
                                 return "Component refenced on component does not exist"
-                            componentrefIDs[auxID] = auxID;
+                            componentrefIDs.push(this.components[auxID]);
                             break;
                         case 'primitiveref':
                             if (this.primitives[auxID] == null)
                                 return "Primitive refenced  on component does not exist"
-                            primitiverefIDs[auxID]= auxID;
+                            primitiverefIDs.push(this.primitives[auxID]);
                             break;
                     }
                 }
@@ -1172,7 +1167,7 @@ class MySceneGraph {
             const component = { //node 
                 componentID,
                 component_materials,
-                transformationRefID,
+                transformation,
                 texture: {
                     textID,
                     length_s,
@@ -1320,18 +1315,65 @@ class MySceneGraph {
             }
         }
         */
+        //process route 
+        //console.log(this.components);
+        //TODO something to start on the route
+        this.scene.pushMatrix(); 
+        for(var key in this.components){
+            this.scene.pushMatrix(); 
 
+            //TODO load material
 
-        //To test the parsing/creation of the primitives, call the display function directly
-        //this.primitives['demoRectangle'].display();
-        //this.primitives['myTriangle'].display();
-        //this.primitives['myCylinder'].display();
-        //this.primitives['mySphere'].display();
+            //TODO Build tranformation matrix
+
+            //get current/ father matrix and multiply by the desired matrix
+
+            //console.log(this.components[key].transformation);
+            this.scene.setMatrix(this.components[key].transformation);
+            console.log(this.components[key].transformation);
+            this.scene.applyViewMatrix();
+
+            //TODO load textures 
+
+            //draw primitive 
+            if(this.components[key].children.componentrefIDs.length!= 0){
+                //go for the next child 
+            }
+            if(this.components[key].children.primitiverefIDs.length != 0){
+                //TODO perguntar acerca da complexidade temporal 
+                for(let i =0; i <this.components[key].children.primitiverefIDs.length; i++)
+                    this.components[key].children.primitiverefIDs[i].display();
+            }
+            //this.components.children.primitiveIDs.display();
+            this.scene.popMatrix(); 
+            
+        }
+        this.scene.popMatrix(); 
+
+        /*
+        const component = { //node 
+                componentID,
+                component_materials,
+                transformationRefID,
+                texture: {
+                    textID,
+                    length_s,
+                    length_t
+                },
+                children: {
+                    componentrefIDs,
+                    primitiverefIDs
+                }
+            }
+
+       //TODO search why cant rotate on X and Y 
         this.scene.pushMatrix();
         this.scene.setMatrix(this.transformations['testTransform']);
         this.scene.applyViewMatrix();
         this.primitives['myTorus'].display();
         this.scene.popMatrix();
 
+         // console.log(Object.keys(this.components).length)
+*/
     }
 }

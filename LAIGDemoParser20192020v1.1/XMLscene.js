@@ -185,10 +185,9 @@ class XMLscene extends CGFscene {
         // Initialize Model-View matrix as identity (no transformation
         this.updateProjectionMatrix();
         this.loadIdentity();
-
+        
         // Apply transformations corresponding to the camera position relative to the origin
         this.applyViewMatrix();
-
         this.views;
 
         this.pushMatrix();
@@ -198,7 +197,7 @@ class XMLscene extends CGFscene {
             this.lights[i].setVisible(true);
             this.lights[i].enable();
         }
-
+      
         if (this.sceneInited) {
             // Draw axis
             this.setDefaultAppearance();
