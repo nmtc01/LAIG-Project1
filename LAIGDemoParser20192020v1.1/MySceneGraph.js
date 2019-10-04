@@ -1328,6 +1328,7 @@ class MySceneGraph {
 
             //get current/ father matrix and multiply by the desired matrix
 
+            //TODO inheritance 
             //console.log(this.components[key].transformation);
             this.scene.setMatrix(this.components[key].transformation);
             console.log(this.components[key].transformation);
