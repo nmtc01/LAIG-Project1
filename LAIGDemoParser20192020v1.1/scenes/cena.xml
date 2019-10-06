@@ -42,8 +42,8 @@
     </materials>
 
     <transformations>
-        <transformation id="demoTransf">
-            <rotate axis="x" angle="-90" />
+        <transformation id="scaleBubble">
+            <scale x="0.3" y="0.3" z="0.3" />
         </transformation>
     </transformations>
 
@@ -58,7 +58,7 @@
             <cylinder base="0.1" top="0.1" height="2" slices="20" stacks="4" />
         </primitive>
         <primitive id="mySphere">
-            <sphere radius="3" slices="50" stacks="50" />
+            <sphere radius="1" slices="50" stacks="50" />
         </primitive>
         <primitive id="myTorus">
             <torus inner="0.5" outer="1" slices="50" loops="50" />
@@ -148,6 +148,7 @@
 
         <component id="boat">
             <transformation>
+                <translate x="0" y="0" z="-10" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -159,7 +160,114 @@
                 <componentref id="middle2" />
                 <componentref id="middle3" />
             </children>
-        </component>  
+        </component> 
+
+        <component id="bubble1">
+            <transformation>
+                <scale x="0.3" y="0.3" z="0.3" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <primitiveref id="mySphere" />
+            </children>
+        </component> 
+        <component id="bubble2">
+            <transformation>
+                <translate x="0.3" y="-0.4" z="0" />
+                <scale x="0.2" y="0.2" z="0.2" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <primitiveref id="mySphere" />
+            </children>
+        </component>
+        <component id="bubble3">
+            <transformation>
+                <translate x="-0.1" y="-0.9" z="0" />
+                <scale x="0.2" y="0.2" z="0.2" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <primitiveref id="mySphere" />
+            </children>
+        </component>
+        <component id="bubbles1">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <componentref id="bubble1" />
+                <componentref id="bubble2" />
+                <componentref id="bubble3" />
+            </children>
+        </component>
+        <component id="bubbles2">
+            <transformation>
+                <translate x="0.5" y="-1.5" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <componentref id="bubble1" />
+                <componentref id="bubble2" />
+                <componentref id="bubble3" />
+            </children>
+        </component>
+        <component id="bubbles3">
+            <transformation>
+                <translate x="0" y="-3" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <componentref id="bubble1" />
+                <componentref id="bubble2" />
+                <componentref id="bubble3" />
+            </children>
+        </component>
+        <component id="bubbleChain">
+            <transformation>
+                <translate x="0" y="-3" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <componentref id="bubbles1" />
+                <componentref id="bubbles2" />
+                <componentref id="bubbles3" />
+            </children>
+        </component>
+
+        <component id="myRoot">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <componentref id="bubbleChain" />
+                <componentref id="boat" />
+            </children>
+        </component> 
     </components>
    
 </lxs>
