@@ -309,7 +309,7 @@ class MySceneGraph {
                             if (last_name == "") {
 
                                 //Get Attributes
-                                var from= this.parseCoordinates3D(grandChildren[j], "view position for ID" + viewId);
+                                var from = this.parseCoordinates3D(grandChildren[j], "view position for ID" + viewId);
 
                                 nodeNames.push(name);
 
@@ -370,33 +370,33 @@ class MySceneGraph {
             //it can easilly be understandable on array index manipulation
 
             //Store info  const 
-            var view_info ={};
-            switch(children[i].nodeName){
+            var view_info = {};
+            switch (children[i].nodeName) {
                 case 'perspective':
-                      view_info = {
-                            type,
-                            viewId,
-                            near,
-                            far,
-                            angle,
-                            from,
-                            to
-                        }
+                    view_info = {
+                        type,
+                        viewId,
+                        near,
+                        far,
+                        angle,
+                        from,
+                        to
+                    }
                     break;
                 case 'ortho':
                     view_info = {
-                            type,
-                            viewId,
-                            near,
-                            far,
-                            left,
-                            right,
-                            top,
-                            bottom,
-                            from,
-                            to,
-                            up
-                        }
+                        type,
+                        viewId,
+                        near,
+                        far,
+                        left,
+                        right,
+                        top,
+                        bottom,
+                        from,
+                        to,
+                        up
+                    }
                     break;
             }
             //Store views
@@ -407,7 +407,7 @@ class MySceneGraph {
         //At least one view
         if (numViews == 0)
             return "at least one view must be defined";
-    
+
         this.log("Parsed views");
         return null;
     }
@@ -769,7 +769,7 @@ class MySceneGraph {
                             return "invalid rotation axis";
 
                         var angle = this.reader.getFloat(grandChildren[j], 'angle');
-                        angle = angle*Math.PI/180;
+                        angle = angle * Math.PI / 180;
                         transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, this.axisCoords[axis]);
                         break;
                 }
@@ -1061,7 +1061,7 @@ class MySceneGraph {
                 grandgrandChildren = grandChildren[transformationIndex].children;
                 var transformation;
 
-                if(grandgrandChildren.length == 0) {
+                if (grandgrandChildren.length == 0) {
                     var mat = mat4.create();
                     transformation = mat;
                 }
@@ -1071,7 +1071,7 @@ class MySceneGraph {
                     if (this.transformations[transfref] == null)
                         return "Transformation id does has not been declared";
                     transformation = this.transformations[transfref];
-                } 
+                }
                 else {
                     //create new transformation
                     var mat = mat4.create();
@@ -1095,13 +1095,13 @@ class MySceneGraph {
                                 if (axis != "x" && axis != "y" && axis != "z")
                                     return "invalid rotation axis";
                                 var angle = this.reader.getFloat(grandgrandChildren[j], 'angle');
-                                angle = angle*Math.PI/180;
+                                angle = angle * Math.PI / 180;
                                 mat = mat4.rotate(mat, mat, angle, this.axisCoords[axis]);
                         }
                         transformation = mat;
                     }
                 }
-            } 
+            }
             else return "transformation block must be declared";
 
             // Materials -- Obrigatorio 
@@ -1122,7 +1122,7 @@ class MySceneGraph {
                         return "material declared doesnt exist";
                     } else component_materials.push(materialID);
                 }
-            } 
+            }
             else return "materials block must be declared";
 
             // Texture -- Obrigatorio
@@ -1144,7 +1144,7 @@ class MySceneGraph {
                     length_t = this.reader.getFloat(grandChildren[textureIndex], 'length_t');
                 }
 
-            } 
+            }
             else return "texture module not declared"
 
             // Children
@@ -1173,12 +1173,13 @@ class MySceneGraph {
                     }
                 }
 
-            } 
+            }
             else "children block must be declared"
-
+            let visited = false;
             //store the data and pass it as a structure into the array 
             const component = { //node 
                 componentID,
+                visited,
                 component_materials,
                 transformation,
                 texture: {
@@ -1311,11 +1312,50 @@ class MySceneGraph {
     /**
      * Displays the scene, processing each node, starting in the root node.
      */
-    displayScene() {
-        //TODO: Create display loop for transversing the scene graph
+    processChild(child) {
+        
+        if(this.components[child].visited)
+            return;
+        
+        //this.components[child].visited = true; 
+        this.scene.pushMatrix();
+        this.scene.multMatrix(this.components[child].transformation);//apply tranfoarmations 
 
-        /* Pseudo code 
+        //TODO: apply texture and material
 
+        for( let i =0; i<this.components[child].children.componentrefIDs.length; i++){
+            this.processChild(this.components[child].children.componentrefIDs[i].componentID);
+        }
+
+        for( let i =0; i<this.components[child].children.primitiverefIDs.length; i++){
+            this.scene.pushMatrix();
+            this.components[child].children.primitiverefIDs[i].display();
+            this.scene.popMatrix();
+        }
+        this.scene.popMatrix();
+        
+    }
+
+    process(root) {
+
+        if(this.components[root].visited)
+            return "error processing - node has been processed";
+
+        //process component passed
+        //this.scene.pushMatrix();
+        //this.scene.multMatrix(this.components[root].transformation);//apply tranfoarmations 
+        //TODO apply material texture 
+        
+        for(var key in this.components){
+            this.processChild(this.components[key].componentID);  
+        }
+        //this.scene.popMatrix();
+        //set everything as no visited for the next processment 
+        for(var key in this.components){
+            this.components[key].visited= false; 
+        }
+    }
+          /*
         pushmatrix();
         process(root,default,null,null,null){
             process(node,activechild,textures,ls,lt)
@@ -1327,46 +1367,39 @@ class MySceneGraph {
                 popmatrix();
             }
         }
-        */
-        //process route 
-        //console.log(this.components);
-        //TODO something to start on the route
-        this.scene.pushMatrix(); 
-        for(var key in this.components){
-            this.scene.pushMatrix(); 
+    */  
 
-            //TODO load material
+        
+        /*
+        for (var key in this.components) {
 
-            //TODO Build tranformation matrix
+            if (this.components[key].visited)
+                return "error processing visited nodes";
 
-            //get current/ father matrix and multiply by the desired matrix
+            //this.scene.pushMatrix();
+            this.scene.multMatrix(this.components[key].transformation);
 
-            //TODO inheritance 
-            //console.log(this.components[key].transformation);
-            let mat = this.scene.getMatrix();
-            mat = this.components[key].transformation
-            this.scene.multMatrix(mat);
-            //console.log(this.components[key].transformation);
+            if (this.components[key].children.componentrefIDs.length != 0) {
+                for (let i = 0; i < this.components[key].children.componentrefIDs.length; i++) {
 
-            //TODO this has to change for smth else
-            //this.scene.multViewMatrix();
+                }
 
-            //TODO load textures 
-
-            //draw primitive 
-            if(this.components[key].children.componentrefIDs.length!= 0){
-                //go for the next child 
             }
-            if(this.components[key].children.primitiverefIDs.length != 0){
+
+            //process primitives
+            if (this.components[key].children.primitiverefIDs.length != 0) {
                 //TODO perguntar acerca da complexidade temporal 
-                for(let i =0; i <this.components[key].children.primitiverefIDs.length; i++)
+                for (let i = 0; i < this.components[key].children.primitiverefIDs.length; i++)
                     this.components[key].children.primitiverefIDs[i].display();
             }
             //this.components.children.primitiveIDs.display();
-            this.scene.popMatrix(); 
             
+            this.scene.popMatrix();
+
         }
-        this.scene.popMatrix(); 
+        */
+
+        //this.scene.popMatrix();
 
         /*
         const component = { //node 
@@ -1383,15 +1416,8 @@ class MySceneGraph {
                     primitiverefIDs
                 }
             }
-
-       //TODO search why cant rotate on X and Y 
-        this.scene.pushMatrix();
-        this.scene.setMatrix(this.transformations['testTransform']);
-        this.scene.applyViewMatrix();
-        this.primitives['myTorus'].display();
-        this.scene.popMatrix();
-
-         // console.log(Object.keys(this.components).length)
-*/
+     */
+    displayScene(){
+        this.process(this.components["root"].componentID);
     }
 }
