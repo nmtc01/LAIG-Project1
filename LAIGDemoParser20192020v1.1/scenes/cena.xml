@@ -51,11 +51,17 @@
         <primitive id="myRectangle">
             <rectangle x1="-0.5" y1="-1" x2="0.5" y2="1" />
         </primitive>
-        <primitive id="myTriangle">
+        <primitive id="myTriangle1">
             <triangle x1="0" y1="0" z1="-3" x2="0" y2="2" z2="0" x3="0" y3="0" z3="0"/>
+        </primitive>
+        <primitive id="myTriangle2">
+            <triangle x1="0" y1="2" z1="0" x2="0" y2="0" z2="3" x3="0" y3="0" z3="0"/>
         </primitive>
         <primitive id="myCylinder">
             <cylinder base="0.1" top="0.1" height="2" slices="20" stacks="4" />
+        </primitive>
+        <primitive id="myTail">
+            <cylinder base="0.1" top="0.3" height="0.3" slices="6" stacks="4" />
         </primitive>
         <primitive id="mySphere">
             <sphere radius="1" slices="50" stacks="50" />
@@ -78,6 +84,7 @@
                 <primitiveref id="myCylinder" />
             </children>
         </component>
+
         <component id="vela">
             <transformation>
                 <translate x="0" y="1.2" z="0" />
@@ -88,7 +95,7 @@
             </materials>
             <texture id="bankTexture"/>
             <children>
-                <primitiveref id="myTriangle" />
+                <primitiveref id="myTriangle1" />
             </children>
         </component>  
 
@@ -118,7 +125,8 @@
             <children>
                 <primitiveref id="myRectangle" />
             </children>
-        </component> 
+        </component>
+
         <component id="middle2">
             <transformation>
                 <scale x="3" y="1" z="1" />
@@ -132,6 +140,7 @@
                 <primitiveref id="myRectangle" />
             </children>
         </component> 
+
         <component id="middle3">
             <transformation>
                 <scale x="3" y="1" z="1" />
@@ -174,6 +183,7 @@
                 <primitiveref id="mySphere" />
             </children>
         </component> 
+
         <component id="bubble2">
             <transformation>
                 <translate x="0.3" y="-0.4" z="0" />
@@ -187,6 +197,7 @@
                 <primitiveref id="mySphere" />
             </children>
         </component>
+
         <component id="bubble3">
             <transformation>
                 <translate x="-0.1" y="-0.9" z="0" />
@@ -200,6 +211,7 @@
                 <primitiveref id="mySphere" />
             </children>
         </component>
+
         <component id="bubbles1">
             <transformation>
             </transformation>
@@ -213,6 +225,7 @@
                 <componentref id="bubble3" />
             </children>
         </component>
+
         <component id="bubbles2">
             <transformation>
                 <translate x="0.5" y="-1.5" z="0" />
@@ -227,6 +240,7 @@
                 <componentref id="bubble3" />
             </children>
         </component>
+
         <component id="bubbles3">
             <transformation>
                 <translate x="0" y="-3" z="0" />
@@ -241,6 +255,7 @@
                 <componentref id="bubble3" />
             </children>
         </component>
+
         <component id="bubbleChain">
             <transformation>
                 <translate x="0" y="-3" z="0" />
@@ -256,8 +271,141 @@
             </children>
         </component>
 
+        <component id="body">
+            <transformation>
+                <scale x="0.6" y="0.3" z="0.4" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <primitiveref id="mySphere" />
+            </children>
+        </component>
+
+        <component id="stripe1">
+            <transformation>
+                <scale x="0.2" y="0.22" z="0.3" />
+                <rotate axis="y" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <primitiveref id="myTorus" />
+            </children>
+        </component>
+
+        <component id="stripe2">
+            <transformation>
+                <translate x="0.2" y="0" z="0" />
+                <scale x="0.12" y="0.2" z="0.28" />
+                <rotate axis="y" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <primitiveref id="myTorus" />
+            </children>
+        </component>
+
+        <component id="fin1">
+            <transformation>
+                <scale x="0.2" y="0.2" z="0.1" />
+                <rotate axis="y" angle="90" />
+                <translate x="0" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <primitiveref id="myTriangle1" />
+            </children>
+        </component>
+
+        <component id="fin2">
+            <transformation>
+                <scale x="0.2" y="0.2" z="0.1" />
+                <rotate axis="y" angle="-90" />
+                <translate x="0" y="1" z="-1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <primitiveref id="myTriangle2" />
+            </children>
+        </component>
+
+        <component id="eye1">
+            <transformation>
+                <translate x="-0.3" y="0" z="0.3" />
+                <scale x="0.1" y="0.1" z="0.1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <primitiveref id="mySphere" />
+            </children>
+        </component>
+
+        <component id="eye2">
+            <transformation>
+                <translate x="-0.3" y="0" z="-0.3" />
+                <scale x="0.1" y="0.1" z="0.1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <primitiveref id="mySphere" />
+            </children>
+        </component>
+
+        <component id="tail">
+            <transformation>
+                <translate x="-0.3" y="2" z="-0.3" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <primitiveref id="myTail" />
+            </children>
+        </component>
+
+        <component id="fish">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <componentref id="body" />
+                <componentref id="stripe1" />
+                <componentref id="stripe2" />
+                <componentref id="eye1" />
+                <componentref id="eye2" />
+                <componentref id="fin1" />
+                <componentref id="fin2" />
+                <componentref id="tail" />
+            </children>
+        </component>
+
         <component id="myRoot">
             <transformation>
+                 <scale x="2" y="2" z="2" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -266,6 +414,7 @@
             <children>
                 <componentref id="bubbleChain" />
                 <componentref id="boat" />
+                <componentref id="fish" />
             </children>
         </component> 
     </components>
