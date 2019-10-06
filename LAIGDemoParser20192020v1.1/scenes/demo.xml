@@ -1,5 +1,5 @@
 <lxs>
-    <scene root="root" axis_length="10"/>
+    <scene root="root" axis_length="5"/>
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
@@ -10,12 +10,6 @@
             <from x="10" y="7" z="10" />
             <to x="0" y="2.0" z="5.0" />
         </perspective>
-        <ortho id="orthoCamera" near="0.1" far="500" left="2" right="2" top="2" bottom="2">
-            <from x="10" y="7" z="10" />
-            <to x="0" y="-5" z="0" />
-            <up x="0" y="1" z="0" />
-            <!-- opcional, default 0,1,0 -->
-        </ortho>
     </views>
 
     <globals>
@@ -33,7 +27,9 @@
     </lights>
 
     <textures>
-        <texture id="bankTexture" file="scenes/images/bank.jpg" />
+        <texture id="metalTexture" file="scenes/images/metal.jpg" />
+        <texture id="fishTexture" file="scenes/images/fish-scale.png" />
+        <texture id="metalTexture" file="scenes/images/metal.jpg" />
         <texture id="leavesTexture" file="scenes/images/leaves.jpg" />
         <texture id="rocksTexture" file="scenes/images/rocks.jpg" />
         <texture id="trunkTexture" file="scenes/images/trunk-image.jpg" />
@@ -41,17 +37,36 @@
     </textures>
 
     <materials>
-        <material id="demoMaterial" shininess="10">
+        <material id="yellowMetal" shininess="5">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="0.0" g="0.0" b="0.3" a="1.0" />
-            <diffuse r="0.6" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.98" g="0.93" b="0.36" a="1.0" />
+            <diffuse r="0.98" g="0.93" b="0.36" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
         </material>
+        <material id="greyMetal" shininess="5">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.5" g="0.5" b="0.5" a="1.0" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+        </material>
+        <material id="blueMetal" shininess="5">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.16" g="0.23" b="0.56" a="1.0" />
+            <diffuse r="0.16" g="0.23" b="0.56" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+        </material>
+         <material id="glass" shininess="20">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.22" g="0.99" b="0.99" a="1.0" />
+            <diffuse r="0.22" g="0.99" b="0.99" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+        </material>
+        <!-- rock and fish material, rock material has a lower speculation -->
     </materials>
 
     <transformations>
-        <transformation id="testTransform">
-            <translate x="5" y="0" z="0" />
+        <transformation id="submarinePos">
+            <translate x="0" y="-5" z="0" />
         </transformation>
     </transformations>
 
@@ -66,7 +81,7 @@
             <cylinder base="3" top="1" height="3" slices="10" stacks="1" />
         </primitive>
         <primitive id="mySphere">
-            <sphere radius="2" slices="50" stacks="25" />
+            <sphere radius="3" slices="50" stacks="50" />
         </primitive>
         <primitive id="myTorus">
             <torus inner="1" outer="2" slices="50" loops="50" />
@@ -74,47 +89,20 @@
     </primitives>
 
     <components>
-        <component id="demoRoot">
+        <component id="submarineBody">
             <transformation>
-                <translate x="0" y="0" z="5" />
-                <scale x="2" y="1" z="2" />
+               <transformationref id="submarinePos"/>
             </transformation>
             <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="vidralTexture"/>
-            <children>
-                <primitiveref id="myTorus" />
-            </children>
-        </component>
-        
-        <component id="testSphere">
-            <transformation>
-                 <transformationref id="testTransform" />
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="vidralTexture"/>
-            <children>
-                <primitiveref id="myTorus"/>
-            </children>
-        </component>
-<!--
-        <component id="testInheritance">
-            <transformation>
-                <translate x="0" y="0" z="-3" />
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
+                <material id="yellowMetal" />
+                <material id="blueMetal" />
+                <material id="greyMetal" />
             </materials>
             <texture id="none"/>
             <children>
-                <componentref id="testSphere" />
+                <primitiveref id="mySphere" />
             </children>
-        </component>
-        -->
-
+        </component>  
     </components>
 </lxs>
 

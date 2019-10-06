@@ -1059,6 +1059,9 @@ class MySceneGraph {
                 //TODO  caso transformacao, sej afeita no componente criar uma matri nova e guardar a matriz na struct component
                 //e nao usar desta maneira com um indix incremanetak a guardar no array das tranformacoes 
                 grandgrandChildren = grandChildren[transformationIndex].children;
+
+                if(grandgrandChildren.length == 0)
+                    break;
                 
                 if (grandgrandChildren[0].nodeName == "transformationref") {
                     var transfref = this.reader.getString(grandgrandChildren[0], 'id');
@@ -1332,6 +1335,8 @@ class MySceneGraph {
             //console.log(this.components[key].transformation);
             this.scene.setMatrix(this.components[key].transformation);
             console.log(this.components[key].transformation);
+
+            //TODO this has to change for smth else
             this.scene.applyViewMatrix();
 
             //TODO load textures 
