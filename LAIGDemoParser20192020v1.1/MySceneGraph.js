@@ -769,10 +769,10 @@ class MySceneGraph {
                             return "invalid rotation axis";
 
                         var angle = this.reader.getFloat(grandChildren[j], 'angle');
+                        angle = angle*Math.PI/180;
                         transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, this.axisCoords[axis]);
                         break;
                 }
-                console.log(transfMatrix);
             }
 
             this.transformations[transformationID] = transfMatrix;
@@ -1095,6 +1095,7 @@ class MySceneGraph {
                                 if (axis != "x" && axis != "y" && axis != "z")
                                     return "invalid rotation axis";
                                 var angle = this.reader.getFloat(grandgrandChildren[j], 'angle');
+                                angle = angle*Math.PI/180;
                                 mat = mat4.rotate(mat, mat, angle, this.axisCoords[axis]);
                         }
                         transformation = mat;
