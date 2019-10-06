@@ -1333,11 +1333,13 @@ class MySceneGraph {
 
             //TODO inheritance 
             //console.log(this.components[key].transformation);
-            this.scene.setMatrix(this.components[key].transformation);
+            let mat = this.scene.getMatrix(); 
+            mat = this.components[key].transformation
+            this.scene.multMatrix(mat);
             console.log(this.components[key].transformation);
 
             //TODO this has to change for smth else
-            this.scene.applyViewMatrix();
+            //this.scene.multViewMatrix();
 
             //TODO load textures 
 

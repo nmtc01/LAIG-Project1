@@ -91,7 +91,7 @@
     <components>
         <component id="submarineBody">
             <transformation>
-               <transformationref id="submarinePos"/>
+               <scale x="1" y="1" z= "2"/>
             </transformation>
             <materials>
                 <material id="yellowMetal" />
@@ -102,7 +102,21 @@
             <children>
                 <primitiveref id="mySphere" />
             </children>
-        </component>  
+        </component> 
+        <component id="submarine">
+            <transformation>
+               <transformationref id="submarinePos"/>
+            </transformation>
+            <materials>
+                <material id="yellowMetal" />
+                <material id="blueMetal" />
+                <material id="greyMetal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="submarineBody"/>
+            </children>
+        </component>   
     </components>
 </lxs>
 
