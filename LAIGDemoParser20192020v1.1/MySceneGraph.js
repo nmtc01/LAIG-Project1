@@ -1056,7 +1056,7 @@ class MySceneGraph {
             // Transformations -- Bloco pode ficar sem conteudo
             if (transformationIndex != -1) {
 
-                //TODO  caso transformacao, sej afeita no componente criar uma matri nova e guardar a matriz na struct component
+                //TODO  caso transformacao, sej afeita no componente criar uma matriz nova e guardar a matriz na struct component
                 //e nao usar desta maneira com um indix incremanetak a guardar no array das tranformacoes 
                 grandgrandChildren = grandChildren[transformationIndex].children;
 
