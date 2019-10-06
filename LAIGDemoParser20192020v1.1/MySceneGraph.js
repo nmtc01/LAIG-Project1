@@ -1318,7 +1318,7 @@ class MySceneGraph {
         if(this.components[child].visited)
             return;
         
-        this.components[child].visited = true; 
+        //this.components[child].visited = true; 
         this.scene.pushMatrix();
         this.scene.multMatrix(this.components[child].transformation);//apply tranfoarmations 
 
