@@ -512,9 +512,9 @@
             </children>
         </component>
 
-        <component id="fish">
+        <component id="fish1">
             <transformation>
-                <translate x="-0.3" y="-5" z="-0.3" />
+                <translate x="-2" y="-5" z="-0.3" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -532,6 +532,123 @@
                 <componentref id="fin4" />
                 <componentref id="tail1" />
                 <componentref id="tail2" />
+            </children>
+        </component>
+
+        <component id="fish2">
+            <transformation>
+                <translate x="-3" y="-7" z="-0.3" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <componentref id="body" />
+                <componentref id="stripe1" />
+                <componentref id="stripe2" />
+                <componentref id="eye1" />
+                <componentref id="eye2" />
+                <componentref id="fin1" />
+                <componentref id="fin2" />
+                <componentref id="fin3" />
+                <componentref id="fin4" />
+                <componentref id="tail1" />
+                <componentref id="tail2" />
+            </children>
+        </component>
+
+        <component id="fish3">
+            <transformation>
+                <translate x="-3" y="-4" z="-1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <componentref id="body" />
+                <componentref id="stripe1" />
+                <componentref id="stripe2" />
+                <componentref id="eye1" />
+                <componentref id="eye2" />
+                <componentref id="fin1" />
+                <componentref id="fin2" />
+                <componentref id="fin3" />
+                <componentref id="fin4" />
+                <componentref id="tail1" />
+                <componentref id="tail2" />
+            </children>
+        </component>
+
+        <component id="fish4">
+            <transformation>
+                <translate x="-3.5" y="-6" z="1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <componentref id="body" />
+                <componentref id="stripe1" />
+                <componentref id="stripe2" />
+                <componentref id="eye1" />
+                <componentref id="eye2" />
+                <componentref id="fin1" />
+                <componentref id="fin2" />
+                <componentref id="fin3" />
+                <componentref id="fin4" />
+                <componentref id="tail1" />
+                <componentref id="tail2" />
+            </children>
+        </component>
+
+        <component id="cardume1">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <componentref id="fish1" />
+                <componentref id="fish2" />
+                <componentref id="fish3" />
+                <componentref id="fish4" />
+            </children>
+        </component>
+
+        <component id="cardume2">
+            <transformation>
+                <translate x="14" y="-3" z="-1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <componentref id="fish1" />
+                <componentref id="fish2" />
+                <componentref id="fish3" />
+                <componentref id="fish4" />
+            </children>
+        </component>
+
+        <component id="cardume3">
+            <transformation>
+                <rotate axis="y" angle="-90" />
+                <translate x="14" y="-3" z="12" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <componentref id="fish1" />
+                <componentref id="fish2" />
+                <componentref id="fish3" />
+                <componentref id="fish4" />
             </children>
         </component>
 
@@ -561,7 +678,9 @@
                 <componentref id="bubbleChain3" />
                 <componentref id="bubbleChain4" />
                 <componentref id="bubbleChain5" />
-                <componentref id="fish" />
+                <componentref id="cardume1" />
+                <componentref id="cardume2" />
+                <componentref id="cardume3" />
             </children>
         </component>
 
