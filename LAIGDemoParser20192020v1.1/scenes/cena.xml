@@ -42,40 +42,122 @@
     </materials>
 
     <transformations>
-        <transformation id="rotateMastro">
+        <transformation id="demoTransf">
             <rotate axis="x" angle="-90" />
         </transformation>
     </transformations>
 
     <primitives>
-        <primitive id="demoRectangle">
+        <primitive id="myRectangle">
             <rectangle x1="-0.5" y1="-1" x2="0.5" y2="1" />
         </primitive>
         <primitive id="myTriangle">
-            <triangle x1="1" y1="0" z1="0" x2="0" y2="2" z2="0" x3="0" y3="0" z3="3"/>
+            <triangle x1="0" y1="0" z1="-3" x2="0" y2="2" z2="0" x3="0" y3="0" z3="0"/>
         </primitive>
-        <primitive id="mastro">
-            <cylinder base="0.1" top="0.1" height="3" slices="20" stacks="4" />
+        <primitive id="myCylinder">
+            <cylinder base="0.1" top="0.1" height="2" slices="20" stacks="4" />
         </primitive>
         <primitive id="mySphere">
             <sphere radius="3" slices="50" stacks="50" />
         </primitive>
         <primitive id="myTorus">
-            <torus inner="1" outer="2" slices="50" loops="50" />
+            <torus inner="0.5" outer="1" slices="50" loops="50" />
         </primitive>
     </primitives >
  
     <components>    
-        <component id="mastro">
+        <component id="stick">
             <transformation>
-                 <transformationref id="rotateMastro" />
+                 <rotate axis="x" angle="-90" />
+                 <translate x="-1" y="0.5" z="0" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
             <texture id="bankTexture"/>
             <children>
-                <primitiveref id="mastro" />
+                <primitiveref id="myCylinder" />
+            </children>
+        </component>
+        <component id="vela">
+            <transformation>
+                <translate x="-1" y="1.2" z="-0.5" />
+                <scale x="0.3" y="0.3" z="0.3" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <primitiveref id="myTriangle" />
+            </children>
+        </component>  
+
+        <component id="mastro">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <componentref id="stick" />
+                <componentref id="vela" />
+            </children>
+        </component>
+
+        <component id="middle1">
+            <transformation>
+                <scale x="3" y="1" z="1" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <primitiveref id="myRectangle" />
+            </children>
+        </component> 
+        <component id="middle2">
+            <transformation>
+                <scale x="3" y="1" z="1" />
+                <rotate axis="x" angle="90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <primitiveref id="myRectangle" />
+            </children>
+        </component> 
+        <component id="middle3">
+            <transformation>
+                <scale x="3" y="1" z="1" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <primitiveref id="myTorus" />
+            </children>
+        </component> 
+
+        <component id="boat">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="bankTexture"/>
+            <children>
+                <componentref id="mastro" />
+                <componentref id="middle1" />
+                <componentref id="middle2" />
+                <componentref id="middle3" />
             </children>
         </component>  
     </components>
