@@ -1117,6 +1117,7 @@ class MySceneGraph {
                     if (materialID == 'inherit') {
                         //TODO if root doesnt work
                         component_materials.push(materialID);
+                        break;
                     }
                     if (this.materials[materialID] == null) {
                         return "material declared doesnt exist";
@@ -1129,7 +1130,7 @@ class MySceneGraph {
             if (textureIndex != -1) {
 
                 var textID = this.reader.getString(grandChildren[textureIndex], 'id');
-                if (textID != 'ihnerit' && textID != 'none') {
+                if (textID != 'inherit' && textID != 'none') {
                     if (this.textures[textID] == null)
                         return "texture block must be declared";
                 }
@@ -1317,7 +1318,7 @@ class MySceneGraph {
         if(this.components[child].visited)
             return;
         
-        //this.components[child].visited = true; 
+        this.components[child].visited = true; 
         this.scene.pushMatrix();
         this.scene.multMatrix(this.components[child].transformation);//apply tranfoarmations 
 
