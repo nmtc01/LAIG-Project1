@@ -1056,20 +1056,23 @@ class MySceneGraph {
             // Transformations -- Bloco pode ficar sem conteudo
             if (transformationIndex != -1) {
 
-                //TODO  caso transformacao, sej afeita no componente criar uma matriz nova e guardar a matriz na struct component
+                //TODO  caso transformacao, seja feita no componente criar uma matriz nova e guardar a matriz na struct component
                 //e nao usar desta maneira com um indix incremanetak a guardar no array das tranformacoes 
                 grandgrandChildren = grandChildren[transformationIndex].children;
+                var transformation;
 
-                if(grandgrandChildren.length == 0)
-                    break;
-                
-                if (grandgrandChildren[0].nodeName == "transformationref") {
+                if(grandgrandChildren.length == 0) {
+                    var mat = mat4.create();
+                    transformation = mat;
+                }
+                else if (grandgrandChildren[0].nodeName == "transformationref") {
                     var transfref = this.reader.getString(grandgrandChildren[0], 'id');
                     //check if that reference exists 
                     if (this.transformations[transfref] == null)
                         return "Transformation id does has not been declared";
-                    var transformation = this.transformations[transfref];
-                } else {
+                    transformation = this.transformations[transfref];
+                } 
+                else {
                     //create new transformation
                     var mat = mat4.create();
                     for (var j = 0; j < grandgrandChildren.length; j++) {
@@ -1097,7 +1100,9 @@ class MySceneGraph {
                         transformation = mat;
                     }
                 }
-            } else return "transformation block must be declared";
+            } 
+            else return "transformation block must be declared";
+
             // Materials -- Obrigatorio 
             if (materialsIndex != -1) {
                 grandgrandChildren = grandChildren[materialsIndex].children;
@@ -1116,7 +1121,9 @@ class MySceneGraph {
                         return "material declared doesnt exist";
                     } else component_materials.push(materialID);
                 }
-            } else return "materials block must be declared";
+            } 
+            else return "materials block must be declared";
+
             // Texture -- Obrigatorio
             if (textureIndex != -1) {
 
@@ -1136,7 +1143,8 @@ class MySceneGraph {
                     length_t = this.reader.getFloat(grandChildren[textureIndex], 'length_t');
                 }
 
-            } else return "texture module not declared"
+            } 
+            else return "texture module not declared"
 
             // Children
             if (childrenIndex != -1) {
@@ -1164,7 +1172,8 @@ class MySceneGraph {
                     }
                 }
 
-            } else "children block must be declared"
+            } 
+            else "children block must be declared"
 
             //store the data and pass it as a structure into the array 
             const component = { //node 
@@ -1333,10 +1342,10 @@ class MySceneGraph {
 
             //TODO inheritance 
             //console.log(this.components[key].transformation);
-            let mat = this.scene.getMatrix(); 
+            let mat = this.scene.getMatrix();
             mat = this.components[key].transformation
             this.scene.multMatrix(mat);
-            console.log(this.components[key].transformation);
+            //console.log(this.components[key].transformation);
 
             //TODO this has to change for smth else
             //this.scene.multViewMatrix();
