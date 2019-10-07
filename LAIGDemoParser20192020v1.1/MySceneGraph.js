@@ -1419,6 +1419,6 @@ class MySceneGraph {
             }
      */
     displayScene(){
-        this.process(this.components["root"].componentID);
+        this.processChild(this.components["root"].componentID);
     }
 }
