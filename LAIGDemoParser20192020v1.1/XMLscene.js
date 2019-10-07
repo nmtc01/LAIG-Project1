@@ -44,7 +44,8 @@ class XMLscene extends CGFscene {
 
     initDefaultCamera() {
         //default camera 
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+        //MANIP test
+        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(100, 100, 100), vec3.fromValues(0, 0, 0)); //default was at 15,15,15
     }
     /**
      * Initializes the scene cameras.
@@ -160,7 +161,8 @@ class XMLscene extends CGFscene {
 
         this.setGlobalAmbientLight(this.graph.globals[0], this.graph.globals[1], this.graph.globals[2], this.graph.globals[3]);
 
-        this.initCameras();
+        //MANIP test
+        //this.initCameras();
 
         this.initLights();
 
