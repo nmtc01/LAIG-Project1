@@ -57,7 +57,7 @@ class MyCylinder extends CGFobject {
 			}
 
 			//Preparing next iteration
-			radius -= d_radius;
+			radius -= d_radius*d_stack;
 			theta = 0;
 		}
 
