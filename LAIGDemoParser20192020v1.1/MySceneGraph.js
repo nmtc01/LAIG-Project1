@@ -40,6 +40,9 @@ class MySceneGraph {
         // File reading 
         this.reader = new CGFXMLreader();
 
+        //Used to manipulate textures and materials 
+        this.current_material;
+
         /*
          * Read the contents of the xml file, and refer to this class for loading and error handlers.
          * After the file is read, the reader calls onXMLReady on this object.
@@ -656,17 +659,14 @@ class MySceneGraph {
         // Any number of materials.
         for (var i = 0; i < children.length; i++) {
 
-            var global = [];
-            var attributeNames = [];
-            var attributeTypes = [];
+            let newMaterial = new CGFappearance(this.scene);
+
+            let r = 0, g = 0, b = 0, a = 0; //local valeus to store components info 
 
             if (children[i].nodeName != "material") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
             }
-
-            attributeNames.push(...["emission", "ambient", "diffuse", "specular"]);
-            attributeTypes.push(...["color", "color", "color", "color"]);
 
             // Get id of the current material.
             var materialID = this.reader.getString(children[i], 'id');
@@ -681,31 +681,65 @@ class MySceneGraph {
             if (shininess <= 0)
                 return "Shininess of the appearance. MUST BE positive, non-zero ( shininess : " + shininess + ")";
 
-            global.push(...[materialID, shininess]);
-            grandChildren = children[i].children;
+            //Pass shininess 
+            newMaterial.setShininess(shininess);
 
-            nodeNames = [];
             //get node names 
+            nodeNames = [];
+            grandChildren = children[i].children;
             for (var j = 0; j < grandChildren.length; j++) {
                 nodeNames.push(grandChildren[j].nodeName);
             }
 
-            for (var j = 0; j < attributeNames.length; j++) {
-                var attributeIndex = nodeNames.indexOf(attributeNames[j]);
-                if (attributeIndex != -1) {
-                    var aux = this.parseColor(grandChildren[attributeIndex], attributeNames[j] + " illumination for ID" + materialID);
+            //TODO será esta a melhor forma de fazer isto ou com loop? 
+            if (grandChildren[0].nodeName == 'emission') {
+                r = this.reader.getFloat(grandChildren[0], 'r');
+                g = this.reader.getFloat(grandChildren[0], 'g');
+                b = this.reader.getFloat(grandChildren[0], 'b');
+                a = this.reader.getFloat(grandChildren[0], 'a');
 
-                    if (!Array.isArray(aux))
-                        return aux;
+                newMaterial.setEmission(r, g, b, a);
 
-                    global.push(aux);
-                }
-                else
-                    return "material " + attributeNames[i] + " undefined for ID = " + materialID;
-            }
-            this.materials[materialID] = global;
+            } else return 'Error material emission was not declared on the *.xml'
+
+            if (grandChildren[1].nodeName == 'ambient') {
+                r = this.reader.getFloat(grandChildren[1], 'r');
+                g = this.reader.getFloat(grandChildren[1], 'g');
+                b = this.reader.getFloat(grandChildren[1], 'b');
+                a = this.reader.getFloat(grandChildren[1], 'a');
+                
+                newMaterial.setAmbient(r, g, b, a);
+
+            } else return 'Error material emission was not declared on the *.xml'
+
+            if (grandChildren[2].nodeName == 'diffuse') {
+                r = this.reader.getFloat(grandChildren[2], 'r');
+                g = this.reader.getFloat(grandChildren[2], 'g');
+                b = this.reader.getFloat(grandChildren[2], 'b');
+                a = this.reader.getFloat(grandChildren[2], 'a');
+                
+                newMaterial.setDiffuse(r, g, b, a);
+
+            } else return 'Error material emission was not declared on the *.xml'
+            if (grandChildren[3].nodeName == 'specular') {
+                r = this.reader.getFloat(grandChildren[3], 'r');
+                g = this.reader.getFloat(grandChildren[3], 'g');
+                b = this.reader.getFloat(grandChildren[3], 'b');
+                a = this.reader.getFloat(grandChildren[3], 'a');
+
+                newMaterial.setSpecular(r, g, b, a);
+
+            } else return 'Error material emission was not declared on the *.xml'
+
+
+            //get Emission
+
+            //get Ambient
+            //get Sifusse
+            //get Specular 
+
+            this.materials[materialID] = newMaterial;
         }
-
         this.log("Parsed materials");
         return null;
     }
@@ -1116,12 +1150,12 @@ class MySceneGraph {
                     //IF MATERIAL IS INHERITABLE 
                     if (materialID == 'inherit') {
                         //TODO if root doesnt work
-                        component_materials.push(materialID);
+                        component_materials.push(this.materials[materialID]);
                         break;
                     }
                     if (this.materials[materialID] == null) {
                         return "material declared doesnt exist";
-                    } else component_materials.push(materialID);
+                    } else component_materials.push(this.materials[materialID]);
                 }
             }
             else return "materials block must be declared";
@@ -1129,10 +1163,11 @@ class MySceneGraph {
             // Texture -- Obrigatorio
             if (textureIndex != -1) {
 
-                var textID = this.reader.getString(grandChildren[textureIndex], 'id');
-                if (textID != 'inherit' && textID != 'none') {
-                    if (this.textures[textID] == null)
-                        return "texture block must be declared";
+                var textureref = this.reader.getString(grandChildren[textureIndex], 'id');
+                if (textureref != 'inherit' && textureref != 'none') {
+                    if (this.textures[textureref] == null)
+                        return "texture block must be declared"
+                    textureref = this.textures[textureref];
                 }
                 var length_s = 0;
                 var length_t = 0;
@@ -1184,7 +1219,7 @@ class MySceneGraph {
                 component_materials,
                 transformation,
                 texture: {
-                    textID,
+                    textureref,
                     length_s,
                     length_t
                 },
@@ -1314,111 +1349,60 @@ class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     processChild(child) {
-        
-        if(this.components[child].visited)
-            return;
-        
-        //this.components[child].visited = true; 
+
+        if (this.components[child].visited)
+            return "Component has already been visited";
+
+        this.components[child].visited = true; //set as visited
+
         this.scene.pushMatrix();
-        this.scene.multMatrix(this.components[child].transformation);//apply tranfoarmations 
+        this.scene.multMatrix(this.components[child].transformation);//apply tranformations 
 
         //TODO: apply texture and material
+        //let temp_material = this.components[child].component_materials[0]; //TODO later do smth so that the material is changed!!!
+        //temp_material.parseTextures(this.components.texture.textureref);
+        //    temp_material.apply(); 
 
-        for( let i =0; i<this.components[child].children.componentrefIDs.length; i++){
+        //let temp_material = this.components[child].component_materials[0]; //TODO later do smth so that the material is changed!!!
+        //console.log(temp_material);
+        //temp_material.apply(); 
+        if (this.components[child].component_materials != 'none') {
+            console.log(this.current_material);
+            if (this.components[child].component_materials == 'inherit') {
+                if (this.current_material == null)
+                    return 'Error - cannot display inhreited material if there is no material declared before';
+                if (this.current_material != null)
+                    this.current_material.apply();
+            } else {
+                this.current_material = this.components[child].component_materials[0]; //TODO later use smth to chnage with key press
+                if (this.current_material != null)
+                    this.current_material.apply();
+            }
+
+
+        }
+        //this.components[child].texture.apply(); 
+        //this.components[child].component_materials.apply;
+        //this.scene.updateTexCoordsGLBuffers();
+        //Process child components
+        for (let i = 0; i < this.components[child].children.componentrefIDs.length; i++) {
             this.processChild(this.components[child].children.componentrefIDs[i]);
         }
 
-        for( let i =0; i<this.components[child].children.primitiverefIDs.length; i++){
+        //Process end node/primitives
+        for (let i = 0; i < this.components[child].children.primitiverefIDs.length; i++) {
             this.scene.pushMatrix();
             this.components[child].children.primitiverefIDs[i].display();
             this.scene.popMatrix();
         }
         this.scene.popMatrix();
-        
+
+        //set as unvisited so that displayScene can be caled multiple times
+        this.components[child].visited = false;
+
     }
 
-    /*process(root) {
-
-        if(this.components[root].visited)
-            return "error processing - node has been processed";
-
-        //process component passed
-        //this.scene.pushMatrix();
-        //this.scene.multMatrix(this.components[root].transformation);//apply tranfoarmations 
-        //TODO apply material texture 
-        
-        for(var key in this.components){
-            this.processChild(this.components[key].componentID);  
-        }
-        //this.scene.popMatrix();
-        //set everything as no visited for the next processment 
-        for(var key in this.components){
-            this.components[key].visited= false; 
-        }
-    }*/
-          /*
-        pushmatrix();
-        process(root,default,null,null,null){
-            process(node,activechild,textures,ls,lt)
-            ...
-            multmatrix(node,matrix); //local ao no'
-            for(each child){
-                pushmatrix();
-                processchild(child,...);
-                popmatrix();
-            }
-        }
-    */  
-
-        
-        /*
-        for (var key in this.components) {
-
-            if (this.components[key].visited)
-                return "error processing visited nodes";
-
-            //this.scene.pushMatrix();
-            this.scene.multMatrix(this.components[key].transformation);
-
-            if (this.components[key].children.componentrefIDs.length != 0) {
-                for (let i = 0; i < this.components[key].children.componentrefIDs.length; i++) {
-
-                }
-
-            }
-
-            //process primitives
-            if (this.components[key].children.primitiverefIDs.length != 0) {
-                //TODO perguntar acerca da complexidade temporal 
-                for (let i = 0; i < this.components[key].children.primitiverefIDs.length; i++)
-                    this.components[key].children.primitiverefIDs[i].display();
-            }
-            //this.components.children.primitiveIDs.display();
-            
-            this.scene.popMatrix();
-
-        }
-        */
-
-        //this.scene.popMatrix();
-
-        /*
-        const component = { //node 
-                componentID,
-                component_materials,
-                transformationRefID,
-                texture: {
-                    textID,
-                    length_s,
-                    length_t
-                },
-                children: {
-                    componentrefIDs,
-                    primitiverefIDs
-                }
-            }
-     */
-    displayScene(){
+    displayScene() {
         this.processChild(this.components["root"].componentID);
     }
 }
