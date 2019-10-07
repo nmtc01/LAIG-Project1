@@ -3,8 +3,12 @@
 
     <views default="defaultcamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
-            <from x="50" y="1" z="50" />
-            <to x="0" y="-2" z="0" />
+            <from x="70" y="10" z="70" />
+            <to x="5" y="-5" z="0" />
+        </perspective>
+        <perspective id="secondaryCamera" near="0.1" far="500" angle="45">
+            <from x="30" y="10" z="30" />
+            <to x="5" y="-5" z="0" />
         </perspective>
     </views>
 
@@ -201,7 +205,7 @@
 
         <component id="mySuperior">
             <transformation>
-                <translate x="0" y="2" z="0" />
+                <translate x="0" y="0.5" z="0" />
             </transformation>
             <materials>
                 <material id="greyMetal" />
