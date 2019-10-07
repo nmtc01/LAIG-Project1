@@ -244,7 +244,6 @@ class MySceneGraph {
         var children = viewsNode.children;
         var grandChildren = [];
 
-        console.log(children);
         //Any number of views
         var numViews = 0;
 
@@ -577,32 +576,30 @@ class MySceneGraph {
 
         //For each texture in textures block, check ID and file URL
         var children = texturesNode.children;
-
         this.textures = [];
 
         for (var i = 0; i < children.length; i++) {
 
-            var aux = []; //to store texture info
-            var valid = true; //valid texture
+            let valid = true; //valid texture
 
             if (children[i].nodeName != "texture") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
             }
             // Get id of the current texture.
-            var textureId = this.reader.getString(children[i], 'id');
+            let textureId = this.reader.getString(children[i], 'id');
             if (textureId == null)
                 return "no ID defined for texture";
 
             // Get texture file ink 
-            var file = this.reader.getString(children[i], 'file');
+            let file = this.reader.getString(children[i], 'file');
             if (file == null)
                 return "no file defined for texture";
 
             // Checks for repeated files.
-            for (var k = 0; k < this.textures.length; k++) {
-                var id = this.textures[k][0];
-                var f = this.textures[k][1];
+            for (let k = 0; k < this.textures.length; k++) {
+                let id = this.textures[k][0];
+                let f = this.textures[k][1];
                 if (this.textures[k][0] == textureId)
                     return "ID must be unique for each texture (conflict: ID = " + textureId + ")";
                 if (this.textures[k][1] == file)
@@ -614,7 +611,7 @@ class MySceneGraph {
                 this.onXMLMinorError("invalid file: " + file);
                 valid = false;
             }
-            var extension = file.substring(file.length - 4);
+            let extension = file.substring(file.length - 4);
             if (extension != ".jpg" && extension != ".png" && valid) {
                 this.onXMLMinorError("invalid file extension: " + file);
                 valid = false;
@@ -622,7 +619,7 @@ class MySceneGraph {
 
             //Check if file exists
             if (valid) {
-                var xhr = new XMLHttpRequest();
+                 let xhr = new XMLHttpRequest();
                 xhr.open('HEAD', file, false);
                 xhr.send();
 
@@ -634,8 +631,8 @@ class MySceneGraph {
 
             //Store valid texture
             if (valid) {
-                aux.push(...[textureId, file]);
-                this.textures[textureId] = aux;
+                let newTexture = new CGFtexture(this.scene,file); 
+                this.textures[textureId] = newTexture;
             }
 
         }
@@ -692,6 +689,8 @@ class MySceneGraph {
             }
 
             //TODO será esta a melhor forma de fazer isto ou com loop? 
+            
+            //parse emission
             if (grandChildren[0].nodeName == 'emission') {
                 r = this.reader.getFloat(grandChildren[0], 'r');
                 g = this.reader.getFloat(grandChildren[0], 'g');
@@ -702,6 +701,7 @@ class MySceneGraph {
 
             } else return 'Error material emission was not declared on the *.xml'
 
+             //parse ambient 
             if (grandChildren[1].nodeName == 'ambient') {
                 r = this.reader.getFloat(grandChildren[1], 'r');
                 g = this.reader.getFloat(grandChildren[1], 'g');
@@ -712,6 +712,7 @@ class MySceneGraph {
 
             } else return 'Error material emission was not declared on the *.xml'
 
+             //parse difuse
             if (grandChildren[2].nodeName == 'diffuse') {
                 r = this.reader.getFloat(grandChildren[2], 'r');
                 g = this.reader.getFloat(grandChildren[2], 'g');
@@ -721,6 +722,8 @@ class MySceneGraph {
                 newMaterial.setDiffuse(r, g, b, a);
 
             } else return 'Error material emission was not declared on the *.xml'
+            
+            //parse specular 
             if (grandChildren[3].nodeName == 'specular') {
                 r = this.reader.getFloat(grandChildren[3], 'r');
                 g = this.reader.getFloat(grandChildren[3], 'g');
@@ -730,13 +733,6 @@ class MySceneGraph {
                 newMaterial.setSpecular(r, g, b, a);
 
             } else return 'Error material emission was not declared on the *.xml'
-
-
-            //get Emission
-
-            //get Ambient
-            //get Sifusse
-            //get Specular 
 
             this.materials[materialID] = newMaterial;
         }
@@ -785,8 +781,6 @@ class MySceneGraph {
                         var coordinates = this.parseCoordinates3D(grandChildren[j], "translate transformation for ID " + transformationID);
                         if (!Array.isArray(coordinates))
                             return coordinates;
-                        console.log(coordinates);
-                        console.log(transfMatrix);
                         transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
                         break;
                     case 'scale':
@@ -1228,7 +1222,6 @@ class MySceneGraph {
                     primitiverefIDs
                 }
             }
-            console.log(component);
             this.components[component.componentID] = component;
         }
     }
@@ -1358,16 +1351,9 @@ class MySceneGraph {
         this.scene.pushMatrix();
         this.scene.multMatrix(this.components[child].transformation);//apply tranformations 
 
-        //TODO: apply texture and material
-        //let temp_material = this.components[child].component_materials[0]; //TODO later do smth so that the material is changed!!!
-        //temp_material.parseTextures(this.components.texture.textureref);
-        //    temp_material.apply(); 
+        //TODO: apply texture
 
-        //let temp_material = this.components[child].component_materials[0]; //TODO later do smth so that the material is changed!!!
-        //console.log(temp_material);
-        //temp_material.apply(); 
         if (this.components[child].component_materials != 'none') {
-            console.log(this.current_material);
             if (this.components[child].component_materials == 'inherit') {
                 if (this.current_material == null)
                     return 'Error - cannot display inhreited material if there is no material declared before';
@@ -1375,6 +1361,8 @@ class MySceneGraph {
                     this.current_material.apply();
             } else {
                 this.current_material = this.components[child].component_materials[0]; //TODO later use smth to chnage with key press
+               
+                //this.current_material.setTexture(this.textures['metal']);
                 if (this.current_material != null)
                     this.current_material.apply();
             }
