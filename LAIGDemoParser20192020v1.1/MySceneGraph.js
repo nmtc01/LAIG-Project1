@@ -1162,9 +1162,9 @@ class MySceneGraph {
                     var auxID = this.reader.getString(grandgrandChildren[k], 'id');
                     switch (grandgrandChildren[k].nodeName) {
                         case 'componentref':
-                            if (this.components[auxID] == null)
-                                return "Component refenced on component does not exist"
-                            componentrefIDs.push(this.components[auxID]);
+                            /*if (this.components[auxID] == null)
+                                return "Component refenced on component does not exist";*/
+                            componentrefIDs.push(auxID);
                             break;
                         case 'primitiveref':
                             if (this.primitives[auxID] == null)
@@ -1325,7 +1325,7 @@ class MySceneGraph {
         //TODO: apply texture and material
 
         for( let i =0; i<this.components[child].children.componentrefIDs.length; i++){
-            this.processChild(this.components[child].children.componentrefIDs[i].componentID);
+            this.processChild(this.components[child].children.componentrefIDs[i]);
         }
 
         for( let i =0; i<this.components[child].children.primitiverefIDs.length; i++){
@@ -1337,7 +1337,7 @@ class MySceneGraph {
         
     }
 
-    process(root) {
+    /*process(root) {
 
         if(this.components[root].visited)
             return "error processing - node has been processed";
@@ -1355,7 +1355,7 @@ class MySceneGraph {
         for(var key in this.components){
             this.components[key].visited= false; 
         }
-    }
+    }*/
           /*
         pushmatrix();
         process(root,default,null,null,null){

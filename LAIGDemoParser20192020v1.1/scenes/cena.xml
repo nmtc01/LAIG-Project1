@@ -759,6 +759,19 @@
             </children>
         </component>
 
+        <component id="root">
+            <transformation>
+                 <scale x="2" y="2" z="2" />
+            </transformation>
+            <materials>
+                <material id="greyMetal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="myOcean" />
+            </children>
+        </component> 
+
         <component id="myOcean">
             <transformation>
             </transformation>
@@ -772,19 +785,6 @@
                 <componentref id="mySuperior" />
             </children>
         </component>
-
-        <component id="root">
-            <transformation>
-                 <scale x="2" y="2" z="2" />
-            </transformation>
-            <materials>
-                <material id="greyMetal" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <componentref id="myOcean" />
-            </children>
-        </component> 
         
     </components>
    
