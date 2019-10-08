@@ -162,7 +162,7 @@ class XMLscene extends CGFscene {
         this.setGlobalAmbientLight(this.graph.globals[0], this.graph.globals[1], this.graph.globals[2], this.graph.globals[3]);
 
         //MANIP test
-        this.initCameras();
+        //this.initCameras();
 
         this.initLights();
 

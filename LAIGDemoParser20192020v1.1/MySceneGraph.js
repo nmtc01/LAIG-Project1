@@ -41,6 +41,7 @@ class MySceneGraph {
         this.reader = new CGFXMLreader();
 
         //Used to manipulate textures and materials 
+        this.current_texture;
         this.current_material;
 
         /*
@@ -1144,7 +1145,7 @@ class MySceneGraph {
                     //IF MATERIAL IS INHERITABLE 
                     if (materialID == 'inherit') {
                         //TODO if root doesnt work
-                        component_materials.push(this.materials[materialID]);
+                        component_materials.push(materialID);
                         break;
                     }
                     if (this.materials[materialID] == null) {
@@ -1352,23 +1353,31 @@ class MySceneGraph {
         this.scene.multMatrix(this.components[child].transformation);//apply tranformations 
 
         //TODO: apply texture
+        //if (this.components[child].component_materials != 'none') {
+            
+        //Materials
+        if (this.components[child].component_materials == 'inherit') {
+            if (this.current_material == null)
+                return 'Error - cannot display inhreited material if there is no material declared before';
+        } 
+        else this.current_material = this.components[child].component_materials[0]; //TODO later use smth to chnage with key press
 
-        if (this.components[child].component_materials != 'none') {
-            if (this.components[child].component_materials == 'inherit') {
-                if (this.current_material == null)
-                    return 'Error - cannot display inhreited material if there is no material declared before';
-                if (this.current_material != null)
-                    this.current_material.apply();
-            } else {
-                this.current_material = this.components[child].component_materials[0]; //TODO later use smth to chnage with key press
-               
-                //this.current_material.setTexture(this.textures['metal']);
-                if (this.current_material != null)
-                    this.current_material.apply();
-            }
-
-
+        //Textures
+        let cenas = this.components[child].texture.textureref;
+        if (this.components[child].texture.textureref == 'inherit') { 
+            if (this.current_texture == null)
+                 return 'Error - cannot display inhreited texture if there is no texture declared before';
         }
+        else if (this.components[child].texture.textureref != 'none') {
+            this.current_texture = this.components[child].texture.textureref;
+            this.current_material.setTexture(this.current_texture);
+        }
+
+        //Apply
+        this.current_material.apply();
+
+
+        //}
         //this.components[child].texture.apply(); 
         //this.components[child].component_materials.apply;
         //this.scene.updateTexCoordsGLBuffers();

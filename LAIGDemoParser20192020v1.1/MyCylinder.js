@@ -78,6 +78,11 @@ class MyCylinder extends CGFobject {
 		}
 
 		this.texCoords = [];
+		this.texCoords.push(0, 1);
+        this.texCoords.push(0, 0);
+        this.texCoords.push(1, 1);
+		this.texCoords.push(1, 0);
+		
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	}
