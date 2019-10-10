@@ -55,6 +55,9 @@ class MyCylinder extends CGFobject {
 				
 				//Preparing next iteration
 				theta += d_theta;
+
+				//Storing textCoords
+				this.texCoords.push(1/this.slices*j, 1/this.stacks*i);
 			}
 
 			//Preparing next iteration
@@ -75,9 +78,6 @@ class MyCylinder extends CGFobject {
 					this.indices.push(p1, p4, p2, p4, p3, p2);
 				}
 				else this.indices.push(p1, p3, p2, p3, p4, p2);
-
-				//Storing textCoords
-				this.texCoords.push(1/this.slices*j, 1/this.stacks*i);
 			}
 		}
 		
