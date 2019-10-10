@@ -27,6 +27,7 @@ class MySphere extends CGFobject {
 		this.vertices = [];
 		this.normals = [];
 		this.indices = [];
+		this.texCoords = [];
 
 		for (let i = 0; i <= 2*this.stacks; i++) {
 			for (let j = 0; j <= this.slices; j++) {
@@ -58,14 +59,17 @@ class MySphere extends CGFobject {
 			for (let j = 0; j < this.slices; j++) {
 				let p1 = i * (this.slices+1) + j;
 				let p2 = p1 + (this.slices+1);
+
 				//Storing indices
 				this.indices.push(
 					p1, p2, p1 + 1, p1 + 1, p2, p2 + 1
 				);
+
+				//Storing textCoords
+				this.texCoords.push(j/this.slices, 1-i/this.stacks);
 			}
 		}
 
-		this.texCoords = []
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	}
