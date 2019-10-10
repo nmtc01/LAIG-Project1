@@ -1417,6 +1417,10 @@ class MySceneGraph {
                     ]);
                     break;
                 }
+                case "MyTriangle":
+                {
+                    break;
+                }
                 default:
                     break;
             }
