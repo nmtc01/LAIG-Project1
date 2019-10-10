@@ -172,8 +172,8 @@
 
         <component id="mySurface">
             <transformation>
-                <rotate axis="x" angle="-90" />
                 <scale x="40" y="20" z="1" />
+                <rotate axis="x" angle="-90" />
             </transformation>
             <materials>
                 <material id="water" />
