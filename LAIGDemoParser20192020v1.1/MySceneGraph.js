@@ -1378,6 +1378,7 @@ class MySceneGraph {
         else if (this.components[child].texture.textureref != 'none') {
             this.current_texture = this.components[child].texture.textureref;
             this.current_material.setTexture(this.current_texture);
+            this.current_material.setTextureWrap('REPEAT', 'REPEAT');
         }
 
         //Apply
@@ -1396,6 +1397,28 @@ class MySceneGraph {
         //Process end node/primitives
         for (let i = 0; i < this.components[child].children.primitiverefIDs.length; i++) {
             this.scene.pushMatrix();
+
+            let lg_s = this.components[child].texture.length_s;
+            let lg_t = this.components[child].texture.length_t;
+
+            switch (this.components[child].children.primitiverefIDs[i].primitiveType) {
+                case 4:
+                {
+                    let x1 = this.components[child].children.primitiverefIDs[i].x1;
+                    let y1 = this.components[child].children.primitiverefIDs[i].y1;
+                    let x2 = this.components[child].children.primitiverefIDs[i].x2;
+                    let y2 = this.components[child].children.primitiverefIDs[i].y2;
+                    this.components[child].children.primitiverefIDs[i].updateTexCoords([
+                        0, Math.sqrt(Math.pow(y2-y1,2))/lg_t,
+			            Math.sqrt(Math.pow(x2-x1,2))/lg_s, Math.sqrt(Math.pow(y2-y1,2))/lg_t,
+			            0, 0,
+			            Math.sqrt(Math.pow(x2-x1,2))/lg_s, 0
+                    ]);
+                }
+                default:
+                    break;
+            }
+
             this.components[child].children.primitiverefIDs[i].display();
             this.scene.popMatrix();
         }
