@@ -1401,8 +1401,9 @@ class MySceneGraph {
             let lg_s = this.components[child].texture.length_s;
             let lg_t = this.components[child].texture.length_t;
 
-            switch (this.components[child].children.primitiverefIDs[i].primitiveType) {
-                case 4:
+            let primitiveType = this.components[child].children.primitiverefIDs[i].constructor.name;
+            switch (primitiveType) {
+                case "MyRectangle":
                 {
                     let x1 = this.components[child].children.primitiverefIDs[i].x1;
                     let y1 = this.components[child].children.primitiverefIDs[i].y1;
@@ -1414,6 +1415,7 @@ class MySceneGraph {
 			            0, 0,
 			            Math.sqrt(Math.pow(x2-x1,2))/lg_s, 0
                     ]);
+                    break;
                 }
                 default:
                     break;
