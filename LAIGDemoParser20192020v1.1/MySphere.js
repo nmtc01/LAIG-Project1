@@ -65,8 +65,7 @@ class MySphere extends CGFobject {
 					p1, p2, p1 + 1, p1 + 1, p2, p2 + 1
 				);
 
-				//Storing textCoords
-				this.texCoords.push(j/this.slices, 1-i/this.stacks);
+				//Storing texCoords
 			}
 		}
 

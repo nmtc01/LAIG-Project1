@@ -1157,22 +1157,30 @@ class MySceneGraph {
 
             // Texture -- Obrigatorio
             if (textureIndex != -1) {
+                var length_s = 1;
+                var length_t = 1;
 
                 var textureref = this.reader.getString(grandChildren[textureIndex], 'id');
                 if (textureref != 'inherit' && textureref != 'none') {
                     if (this.textures[textureref] == null)
                         return "texture block must be declared"
                     textureref = this.textures[textureref];
-                }
-                var length_s = 0;
-                var length_t = 0;
 
-                if (this.reader.hasAttribute(grandChildren[textureIndex], 'length_s')) {
+                    //Handling lengths
                     length_s = this.reader.getFloat(grandChildren[textureIndex], 'length_s');
-                }
-
-                if (this.reader.hasAttribute(grandChildren[textureIndex], 'length_t')) {
+                    if (length_s == null)
+                        return "texture must have a length_s declared"
                     length_t = this.reader.getFloat(grandChildren[textureIndex], 'length_t');
+                    if (length_t == null)
+                        return "texture must have a length_t declared"
+                }
+                else {
+                    if (this.reader.hasAttribute(grandChildren[textureIndex], 'length_s')) {
+                        return "texture should not have a length_s declared"
+                    }
+                    if (this.reader.hasAttribute(grandChildren[textureIndex], 'length_t')) {
+                        return "texture should not have a length_t declared"
+                    }
                 }
 
             }

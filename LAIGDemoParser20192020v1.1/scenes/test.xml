@@ -132,7 +132,7 @@
             <cylinder base="5" top="5" height="5" slices="20" stacks="4" />
         </primitive>
         <primitive id="mySphere">
-            <sphere radius="10" slices="20" stacks="20" />
+            <sphere radius="30" slices="10" stacks="10" />
         </primitive>
         <primitive id="myTorus">
             <torus inner="0.5" outer="1" slices="50" loops="50" />
