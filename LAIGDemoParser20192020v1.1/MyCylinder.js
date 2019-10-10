@@ -34,6 +34,7 @@ class MyCylinder extends CGFobject {
 		this.vertices = [];
 		this.normals = [];
 		this.indices = [];
+		this.texCoords = [];
 
 		for (let i = 0; i <= this.stacks; i++) {
 			for (let j = 0; j < this.slices; j++) {
@@ -74,6 +75,9 @@ class MyCylinder extends CGFobject {
 					this.indices.push(p1, p4, p2, p4, p3, p2);
 				}
 				else this.indices.push(p1, p3, p2, p3, p4, p2);
+
+				//Storing textCoords
+				this.texCoords.push(1/this.slices*j, 1/this.stacks*i);
 			}
 		}
 		
