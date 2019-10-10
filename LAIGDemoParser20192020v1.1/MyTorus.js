@@ -61,8 +61,6 @@ theta += d_theta;
 				this.indices.push(
 					p1, p2, p1 + 1, p1 + 1, p2, p2 + 1
 				);
-				
-
 			}
 		}
 		

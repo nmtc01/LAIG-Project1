@@ -1363,7 +1363,6 @@ class MySceneGraph {
         else this.current_material = this.components[child].component_materials[0]; //TODO later use smth to chnage with key press
 
         //Textures
-        let cenas = this.components[child].texture.textureref;
         if (this.components[child].texture.textureref == 'inherit') { 
             if (this.current_texture == null)
                  return 'Error - cannot display inhreited texture if there is no texture declared before';

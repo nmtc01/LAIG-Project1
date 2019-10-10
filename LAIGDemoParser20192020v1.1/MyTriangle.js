@@ -58,23 +58,8 @@ class MyTriangle extends CGFobject {
 			this.nx,this.ny,this.nz,
 			this.nx,this.ny,this.nz
 		];
-		
-		/*
-		Texture coords (s,t)
-		+----------> s
-        |
-        |
-		|
-		v
-        t
-        */
 
-		this.texCoords = [
-			0, 1,
-			1, 1,
-			0.5, 0
-
-		]
+		this.texCoords = []
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	}
