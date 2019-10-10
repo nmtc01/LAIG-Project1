@@ -70,9 +70,7 @@ class MyTriangle extends CGFobject {
 	 * @param {Array} coords - Array of texture coordinates
 	 */
 	//TODO USE THE SLIDES TO SET THE TEXTURES WITH LEGHTS AND STUFF 
-	updateTexCoords(coords) {
-		this.texCoords = [
-			...coords];
+	updateTexCoords(lg_s, lg_t) {
 		this.updateTexCoordsGLBuffers();
 	}
 }

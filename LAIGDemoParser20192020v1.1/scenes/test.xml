@@ -152,6 +152,18 @@
             </materials>
             <texture id="pessoa" length_s="5" length_t="2"/>
             <children>
+                <componentref id="my" />
+            </children>
+        </component>
+
+        <component id="my">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="greyMetal" />
+            </materials>
+            <texture id="inherit" />
+            <children>
                 <primitiveref id="myRectangle" />
             </children>
         </component>

@@ -1206,7 +1206,7 @@ class MySceneGraph {
                             break;
                         case 'primitiveref':
                             if (this.primitives[auxID] == null)
-                                return "Primitive refenced  on component does not exist"
+                                return "Primitive referenced  on component does not exist"
                             primitiverefIDs.push(this.primitives[auxID]);
                             break;
                     }
@@ -1401,29 +1401,7 @@ class MySceneGraph {
             let lg_s = this.components[child].texture.length_s;
             let lg_t = this.components[child].texture.length_t;
 
-            let primitiveType = this.components[child].children.primitiverefIDs[i].constructor.name;
-            switch (primitiveType) {
-                case "MyRectangle":
-                {
-                    let x1 = this.components[child].children.primitiverefIDs[i].x1;
-                    let y1 = this.components[child].children.primitiverefIDs[i].y1;
-                    let x2 = this.components[child].children.primitiverefIDs[i].x2;
-                    let y2 = this.components[child].children.primitiverefIDs[i].y2;
-                    this.components[child].children.primitiverefIDs[i].updateTexCoords([
-                        0, Math.sqrt(Math.pow(y2-y1,2))/lg_t,
-			            Math.sqrt(Math.pow(x2-x1,2))/lg_s, Math.sqrt(Math.pow(y2-y1,2))/lg_t,
-			            0, 0,
-			            Math.sqrt(Math.pow(x2-x1,2))/lg_s, 0
-                    ]);
-                    break;
-                }
-                case "MyTriangle":
-                {
-                    break;
-                }
-                default:
-                    break;
-            }
+            this.components[child].children.primitiverefIDs[i].updateTexCoords(lg_s, lg_t);
 
             this.components[child].children.primitiverefIDs[i].display();
             this.scene.popMatrix();

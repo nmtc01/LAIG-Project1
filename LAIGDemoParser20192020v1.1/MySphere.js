@@ -78,8 +78,7 @@ class MySphere extends CGFobject {
 	 * Updates the list of texture coordinates of the rectangle
 	 * @param {Array} coords - Array of texture coordinates
 	 */
-	updateTexCoords(coords) {
-		this.texCoords = [...coords];
+	updateTexCoords(lg_s, lg_t) {
 		this.updateTexCoordsGLBuffers();
 	}
 }
