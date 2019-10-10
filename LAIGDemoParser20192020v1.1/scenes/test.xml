@@ -164,7 +164,7 @@
             </materials>
             <texture id="inherit" />
             <children>
-                <primitiveref id="myRectangle" />
+                <primitiveref id="myCylinder" />
             </children>
         </component>
 
