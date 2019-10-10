@@ -150,7 +150,7 @@
             <materials>
                 <material id="greyMetal" />
             </materials>
-            <texture id="pessoa"/>
+            <texture id="pessoa" length_s="3" length_t="4"/>
             <children>
                 <primitiveref id="mySphere" />
             </children>
