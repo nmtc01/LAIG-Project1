@@ -1350,7 +1350,7 @@ class MySceneGraph {
     /**
      * Displays the scene, processing each node, starting in the root node.
      */
-    processChild(child) {
+    processChild(child, parent_length_s, parent_length_t) {
 
         if (this.components[child].visited)
             return "Component has already been visited";
@@ -1374,11 +1374,17 @@ class MySceneGraph {
         if (this.components[child].texture.textureref == 'inherit') { 
             if (this.current_texture == null)
                  return 'Error - cannot display inhreited texture if there is no texture declared before';
+            this.components[child].texture.length_s = parent_length_s;
+            this.components[child].texture.length_t = parent_length_t;
         }
         else if (this.components[child].texture.textureref != 'none') {
             this.current_texture = this.components[child].texture.textureref;
             this.current_material.setTexture(this.current_texture);
             this.current_material.setTextureWrap('REPEAT', 'REPEAT');
+        }
+        else {
+            this.components[child].texture.length_s = parent_length_s;
+            this.components[child].texture.length_t = parent_length_t;
         }
 
         //Apply
@@ -1391,7 +1397,7 @@ class MySceneGraph {
         //this.scene.updateTexCoordsGLBuffers();
         //Process child components
         for (let i = 0; i < this.components[child].children.componentrefIDs.length; i++) {
-            this.processChild(this.components[child].children.componentrefIDs[i]);
+            this.processChild(this.components[child].children.componentrefIDs[i], this.components[child].texture.length_s, this.components[child].texture.length_t);
         }
 
         //Process end node/primitives
@@ -1414,6 +1420,8 @@ class MySceneGraph {
     }
 
     displayScene() {
-        this.processChild(this.components["root"].componentID);
+        let s = this.components["root"].texture.length_s;
+        let t = this.components["root"].texture.length_t
+        this.processChild(this.components["root"].componentID, this.components["root"].texture.length_s, this.components["root"].texture.length_t);
     }
 }

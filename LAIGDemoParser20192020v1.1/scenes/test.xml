@@ -150,13 +150,25 @@
             <materials>
                 <material id="greyMetal" />
             </materials>
-            <texture id="pessoa" length_s="1" length_t="2"/>
+            <texture id="none"/>
             <children>
                 <componentref id="my" />
             </children>
         </component>
 
         <component id="my">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="greyMetal" />
+            </materials>
+            <texture id="pessoa" length_s="20" length_t="10"/>
+            <children>
+                <componentref id="cenas" />
+            </children>
+        </component>
+
+        <component id="cenas">
             <transformation>
             </transformation>
             <materials>
