@@ -1420,8 +1420,6 @@ class MySceneGraph {
     }
 
     displayScene() {
-        let s = this.components["root"].texture.length_s;
-        let t = this.components["root"].texture.length_t
         this.processChild(this.components["root"].componentID, this.components["root"].texture.length_s, this.components["root"].texture.length_t);
     }
 }
