@@ -45,6 +45,9 @@ class MySphere extends CGFobject {
 				//Storing values
 				this.vertices.push(x, y, z);
 				this.normals.push(nx, ny, nz);
+
+				//Storing texCoords
+				this.texCoords.push(1/this.slices*j, 1/this.stacks*i);
 				
 				//Preparing next iteration
 				phi += d_phi;

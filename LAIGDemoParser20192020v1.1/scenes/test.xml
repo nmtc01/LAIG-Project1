@@ -132,7 +132,7 @@
             <triangle x1="0" y1="0" z1="0.5" x2="0" y2="0" z2="-0.5" x3="2.179" y3="0" z3="0"/>
         </primitive>
         <primitive id="myCylinder">
-            <cylinder base="10" top="10" height="10" slices="6" stacks="1" />
+            <cylinder base="10" top="10" height="10" slices="20" stacks="10" />
         </primitive>
         <primitive id="mySphere">
             <sphere radius="30" slices="10" stacks="10" />
@@ -167,7 +167,7 @@
             </materials>
             <texture id="inherit" />
             <children>
-                <primitiveref id="myCylinder" />
+                <primitiveref id="mySphere" />
             </children>
         </component>
 

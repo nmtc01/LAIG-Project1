@@ -52,12 +52,12 @@ class MyCylinder extends CGFobject {
 				this.vertices.push(x, y, z);
 				nr_vertices++;
 				this.normals.push(nx, ny, nz); 
-				
-				//Preparing next iteration
-				theta += d_theta;
 
 				//Storing textCoords
 				this.texCoords.push(1/this.slices*j, 1/this.stacks*i);
+				
+				//Preparing next iteration
+				theta += d_theta;
 			}
 
 			//Preparing next iteration
