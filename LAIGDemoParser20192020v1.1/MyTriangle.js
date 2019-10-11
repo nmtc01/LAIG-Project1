@@ -59,7 +59,15 @@ class MyTriangle extends CGFobject {
 			this.nx,this.ny,this.nz
 		];
 
-		this.texCoords = []
+		let a = Math.sqrt(Math.pow(this.x2-this.x1,2) + Math.pow(this.y2-this.y1,2));
+		let b = Math.sqrt(Math.pow(this.x3-this.x2,2) + Math.pow(this.y3-this.y2,2))
+		let c = Math.sqrt(Math.pow(this.x3-this.x1,2) + Math.pow(this.y3-this.y1,2));
+		let cos_alfa = ((Math.pow(a,2)-Math.pow(b,2)+Math.pow(c,2))/(2*a*c));
+		this.texCoords = [
+			0, 0,
+			a, 0,
+			c*cos_alfa, c*Math.sqrt(1-Math.pow(cos_alfa, 2))
+		];
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	}
@@ -71,6 +79,15 @@ class MyTriangle extends CGFobject {
 	 */
 	//TODO USE THE SLIDES TO SET THE TEXTURES WITH LEGHTS AND STUFF 
 	updateTexCoords(lg_s, lg_t) {
+		let a = Math.sqrt(Math.pow(this.x2-this.x1,2) + Math.pow(this.y2-this.y1,2));
+		let b = Math.sqrt(Math.pow(this.x3-this.x2,2) + Math.pow(this.y3-this.y2,2))
+		let c = Math.sqrt(Math.pow(this.x3-this.x1,2) + Math.pow(this.y3-this.y1,2));
+		let cos_alfa = ((Math.pow(a,2)-Math.pow(b,2)+Math.pow(c,2))/(2*a*c));
+		this.texCoords = [
+			0, 0,
+			a/lg_s, 0,
+			c*cos_alfa/lg_s, c*Math.sqrt(1-Math.pow(cos_alfa, 2))/lg_t
+		];
 		this.updateTexCoordsGLBuffers();
 	}
 }
