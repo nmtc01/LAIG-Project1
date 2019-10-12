@@ -69,8 +69,6 @@ class MySphere extends CGFobject {
 
 		for (let i = 0; i <= 2*this.stacks; i++)
 			for (let j = 0; j <= this.slices; j++) {
-				let ts = 1/this.stacks*(i/2);
-				let tt = 1-1/this.slices*j;
 				//Storing texCoords
 				this.texCoords.push(1/this.stacks*(i/2), 1-1/this.slices*j);
 			}
