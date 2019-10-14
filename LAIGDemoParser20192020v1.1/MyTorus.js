@@ -61,8 +61,6 @@ theta += d_theta;
 				this.indices.push(
 					p1, p2, p1 + 1, p1 + 1, p2, p2 + 1
 				);
-				
-
 			}
 		}
 		
@@ -76,8 +74,7 @@ theta += d_theta;
 	 * Updates the list of texture coordinates of the rectangle
 	 * @param {Array} coords - Array of texture coordinates
 	 */
-	updateTexCoords(coords) {
-		this.texCoords = [...coords];
+	updateTexCoords(lg_s, lg_t) {
 		this.updateTexCoordsGLBuffers();
 	}
 }

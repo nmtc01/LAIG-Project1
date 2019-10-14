@@ -172,6 +172,7 @@
 
         <component id="mySurface">
             <transformation>
+                <scale x="40" y="1" z="20" />
                 <rotate axis="x" angle="-90" />
                 <scale x="40" y="20" z="1" />
             </transformation>

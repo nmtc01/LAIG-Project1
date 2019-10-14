@@ -34,9 +34,10 @@ class MyCylinder extends CGFobject {
 		this.vertices = [];
 		this.normals = [];
 		this.indices = [];
+		this.texCoords = [];
 
 		for (let i = 0; i <= this.stacks; i++) {
-			for (let j = 0; j < this.slices; j++) {
+			for (let j = 0; j <= this.slices; j++) {
 
 				//Normals
 				let nx = Math.cos(theta); 
@@ -51,6 +52,9 @@ class MyCylinder extends CGFobject {
 				this.vertices.push(x, y, z);
 				nr_vertices++;
 				this.normals.push(nx, ny, nz); 
+
+				//Storing textCoords
+				this.texCoords.push(1/this.slices*j, 1/this.stacks*i);
 				
 				//Preparing next iteration
 				theta += d_theta;
@@ -62,18 +66,13 @@ class MyCylinder extends CGFobject {
 		}
 
 		for (let i = 0; i < this.stacks; i ++) {
-			for (let j = 0; j < this.slices; j++) {
-				let p1 = i * this.slices + j;
-				let p2 = p1 + this.slices;
+			for (let j = 0; j <= this.slices; j++) {
+				let p1 = i * (this.slices+1) + j;
+				let p2 = p1 + (this.slices+1);
 				let p3 = p1 + 1;
 				let p4 = p2 + 1;
 
-				//Storing indices
-				if (j == this.slices-1) {
-					p4 = p4 - 2*this.slices;
-					this.indices.push(p1, p4, p2, p4, p3, p2);
-				}
-				else this.indices.push(p1, p3, p2, p3, p4, p2);
+				this.indices.push(p3, p2, p1, p4, p2, p3);
 			}
 		}
 		
@@ -86,8 +85,7 @@ class MyCylinder extends CGFobject {
 	 * Updates the list of texture coordinates of the rectangle
 	 * @param {Array} coords - Array of texture coordinates
 	 */
-	updateTexCoords(coords) {
-		this.texCoords = [...coords];
+	updateTexCoords(lg_s, lg_t) {
 		this.updateTexCoordsGLBuffers();
 	}
 }

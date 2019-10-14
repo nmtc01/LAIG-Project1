@@ -27,6 +27,7 @@ class MySphere extends CGFobject {
 		this.vertices = [];
 		this.normals = [];
 		this.indices = [];
+		this.texCoords = [];
 
 		for (let i = 0; i <= 2*this.stacks; i++) {
 			for (let j = 0; j <= this.slices; j++) {
@@ -58,6 +59,7 @@ class MySphere extends CGFobject {
 			for (let j = 0; j < this.slices; j++) {
 				let p1 = i * (this.slices+1) + j;
 				let p2 = p1 + (this.slices+1);
+
 				//Storing indices
 				this.indices.push(
 					p1, p2, p1 + 1, p1 + 1, p2, p2 + 1
@@ -65,7 +67,12 @@ class MySphere extends CGFobject {
 			}
 		}
 
-		this.texCoords = []
+		for (let i = 0; i <= 2*this.stacks; i++)
+			for (let j = 0; j <= this.slices; j++) {
+				//Storing texCoords
+				this.texCoords.push(1/this.stacks*(i/2), 1-1/this.slices*j);
+			}
+
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	}
@@ -75,8 +82,7 @@ class MySphere extends CGFobject {
 	 * Updates the list of texture coordinates of the rectangle
 	 * @param {Array} coords - Array of texture coordinates
 	 */
-	updateTexCoords(coords) {
-		this.texCoords = [...coords];
+	updateTexCoords(lg_s, lg_t) {
 		this.updateTexCoordsGLBuffers();
 	}
 }

@@ -1157,22 +1157,30 @@ class MySceneGraph {
 
             // Texture -- Obrigatorio
             if (textureIndex != -1) {
+                var length_s = 1;
+                var length_t = 1;
 
                 var textureref = this.reader.getString(grandChildren[textureIndex], 'id');
                 if (textureref != 'inherit' && textureref != 'none') {
                     if (this.textures[textureref] == null)
                         return "texture block must be declared"
                     textureref = this.textures[textureref];
-                }
-                var length_s = 0;
-                var length_t = 0;
 
-                if (this.reader.hasAttribute(grandChildren[textureIndex], 'length_s')) {
+                    //Handling lengths
                     length_s = this.reader.getFloat(grandChildren[textureIndex], 'length_s');
-                }
-
-                if (this.reader.hasAttribute(grandChildren[textureIndex], 'length_t')) {
+                    if (length_s == null)
+                        return "texture must have a length_s declared"
                     length_t = this.reader.getFloat(grandChildren[textureIndex], 'length_t');
+                    if (length_t == null)
+                        return "texture must have a length_t declared"
+                }
+                else {
+                    if (this.reader.hasAttribute(grandChildren[textureIndex], 'length_s')) {
+                        return "texture should not have a length_s declared"
+                    }
+                    if (this.reader.hasAttribute(grandChildren[textureIndex], 'length_t')) {
+                        return "texture should not have a length_t declared"
+                    }
                 }
 
             }
@@ -1198,7 +1206,7 @@ class MySceneGraph {
                             break;
                         case 'primitiveref':
                             if (this.primitives[auxID] == null)
-                                return "Primitive refenced  on component does not exist"
+                                return "Primitive referenced  on component does not exist"
                             primitiverefIDs.push(this.primitives[auxID]);
                             break;
                     }
@@ -1342,12 +1350,7 @@ class MySceneGraph {
     /**
      * Displays the scene, processing each node, starting in the root node.
      */
-
-    updateMaterials(){
-        console.log('xD');
-    }
-    
-    processChild(child) {
+    processChild(child, parent_length_s, parent_length_t) {
 
         if (this.components[child].visited)
             return "Component has already been visited";
@@ -1369,16 +1372,21 @@ class MySceneGraph {
 
         
         //Textures
-/*
         if (this.components[child].texture.textureref == 'inherit') { 
             if (this.current_texture == null)
                  return 'Error - cannot display inhreited texture if there is no texture declared before';
+            this.components[child].texture.length_s = parent_length_s;
+            this.components[child].texture.length_t = parent_length_t;
         }
         else if (this.components[child].texture.textureref != 'none') {
             this.current_texture = this.components[child].texture.textureref;
             this.current_material.setTexture(this.current_texture);
+            this.current_material.setTextureWrap('REPEAT', 'REPEAT');
         }
-        */
+        else {
+            this.components[child].texture.length_s = parent_length_s;
+            this.components[child].texture.length_t = parent_length_t;
+        }
 
         //Apply
         this.current_material.apply();
@@ -1390,12 +1398,18 @@ class MySceneGraph {
         //this.scene.updateTexCoordsGLBuffers();
         //Process child components
         for (let i = 0; i < this.components[child].children.componentrefIDs.length; i++) {
-            this.processChild(this.components[child].children.componentrefIDs[i]);
+            this.processChild(this.components[child].children.componentrefIDs[i], this.components[child].texture.length_s, this.components[child].texture.length_t);
         }
 
         //Process end node/primitives
         for (let i = 0; i < this.components[child].children.primitiverefIDs.length; i++) {
             this.scene.pushMatrix();
+
+            let lg_s = this.components[child].texture.length_s;
+            let lg_t = this.components[child].texture.length_t;
+
+            this.components[child].children.primitiverefIDs[i].updateTexCoords(lg_s, lg_t);
+
             this.components[child].children.primitiverefIDs[i].display();
             this.scene.popMatrix();
         }
@@ -1407,6 +1421,6 @@ class MySceneGraph {
     }
 
     displayScene() {
-        this.processChild(this.components["root"].componentID);
+        this.processChild(this.components["root"].componentID, this.components["root"].texture.length_s, this.components["root"].texture.length_t);
     }
 }
