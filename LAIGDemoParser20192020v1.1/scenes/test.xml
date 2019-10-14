@@ -147,7 +147,7 @@
             <sphere radius="30" slices="20" stacks="10" />
         </primitive>
         <primitive id="myTorus">
-            <torus inner="0.5" outer="1" slices="50" loops="50" />
+            <torus inner="10" outer="20" slices="50" loops="50" />
         </primitive>
          <primitive id="myTorus2">
             <torus inner="0.25" outer="1" slices="50" loops="50" />
@@ -176,7 +176,7 @@
             </materials>
             <texture id="inherit" />
             <children>
-                <primitiveref id="mySphere" />
+                <primitiveref id="myTorus" />
             </children>
         </component>
 

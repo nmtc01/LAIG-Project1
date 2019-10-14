@@ -227,7 +227,7 @@
                 <material id="greyMetal" />
                 <material id="blueMetal" />
             </materials>
-            <texture id="metal"/>
+            <texture id="metal" length_s="1" length_t="1"/>
             <children>
                 <componentref id="bodyShip1" />
                 <componentref id="bodyShip2" />
@@ -980,7 +980,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="none" />
             <children>
                 <primitiveref id="mySphere" />
             </children>
@@ -994,7 +994,7 @@
             <materials>
                 <material id="inherit" />
             </materials> 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="none" />
             <children>
                 <primitiveref id="mySphere" />
             </children>
@@ -1008,7 +1008,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="none" />
             <children>
                 <primitiveref id="mySphere" />
             </children>
@@ -1158,7 +1158,7 @@
             <materials>
                 <material id="wood" />
             </materials>
-            <texture id="inherit" length_s="1" length_t="1" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="myCylinder" />
             </children>
