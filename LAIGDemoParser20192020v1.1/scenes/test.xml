@@ -50,6 +50,8 @@
         <texture id="metal" file="scenes/images/metal.jpg" />
         <texture id="pessoa" file="scenes/images/pessoa.jpg" />
         <texture id="pressao" file="scenes/images/pressao.jpg" />
+        <texture id="pokeball" file="scenes/images/pokeball.png" />
+        <texture id="floater" file="scenes/images/boia.png" />
     </textures>
 
     <materials>
@@ -162,7 +164,7 @@
             <materials>
                 <material id="greyMetal" />
             </materials>
-            <texture id="pressao" length_s="10" length_t="10"/>
+            <texture id="floater" length_s="10" length_t="10"/>
             <children>
                 <componentref id="cenas" />
             </children>

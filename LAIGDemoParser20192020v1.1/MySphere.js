@@ -67,10 +67,11 @@ class MySphere extends CGFobject {
 			}
 		}
 
+		//TODO isto nao fara  mais sentido colocar isto dentro do ciclo de cima de vez?
 		for (let i = 0; i <= 2*this.stacks; i++)
 			for (let j = 0; j <= this.slices; j++) {
 				//Storing texCoords
-				this.texCoords.push(1/this.stacks*(i/2), 1-1/this.slices*j);
+				this.texCoords.push(1/this.slices*(i/2), 1-1/this.slices*j); 
 			}
 
 		this.primitiveType = this.scene.gl.TRIANGLES;

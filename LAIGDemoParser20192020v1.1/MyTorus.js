@@ -27,6 +27,7 @@ class MyTorus extends CGFobject {
 		this.vertices = [];
 		this.indices = [];
 		this.normals = [];
+		this.texCoords = [];
 
 		//create vertices and normals 
 		for (let i = 0; i <= this.slices; i++) {
@@ -42,9 +43,15 @@ class MyTorus extends CGFobject {
 				let y = (this.outer + this.inner * Math.cos(theta)) * Math.sin(phi);
 				let z = this.inner* Math.sin(theta);
 
+
+				//TextCoords
+				this.texCoords.push(i/this.loops,j/this.slices);
+
 				this.vertices.push(x, y, z);
 				this.normals.push(nx, ny, nz);
-theta += d_theta;
+
+
+				theta += d_theta;
 				
 			}
 			phi += d_phi;
@@ -64,7 +71,12 @@ theta += d_theta;
 			}
 		}
 		
-		//this.texCoords = []; //TODO
+		for (let i = 0; i <= 2*this.slices; i++)
+			for (let j = 0; j <= this.slices; j++) {
+				//Storing texCoords
+				this.texCoords.push(1/this.slices*(i/2), 1-1/this.slices*j);
+			}
+
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	}
