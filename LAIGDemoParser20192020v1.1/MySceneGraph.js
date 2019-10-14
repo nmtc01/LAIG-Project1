@@ -555,7 +555,7 @@ class MySceneGraph {
 
                 global.push(...[angle, exponent, targetLight])
             }
-
+            console.log(global);
             this.lights[lightId] = global;
             numLights++;
         }
@@ -1342,6 +1342,11 @@ class MySceneGraph {
     /**
      * Displays the scene, processing each node, starting in the root node.
      */
+
+    updateMaterials(){
+        console.log('xD');
+    }
+    
     processChild(child) {
 
         if (this.components[child].visited)
@@ -1362,8 +1367,9 @@ class MySceneGraph {
         } 
         else this.current_material = this.components[child].component_materials[0]; //TODO later use smth to chnage with key press
 
+        
         //Textures
-        let cenas = this.components[child].texture.textureref;
+/*
         if (this.components[child].texture.textureref == 'inherit') { 
             if (this.current_texture == null)
                  return 'Error - cannot display inhreited texture if there is no texture declared before';
@@ -1372,6 +1378,7 @@ class MySceneGraph {
             this.current_texture = this.components[child].texture.textureref;
             this.current_material.setTexture(this.current_texture);
         }
+        */
 
         //Apply
         this.current_material.apply();

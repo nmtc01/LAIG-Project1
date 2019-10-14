@@ -1,5 +1,5 @@
 <lxs>
-    <scene root="root" axis_length="0" />
+    <scene root="root" axis_length="50" />
 
     <views default="defaultcamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
@@ -172,8 +172,8 @@
 
         <component id="mySurface">
             <transformation>
-                <scale x="40" y="20" z="1" />
                 <rotate axis="x" angle="-90" />
+                <scale x="40" y="20" z="1" />
             </transformation>
             <materials>
                 <material id="water" />

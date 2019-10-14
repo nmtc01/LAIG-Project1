@@ -66,7 +66,7 @@ theta += d_theta;
 			}
 		}
 		
-		this.texCoords = []; //TODO
+		//this.texCoords = []; //TODO
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	}

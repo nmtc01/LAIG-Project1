@@ -36,6 +36,15 @@ class XMLscene extends CGFscene {
         this.setUpdatePeriod(100);
 
         //interface utils
+        this.displayAxis = true;
+        this.light0 = false;
+        this.light1 = false;
+        this.light2 = false;
+        this.light3 = false;
+        this.light4 = false;
+        this.light5 = false;
+        this.light6 = false;
+        this.light7 = false;
 
         //save index of the selected item 
         this.selectedLight = 0;
@@ -54,7 +63,7 @@ class XMLscene extends CGFscene {
         //array to store enabled cameras, got from from views
         this.cameras = {};
         this.cameraIDs = [];
-        let aux = true; 
+        let aux = true;
         //TODO explode porque nao identifica views e nao consigo perceber porque...
         for (var key in this.graph.views) {
             if (this.graph.views.hasOwnProperty(key)) {
@@ -78,21 +87,21 @@ class XMLscene extends CGFscene {
                         }
                 }
                 //set the first camera passed
-                if(aux){
+                if (aux) {
                     console.log(view.viewId);
                     this.camera = this.cameras[view.viewId];
-                    aux=false;
+                    aux = false;
                 }
-    
+
             }
         }
-    
-        if (this.cameras.length != 0) 
-           return "no cameras were defined";
+
+        if (this.cameras.length != 0)
+            return "no cameras were defined";
     }
     //Update camera upon change on interface
     updateCameras(val) {
-      this.camera = this.cameras[val];
+        this.camera = this.cameras[val];
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
@@ -100,7 +109,6 @@ class XMLscene extends CGFscene {
     initLights() {
         var i = 0;
         // Lights index.
-
         // Reads the lights from the scene graph.
         for (var key in this.graph.lights) {
             if (i >= 8)
@@ -134,7 +142,20 @@ class XMLscene extends CGFscene {
     }
     //Update Lights upon change on interface
     updateLights() {
-
+        var k = '0';
+        for (let i = 0; i < this.lights.length; i++) {
+            if (this.lights0) {
+                this.lights[i].enable();
+                console.log('light' + k);
+            }
+            else {
+                this.lights[i].disable();
+                console.log('xau');
+    
+            } 
+            this.lights[i].update();
+        }
+        k = '0';
     }
 
     initTextures() {
@@ -174,6 +195,20 @@ class XMLscene extends CGFscene {
         this.sceneInited = true;
     }
 
+    checkKeys() {
+        var text = "Keys pressed: ";
+        var keysPressed = false;
+
+        if (this.gui.isKeyPressed("KeyM")) {
+            keysPressed = true;
+            text += " M ";
+            this.graph.updateMaterials();
+        }
+
+        if (keysPressed)
+            console.log(text);
+
+    }
     /**
      * Displays the scene.
      */
@@ -187,19 +222,23 @@ class XMLscene extends CGFscene {
         // Initialize Model-View matrix as identity (no transformation
         this.updateProjectionMatrix();
         this.loadIdentity();
-        
+
         // Apply transformations corresponding to the camera position relative to the origin
         this.applyViewMatrix();
         this.views;
 
         this.pushMatrix();
-        this.axis.display();
+        if (this.displayAxis)
+            this.axis.display();
+
+        this.checkKeys();
+        this.updateLights();
 
         for (var i = 0; i < this.lights.length; i++) {
             this.lights[i].setVisible(true);
             this.lights[i].enable();
         }
-      
+
         if (this.sceneInited) {
             // Draw axis
             this.setDefaultAppearance();

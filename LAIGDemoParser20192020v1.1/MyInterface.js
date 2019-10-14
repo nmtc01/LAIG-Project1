@@ -20,9 +20,10 @@ class MyInterface extends CGFinterface {
 
         this.gui = new dat.GUI();
         // add a group of controls (and open/expand by defult
-
+    
         this.initKeys();
 
+        this.gui.add(this.scene, 'displayAxis').name("Display axis");
         return true;
     }
 
@@ -52,6 +53,15 @@ class MyInterface extends CGFinterface {
     updateInterface(){
         this.gui.add(this.scene, 'selectedCamera',this.scene.cameraIDs)
             .name('Select Camera:')
-            .onChange(val => this.scene.updateCameras(val));        
+            .onChange(val => this.scene.updateCameras(val));    
+
+            var f0 = this.gui.addFolder('Lights');
+            var i = '0';
+            for( var key in this.scene.graph.lights){
+                f0.add(this.scene,'light'+i).name(key);
+            }
+            i='0';
+    
+        
     }
 }
