@@ -63,6 +63,8 @@ class XMLscene extends CGFscene {
         //*I wanted to do a different way, as professor 
         this.selectedCamera = 0;
 
+        this.keysPressed=false; 
+
     }
 
     initDefaultCamera() {
@@ -256,16 +258,18 @@ class XMLscene extends CGFscene {
     }
 
     checkKeys() {
-        let keysPressed= false;
-        if (this.gui.isKeyPressed("KeyM")) {
-            //if (this.PressCount)
+         if (this.gui.isKeyPressed("KeyM") ) { //when key is released
+            if(!this.keysPressed){
                 this.graph.updateMaterials();
-            keysPressed = true;
+                this.keysPressed=true;
+            }
+            if(this.keysPressed){
+                return; 
+            }
         }
 
-        if (keysPressed)
-            console.log('m');
-
+        this.keysPressed = false;
+        
     }
     /**
      * Displays the scene.
