@@ -62,6 +62,7 @@ class XMLscene extends CGFscene {
         this.selectedLight = 0;
         //*I wanted to do a different way, as professor 
         this.selectedCamera = 0;
+
     }
 
     initDefaultCamera() {
@@ -165,56 +166,56 @@ class XMLscene extends CGFscene {
             this.lights[0].disable();
             //console.log('xau');
         }
-    this.lights[0].update();
+        this.lights[0].update();
 
-    if (this.light1) {
-        this.lights[1].enable();
-        //console.log('ola');
-    } else {
-        this.lights[1].disable();
-        //console.log('xau');
-    }
-    this.lights[1].update();
+        if (this.light1) {
+            this.lights[1].enable();
+            //console.log('ola');
+        } else {
+            this.lights[1].disable();
+            //console.log('xau');
+        }
+        this.lights[1].update();
 
-    if (this.light2) {
-        this.lights[2].enable();
-        //console.log('ola');
-    } else {
-        this.lights[2].disable();
-        //console.log('xau');
-    }
-    this.lights[2].update();
+        if (this.light2) {
+            this.lights[2].enable();
+            //console.log('ola');
+        } else {
+            this.lights[2].disable();
+            //console.log('xau');
+        }
+        this.lights[2].update();
 
-    if (this.light3) {
-        this.lights[3].enable();
-        //console.log('ola');
-    } else {
-        this.lights[3].disable();
-        //console.log('xau');
-    }
-    this.lights[3].update();
+        if (this.light3) {
+            this.lights[3].enable();
+            //console.log('ola');
+        } else {
+            this.lights[3].disable();
+            //console.log('xau');
+        }
+        this.lights[3].update();
 
-    if (this.light4) {
-        this.lights[4].enable();
-        //console.log('ola');
-    } else {
-        this.lights[4].disable();
-        //console.log('xau');
-    }
-    this.lights[4].update();
+        if (this.light4) {
+            this.lights[4].enable();
+            //console.log('ola');
+        } else {
+            this.lights[4].disable();
+            //console.log('xau');
+        }
+        this.lights[4].update();
 
 
-    //TODO want to do like this, should ask later 
-       /* for (let i = 0; i < this.lights.length; i++) {
-         if(this.getSwitch(i)){
-             this.lights[i].enable(); 
-             //console.log('ola');
-         }else{
-             this.lights[1].disable();
-             //console.log('xau');
-         }
-         this.lights[i].update();
-     }*/
+        //TODO want to do like this, should ask later 
+        /* for (let i = 0; i < this.lights.length; i++) {
+          if(this.getSwitch(i)){
+              this.lights[i].enable(); 
+              //console.log('ola');
+          }else{
+              this.lights[1].disable();
+              //console.log('xau');
+          }
+          this.lights[i].update();
+      }*/
     }
 
     initTextures() {
@@ -255,17 +256,15 @@ class XMLscene extends CGFscene {
     }
 
     checkKeys() {
-        var text = "Keys pressed: ";
-        var keysPressed = false;
-
+        let keysPressed= false;
         if (this.gui.isKeyPressed("KeyM")) {
+            if (this.PressCount)
+                this.graph.updateMaterials();
             keysPressed = true;
-            text += " M ";
-            this.graph.updateMaterials();
         }
 
         if (keysPressed)
-            console.log(text);
+            console.log('m');
 
     }
     /**
