@@ -258,7 +258,7 @@ class XMLscene extends CGFscene {
     checkKeys() {
         let keysPressed= false;
         if (this.gui.isKeyPressed("KeyM")) {
-            if (this.PressCount)
+            //if (this.PressCount)
                 this.graph.updateMaterials();
             keysPressed = true;
         }
