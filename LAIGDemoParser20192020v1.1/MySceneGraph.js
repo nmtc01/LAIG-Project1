@@ -44,6 +44,8 @@ class MySceneGraph {
         this.current_texture;
         this.current_material;
 
+        this.change_material_id=0;
+
         /*
          * Read the contents of the xml file, and refer to this class for loading and error handlers.
          * After the file is read, the reader calls onXMLReady on this object.
@@ -1347,6 +1349,10 @@ class MySceneGraph {
         console.log("   " + message);
     }
 
+    updateMaterials(){
+        this.change_material_id++;
+    }
+
     /**
      * Displays the scene, processing each node, starting in the root node.
      */
@@ -1368,8 +1374,10 @@ class MySceneGraph {
             if (this.current_material == null)
                 return 'Error - cannot display inhreited material if there is no material declared before';
         } 
-        else this.current_material = this.components[child].component_materials[0]; //TODO later use smth to chnage with key press
-
+        else {
+            let i = this.change_material_id % this.components[child].component_materials.length;
+            this.current_material = this.components[child].component_materials[i]; //TODO later use smth to chnage with key press
+        }
         
         //Textures
         if (this.components[child].texture.textureref == 'inherit') { 
