@@ -47,8 +47,8 @@ class XMLscene extends CGFscene {
         this.light7 = false;
 
         //TODO try to improve using array 
-        //this.lightSwitch = [true, false, false, false, false, false, false, false];
-        this.lightSwitch = [
+        this.lightSwitch = [true, false, false, false, false, false, false, false];
+        /*this.lightSwitch = [
             this.light0,
             this.light1,
             this.light2,
@@ -57,7 +57,7 @@ class XMLscene extends CGFscene {
             this.light5,
             this.light6,
             this.light7
-        ];
+        ];*/
         //save index of the selected item 
         this.selectedLight = 0;
         //*I wanted to do a different way, as professor 
@@ -106,6 +106,7 @@ class XMLscene extends CGFscene {
                 if (aux) {
                     console.log(view.viewId);
                     this.camera = this.cameras[view.viewId];
+                    this.interface.setActiveCamera(this.cameras[view.viewId]);
                     aux = false;
                 }
 
@@ -117,8 +118,8 @@ class XMLscene extends CGFscene {
     }
     //Update camera upon change on interface
     updateCameras(val) {
-        //this.camera = this.cameras[val];
-        this.setActiveCamera(this.cameras[val]);
+        this.camera = this.cameras[val];
+        this.interface.setActiveCamera(this.cameras[val]);
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
@@ -146,11 +147,15 @@ class XMLscene extends CGFscene {
                 }
 
                 this.lights[i].setVisible(true);
-                if (light[0])
+                console.log(this.graph.lights[key][0]);
+                if (this.graph.lights[key][0]==true){
                     this.lights[i].enable();
-                else
+                    this.lightSwitch[i] = true;
+                }
+                else{
                     this.lights[i].disable();
-
+                    this.lightSwitch[i] = false;
+                }
                 this.lights[i].update();
 
                 i++;
@@ -161,6 +166,18 @@ class XMLscene extends CGFscene {
     //Update Lights upon change on interface
     updateLights() {
 
+        for(let i =0; i<this.lights.length; i++){
+            console.log(i+': '+this.lightSwitch[i]);
+            if(this.lightSwitch[i]){
+                this.lights[i].enable(); 
+            }
+            else{
+                this.lights[i].disable();  
+            } 
+            this.lights[i].update();
+        }
+
+        /*
         if (this.light0) {
             this.lights[0].enable();
             //console.log('ola');
@@ -205,9 +222,9 @@ class XMLscene extends CGFscene {
             //console.log('xau');
         }
         this.lights[4].update();
+*/
 
-
-        //TODO want to do like this, should ask later 
+        //TOD/O want to do like this, should ask later 
         /* for (let i = 0; i < this.lights.length; i++) {
           if(this.getSwitch(i)){
               this.lights[i].enable(); 
@@ -245,7 +262,7 @@ class XMLscene extends CGFscene {
         this.setGlobalAmbientLight(this.graph.globals[0], this.graph.globals[1], this.graph.globals[2], this.graph.globals[3]);
 
         //MANIP test
-        //this.initCameras();
+        this.initCameras();
 
         this.initLights();
 

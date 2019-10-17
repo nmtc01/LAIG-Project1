@@ -58,17 +58,19 @@ class MyInterface extends CGFinterface {
             var f0 = this.gui.addFolder('Lights');
             var i = 0;
             //TODO try to improve using array 
-           /* for(var key in this.scene.graph.lights){
-                //f0.add(this.scene,this.scene.lightSwitch[i]).name(key);
-               f0.add(this.scene,'light'+i).name(key);
+           for(var key in this.scene.graph.lights){
+            //console.log('lightSwitch'+'['+i+']');
+               //f0.add(this.scene,'lightSwitch['+i+']').name(key);
+               f0.add(this.scene.lightSwitch,i).name(key);
                i++;
-            }*/
+            }
+            /*
            var i = '0';
             for( var key in this.scene.graph.lights){
                 f0.add(this.scene,'light'+i).name(key);
                 console.log('light'+i);
                 i++;
-            }   
+            }   */
         
     }
 }
