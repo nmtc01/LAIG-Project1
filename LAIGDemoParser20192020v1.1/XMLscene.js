@@ -106,6 +106,7 @@ class XMLscene extends CGFscene {
                 if (aux) {
                     console.log(view.viewId);
                     this.camera = this.cameras[view.viewId];
+                    this.interface.setActiveCamera(this.cameras[view.viewId]);
                     aux = false;
                 }
 
@@ -117,8 +118,8 @@ class XMLscene extends CGFscene {
     }
     //Update camera upon change on interface
     updateCameras(val) {
-        //this.camera = this.cameras[val];
-        this.setActiveCamera(this.cameras[val]);
+        this.camera = this.cameras[val];
+        this.interface.setActiveCamera(this.cameras[val]);
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
@@ -245,7 +246,7 @@ class XMLscene extends CGFscene {
         this.setGlobalAmbientLight(this.graph.globals[0], this.graph.globals[1], this.graph.globals[2], this.graph.globals[3]);
 
         //MANIP test
-        //this.initCameras();
+        this.initCameras();
 
         this.initLights();
 
