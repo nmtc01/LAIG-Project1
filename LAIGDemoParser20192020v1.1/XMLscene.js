@@ -37,30 +37,9 @@ class XMLscene extends CGFscene {
 
         //interface utils
         this.displayAxis = true;
-        this.light0 = true;
-        this.light1 = false;
-        this.light2 = false;
-        this.light3 = false;
-        this.light4 = false;
-        this.light5 = false;
-        this.light6 = false;
-        this.light7 = false;
 
-        //TODO try to improve using array 
         this.lightSwitch = [true, false, false, false, false, false, false, false];
-        /*this.lightSwitch = [
-            this.light0,
-            this.light1,
-            this.light2,
-            this.light3,
-            this.light4,
-            this.light5,
-            this.light6,
-            this.light7
-        ];*/
         //save index of the selected item 
-        this.selectedLight = 0;
-        //*I wanted to do a different way, as professor 
         this.selectedCamera = 0;
 
         this.keysPressed=false; 
@@ -80,7 +59,6 @@ class XMLscene extends CGFscene {
         this.cameras = {};
         this.cameraIDs = [];
         let aux = true;
-        //TODO explode porque nao identifica views e nao consigo perceber porque...
         for (var key in this.graph.views) {
             if (this.graph.views.hasOwnProperty(key)) {
                 var view = this.graph.views[key];
@@ -104,7 +82,6 @@ class XMLscene extends CGFscene {
                 }
                 //set the first camera passed
                 if (aux) {
-                    console.log(view.viewId);
                     this.camera = this.cameras[view.viewId];
                     this.interface.setActiveCamera(this.cameras[view.viewId]);
                     aux = false;
@@ -167,7 +144,6 @@ class XMLscene extends CGFscene {
     updateLights() {
 
         for(let i =0; i<this.lights.length; i++){
-            console.log(i+': '+this.lightSwitch[i]);
             if(this.lightSwitch[i]){
                 this.lights[i].enable(); 
             }
@@ -177,65 +153,7 @@ class XMLscene extends CGFscene {
             this.lights[i].update();
         }
 
-        /*
-        if (this.light0) {
-            this.lights[0].enable();
-            //console.log('ola');
-        } else {
-            this.lights[0].disable();
-            //console.log('xau');
-        }
-        this.lights[0].update();
-
-        if (this.light1) {
-            this.lights[1].enable();
-            //console.log('ola');
-        } else {
-            this.lights[1].disable();
-            //console.log('xau');
-        }
-        this.lights[1].update();
-
-        if (this.light2) {
-            this.lights[2].enable();
-            //console.log('ola');
-        } else {
-            this.lights[2].disable();
-            //console.log('xau');
-        }
-        this.lights[2].update();
-
-        if (this.light3) {
-            this.lights[3].enable();
-            //console.log('ola');
-        } else {
-            this.lights[3].disable();
-            //console.log('xau');
-        }
-        this.lights[3].update();
-
-        if (this.light4) {
-            this.lights[4].enable();
-            //console.log('ola');
-        } else {
-            this.lights[4].disable();
-            //console.log('xau');
-        }
-        this.lights[4].update();
-*/
-
-        //TOD/O want to do like this, should ask later 
-        /* for (let i = 0; i < this.lights.length; i++) {
-          if(this.getSwitch(i)){
-              this.lights[i].enable(); 
-              //console.log('ola');
-          }else{
-              this.lights[1].disable();
-              //console.log('xau');
-          }
-          this.lights[i].update();
-      }*/
-    }
+         }
 
     initTextures() {
         this.textures = [];

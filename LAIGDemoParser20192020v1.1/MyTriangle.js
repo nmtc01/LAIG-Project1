@@ -76,16 +76,17 @@ class MyTriangle extends CGFobject {
 	 * @method updateTexCoords
 	 * Updates the list of texture coordinates of the rectangle
 	 * @param {Array} coords - Array of texture coordinates
+	 * @param {int} lg_s- Sacling factor length
+	 * @param {int} lg_s- Sacling factor length
 	 */
-	//TODO USE THE SLIDES TO SET THE TEXTURES WITH LEGHTS AND STUFF 
 	updateTexCoords(lg_s, lg_t) {
-		let a = Math.sqrt(Math.pow(this.x2-this.x1,2) + Math.pow(this.y2-this.y1,2));
-		let b = Math.sqrt(Math.pow(this.x3-this.x2,2) + Math.pow(this.y3-this.y2,2))
-		let c = Math.sqrt(Math.pow(this.x3-this.x1,2) + Math.pow(this.y3-this.y1,2));
+		let a = Math.sqrt(Math.pow(this.x2-this.x1,2) + Math.pow(this.y2-this.y1,2) + Math.pow(this.z2-this.z1,2));
+		let b = Math.sqrt(Math.pow(this.x3-this.x2,2) + Math.pow(this.y3-this.y2,2)+ Math.pow(this.z3-this.z2,2))
+		let c = Math.sqrt(Math.pow(this.x3-this.x1,2) + Math.pow(this.y3-this.y1,2)+ Math.pow(this.z3-this.z1,2));
 		let cos_alfa = ((Math.pow(a,2)-Math.pow(b,2)+Math.pow(c,2))/(2*a*c));
 		this.texCoords = [
-			0, 0,
-			a/lg_s, 0,
+			0, 0, //t1
+			a/lg_s, 0, //t2
 			c*cos_alfa/lg_s, c*Math.sqrt(1-Math.pow(cos_alfa, 2))/lg_t
 		];
 		this.updateTexCoordsGLBuffers();
