@@ -614,7 +614,7 @@
             <transformation>
             </transformation>
             <materials>
-                <material id="testFloater" />
+                <material id="redScale" />
             </materials>
             <texture id="redScale" length_s="1" length_t="1"/>
             <children>
@@ -630,9 +630,9 @@
                 <translate x="14" y="-3" z="-1" />
             </transformation>
             <materials>
-                <material id="testFloater" />
+                <material id="blueScale" />
             </materials>
-            <texture id="redScale" length_s="1" length_t="1"/>
+            <texture id="blueScale" length_s="1" length_t="1"/>
             <children>
                 <componentref id="fish1" />
                 <componentref id="fish2" />
@@ -647,7 +647,7 @@
                 <translate x="14" y="-3" z="12" />
             </transformation>
             <materials>
-                <material id="testFloater" />
+                <material id="greenScale" />
             </materials>
             <texture id="greenScale" length_s="1" length_t="1"/>
             <children>
@@ -686,9 +686,9 @@
                 <translate x="-3" y="-7" z="-0.3" />
             </transformation>
              <materials>
-                <material id="testFloater" />
+                <material id="inherit" />
             </materials>
-            <texture id="redScale" length_s="1" length_t="1"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="body" />
                 <componentref id="stripe1" />

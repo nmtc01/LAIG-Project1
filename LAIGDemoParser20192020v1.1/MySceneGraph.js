@@ -1346,7 +1346,7 @@ class MySceneGraph {
     /**
      * Displays the scene, processing each node, starting in the root node.
      */
-    processChild(child, parent_texture, parent_length_s, parent_length_t) {
+    processChild(child, parent_material,parent_texture, parent_length_s, parent_length_t) {
 
         if (this.components[child].visited)
             return "Component has already been visited";
@@ -1355,32 +1355,31 @@ class MySceneGraph {
 
         this.scene.pushMatrix();
         this.scene.multMatrix(this.components[child].transformation);//apply tranformations 
-
-        //TODO: apply texture
-        //if (this.components[child].component_materials != 'none') {
             
         //Materials
         if (this.components[child].component_materials == 'inherit') {
-            if (this.current_material == null)
+            if (parent_material == null)
                 return 'Error - cannot display inhreited material if there is no material declared before';
         } 
         else {
             let i = this.change_material_id % this.components[child].component_materials.length;
-            this.current_material = this.components[child].component_materials[i]; //TODO later use smth to chnage with key press
+            parent_material = this.components[child].component_materials[i]; 
         }
         
         //Textures
         if (this.components[child].texture.textureref == 'inherit') { 
+            //controll erros if there is no texture, program stop
             if (this.current_texture == null)
                  return 'Error - cannot display inhreited texture if there is no texture declared before';
+                 
             this.components[child].texture.textureref = parent_texture;
             this.components[child].texture.length_s = parent_length_s;
             this.components[child].texture.length_t = parent_length_t;
         }
         if (this.components[child].texture.textureref != 'none') {
             this.current_texture = this.components[child].texture.textureref;
-            this.current_material.setTexture(this.current_texture);
-            this.current_material.setTextureWrap('REPEAT', 'REPEAT');
+            parent_material.setTexture(this.current_texture);
+            parent_material.setTextureWrap('REPEAT', 'REPEAT');
         }
         else {
             this.components[child].texture.length_s = 1;
@@ -1388,7 +1387,7 @@ class MySceneGraph {
         }
 
         //Apply
-        this.current_material.apply();
+        parent_material.apply();
 
 
         //}
@@ -1397,7 +1396,7 @@ class MySceneGraph {
         //this.scene.updateTexCoordsGLBuffers();
         //Process child components
         for (let i = 0; i < this.components[child].children.componentrefIDs.length; i++) {
-            this.processChild(this.components[child].children.componentrefIDs[i], this.components[child].texture.textureref, this.components[child].texture.length_s, this.components[child].texture.length_t);
+            this.processChild(this.components[child].children.componentrefIDs[i], parent_material,this.components[child].texture.textureref, this.components[child].texture.length_s, this.components[child].texture.length_t);
         }
 
         //Process end node/primitives
@@ -1420,6 +1419,6 @@ class MySceneGraph {
     }
 
     displayScene() {
-        this.processChild(this.components["root"].componentID, this.components["root"].texture.textureref, this.components["root"].texture.length_s, this.components["root"].texture.length_t);
+        this.processChild(this.components["root"].componentID,this.components["root"].component_materials, this.components["root"].texture.textureref, this.components["root"].texture.length_s, this.components["root"].texture.length_t);
     }
 }
