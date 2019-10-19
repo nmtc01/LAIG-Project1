@@ -671,7 +671,7 @@ class MySceneGraph {
             // Get id of the current material.
             var materialID = this.reader.getString(children[i], 'id');
             if (materialID == null)
-                return "no ID defined for material";
+                return "no ID defined for material:" + materialID;
 
             // Checks for repeated IDs.
             if (this.materials[materialID] != null)
@@ -691,8 +691,6 @@ class MySceneGraph {
                 nodeNames.push(grandChildren[j].nodeName);
             }
 
-            //TODO será esta a melhor forma de fazer isto ou com loop? 
-            
             //parse emission
             if (grandChildren[0].nodeName == 'emission') {
                 r = this.reader.getFloat(grandChildren[0], 'r');
@@ -1034,7 +1032,6 @@ class MySceneGraph {
         return null;
     }
 
-    //TODO inves de guardar arrays de staring guardar o this.obeject 
     /**
    * Parses the <components> block.
    * @param {components block element} componentsNode
@@ -1048,9 +1045,6 @@ class MySceneGraph {
         var grandgrandChildren = [];
         var nodeNames = [];
 
-        //TODO check for the root 
-        //TODO define tranformationrefID?
-
         // Any number of components.
         for (var i = 0; i < children.length; i++) {
 
@@ -1062,7 +1056,7 @@ class MySceneGraph {
             // Get id of the current component.
             var componentID = this.reader.getString(children[i], 'id');
             if (componentID == null)
-                return "no ID defined for componentID";
+                return "no ID defined for componentID:"+componentID;
 
             // Checks for repeated IDs.
             if (this.components[componentID] != null)
@@ -1086,9 +1080,6 @@ class MySceneGraph {
 
             // Transformations -- Bloco pode ficar sem conteudo
             if (transformationIndex != -1) {
-
-                //TODO  caso transformacao, seja feita no componente criar uma matriz nova e guardar a matriz na struct component
-                //e nao usar desta maneira com um indix incremanetak a guardar no array das tranformacoes 
                 grandgrandChildren = grandChildren[transformationIndex].children;
                 var transformation;
 
@@ -1100,7 +1091,7 @@ class MySceneGraph {
                     var transfref = this.reader.getString(grandgrandChildren[0], 'id');
                     //check if that reference exists 
                     if (this.transformations[transfref] == null)
-                        return "Transformation id does has not been declared";
+                        return "Transformation id does has not been declared: "+transfref;
                     transformation = this.transformations[transfref];
                 }
                 else {
@@ -1146,12 +1137,11 @@ class MySceneGraph {
                     var materialID = this.reader.getString(grandgrandChildren[k], 'id')
                     //IF MATERIAL IS INHERITABLE 
                     if (materialID == 'inherit') {
-                        //TODO if root doesnt work
                         component_materials.push(materialID);
                         break;
                     }
                     if (this.materials[materialID] == null) {
-                        return "material declared doesnt exist";
+                        return "material declared on component doesnt exist: "+materialID;
                     } else component_materials.push(this.materials[materialID]);
                 }
             }
@@ -1164,8 +1154,8 @@ class MySceneGraph {
 
                 var textureref = this.reader.getString(grandChildren[textureIndex], 'id');
                 if (textureref != 'inherit' && textureref != 'none') {
-                    if (this.textures[textureref] == null)
-                        return "texture block must be declared"
+                    if(this.textures[textureref] == null)
+                        return "texture declared on component doesnt not exist: " + textureref;
                     textureref = this.textures[textureref];
 
                     //Handling lengths
