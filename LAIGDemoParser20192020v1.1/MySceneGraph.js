@@ -1160,7 +1160,6 @@ class MySceneGraph {
                     if (this.textures[textureref] == null)
                         return "texture declared on component doesnt not exist: " + textureref;
                     textureref = this.textures[textureref];
-
                     //Handling lengths
                     length_s = this.reader.getFloat(grandChildren[textureIndex], 'length_s');
                     if (length_s == null)
@@ -1381,27 +1380,30 @@ class MySceneGraph {
             //controll erros if there is no texture, program stop
             if (parent_texture == null)
                 return 'Error - cannot display inhreited texture if there is no texture declared before';
-
-            this.components[child].texture.textureref = parent_texture;
-            this.components[child].texture.length_s = parent_length_s;
-            this.components[child].texture.length_t = parent_length_t;
+            //use parent texture
+           parent_material.setTexture(parent_texture);
+           parent_material.setTextureWrap('REPEAT', 'REPEAT');
         }
-        if (this.components[child].texture.textureref != 'none') {
-            parent_texture = this.components[child].texture.textureref;
-            parent_material.setTexture(parent_texture);
-            parent_material.setTextureWrap('REPEAT', 'REPEAT');
-        }
-        else {
+        if (this.components[child].texture.textureref == 'none') {
+            //if null set nothing
             parent_material.setTexture(null);
             this.components[child].texture.length_s = 1;
             this.components[child].texture.length_t = 1;
+        }
+        if(this.components[child].texture.textureref != 'none' && this.components[child].texture.textureref != 'inherit'){
+            //if new texture reset parent variables
+            parent_texture = this.components[child].texture.textureref;
+            parent_material.setTexture(parent_texture);
+            parent_length_s =  this.components[child].texture.length_s;
+            parent_length_t =  this.components[child].texture.length_t;
+            parent_material.setTextureWrap('REPEAT', 'REPEAT');
         }
 
         //Apply
         parent_material.apply();
         //Process child components
         for (let i = 0; i < this.components[child].children.componentrefIDs.length; i++) {
-            this.processChild(this.components[child].children.componentrefIDs[i], parent_material, this.components[child].texture.textureref, this.components[child].texture.length_s, this.components[child].texture.length_t);
+            this.processChild(this.components[child].children.componentrefIDs[i], parent_material, parent_texture, parent_length_s, parent_length_t);
         }
 
         //Process end node/primitives
