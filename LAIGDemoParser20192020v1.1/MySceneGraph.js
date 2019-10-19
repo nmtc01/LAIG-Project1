@@ -1382,6 +1382,7 @@ class MySceneGraph {
             parent_material.setTextureWrap('REPEAT', 'REPEAT');
         }
         else {
+            parent_material.setTexture(null);
             this.components[child].texture.length_s = 1;
             this.components[child].texture.length_t = 1;
         }
