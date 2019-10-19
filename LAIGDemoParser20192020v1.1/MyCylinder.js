@@ -26,11 +26,13 @@ class MyCylinder extends CGFobject {
 		let d_stack = this.height/this.stacks;
 		let d_radius = (this.base-this.top)/this.height;
 		
-		let theta = 0;
-		let nr_vertices = 0;
+		//angle starting values 
+		let theta = 0;	
 		let radius = this.base;
+		//normal
 		let nz = (this.base-this.top)/this.height;
-
+		
+		//arrays to store primitives data
 		this.vertices = [];
 		this.normals = [];
 		this.indices = [];
@@ -50,7 +52,6 @@ class MyCylinder extends CGFobject {
 
 				//Storing values
 				this.vertices.push(x, y, z);
-				nr_vertices++;
 				this.normals.push(nx, ny, nz); 
 
 				//Storing textCoords
@@ -64,18 +65,23 @@ class MyCylinder extends CGFobject {
 			radius -= d_radius*d_stack;
 			theta = 0;
 		}
-
 		for (let i = 0; i < this.stacks; i ++) {
 			for (let j = 0; j <= this.slices; j++) {
-				let p1 = i * (this.slices+1) + j;
-				let p2 = p1 + (this.slices+1);
+				let p1 = i * this.slices + j;
+				let p2 = p1 + this.slices;
 				let p3 = p1 + 1;
 				let p4 = p2 + 1;
 
-				this.indices.push(p3, p2, p1, p4, p2, p3);
+				//TODO NUNO CONFIRMA PF!!!
+				//Storing indices
+				if (j == this.slices-1) {
+					p4 = p4 - 2*this.slices;
+					this.indices.push(p1, p4, p2, p4, p3, p2);
+				}
+				else this.indices.push(p1, p3, p2, p3, p4, p2);
 			}
 		}
-		
+
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	}
@@ -84,6 +90,9 @@ class MyCylinder extends CGFobject {
 	 * @method updateTexCoords
 	 * Updates the list of texture coordinates of the rectangle
 	 * @param {Array} coords - Array of texture coordinates
+	 * @param {Int} lg_s - Sacling factor length
+	 * @param {Int} lg_t - Sacling factor length
+	 * in this case the arguments to nothing
 	 */
 	updateTexCoords(lg_s, lg_t) {
 		this.updateTexCoordsGLBuffers();

@@ -20,9 +20,10 @@ class MyInterface extends CGFinterface {
 
         this.gui = new dat.GUI();
         // add a group of controls (and open/expand by defult
-    
-        this.initKeys();
 
+        this.initKeys();
+         
+        //added a checkbox with a switch to display axis
         this.gui.add(this.scene, 'displayAxis').name("Display axis");
         return true;
     }
@@ -49,16 +50,17 @@ class MyInterface extends CGFinterface {
         return this.activeKeys[keyCode] || false;
     }
 
-    updateInterface(){
-        this.gui.add(this.scene, 'selectedCamera',this.scene.cameraIDs)
+    updateInterface() {
+        //create dropdown with cameras/view
+        this.gui.add(this.scene, 'selectedCamera', this.scene.cameraIDs)
             .name('Select Camera:')
-            .onChange(val => this.scene.updateCameras(val));    
-
-            var f0 = this.gui.addFolder('Lights');
-            var i = 0;
-           for(var key in this.scene.graph.lights){
-               f0.add(this.scene.lightSwitch,i).name(key);
-               i++;
-            }
+            .onChange(val => this.scene.updateCameras(val));
+        //create folder with lights
+        var f0 = this.gui.addFolder('Lights');
+        var i = 0; //to iterate camera state 
+        for (var key in this.scene.graph.lights) { //create switches for each light adde on XML 
+            f0.add(this.scene.lightSwitch, i).name(key);
+            i++;
+        }
     }
 }

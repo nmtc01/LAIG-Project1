@@ -23,6 +23,7 @@ class XMLscene extends CGFscene {
 
         this.sceneInited = false;
 
+        //initiliaze a camare build buy the program ignoring the xml
         this.initDefaultCamera();
 
         this.enableTextures(true);
@@ -36,20 +37,16 @@ class XMLscene extends CGFscene {
         this.setUpdatePeriod(100);
 
         //interface utils
-        this.displayAxis = true;
-
-        this.lightSwitch = [true, false, false, false, false, false, false, false];
-        //save index of the selected item 
-        this.selectedCamera = 0;
-
-        this.keysPressed=false; 
+        this.displayAxis = true; //axis state
+        this.lightSwitch = [true, false, false, false, false, false, false, false]; //array containing light states
+        this.selectedCamera = 0; //store index of the selected camera
+        this.keysPressed=false; //used to avoid infinite key pressing, always assume one tap, and reset with realease
 
     }
 
     initDefaultCamera() {
         //default camera 
-        //MANIP test
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(100, 100, 100), vec3.fromValues(0, 0, 0)); //default was at 15,15,15
+        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0)); 
     }
     /**
      * Initializes the scene cameras.
@@ -59,6 +56,7 @@ class XMLscene extends CGFscene {
         this.cameras = {};
         this.cameraIDs = [];
         let aux = true;
+        //loop to iterate throught cameras read on xml, this loop was originaly made on the file presented
         for (var key in this.graph.views) {
             if (this.graph.views.hasOwnProperty(key)) {
                 var view = this.graph.views[key];
@@ -80,23 +78,23 @@ class XMLscene extends CGFscene {
                             break;
                         }
                 }
-                //set the first camera passed
+                //set the first camera passed as the deafult one 
                 if (aux) {
                     this.camera = this.cameras[view.viewId];
-                    this.interface.setActiveCamera(this.cameras[view.viewId]);
-                    aux = false;
+                    this.interface.setActiveCamera(this.cameras[view.viewId]); //set camera
+                    aux = false; //so the program only do this condition once
                 }
 
             }
         }
-
+        //at least one camere needs to be defined
         if (this.cameras.length != 0)
             return "no cameras were defined";
     }
     //Update camera upon change on interface
     updateCameras(val) {
-        this.camera = this.cameras[val];
-        this.interface.setActiveCamera(this.cameras[val]);
+        this.camera = this.cameras[val]; //get the camera using val passed on the interface, set as main camera
+        this.interface.setActiveCamera(this.cameras[val]); //set the camera
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
@@ -109,6 +107,7 @@ class XMLscene extends CGFscene {
             if (i >= 8)
                 break;              // Only eight lights allowed by WebGL.
 
+            //another loop presented on the files given at moodle
             if (this.graph.lights.hasOwnProperty(key)) {
                 var light = this.graph.lights[key];
 
@@ -117,32 +116,37 @@ class XMLscene extends CGFscene {
                 this.lights[i].setDiffuse(light[4][0], light[4][1], light[4][2], light[4][3]);
                 this.lights[i].setSpecular(light[5][0], light[5][1], light[5][2], light[5][3]);
 
+                //set light attenuations - added futher 
+                this.lights[i].setConstantAttenuation(light[6][0]);
+                this.lights[i].setLinearAttenuation(light[6][1]);
+                this.lights[i].setQuadraticAttenuation(light[6][2]);
+                //indexes had to be incremented, so that we could add the attenuations.
+                
+                //added further info if it is a spotlight
                 if (light[1] == "spot") {
-                    this.lights[i].setSpotCutOff(light[6]);
-                    this.lights[i].setSpotExponent(light[7]);
-                    this.lights[i].setSpotDirection(light[8][0], light[8][1], light[8][2]);
+                    this.lights[i].setSpotCutOff(light[7]);
+                    this.lights[i].setSpotExponent(light[8]);
+                    this.lights[i].setSpotDirection(light[9][0], light[9][1], light[9][2]);
                 }
 
-                this.lights[i].setVisible(true);
-                console.log(this.graph.lights[key][0]);
-                if (this.graph.lights[key][0]==true){
-                    this.lights[i].enable();
+                this.lights[i].setVisible(true); // always set the light as visible and the change further
+                if (this.graph.lights[key][0]==true){ //if the xml defines light as enabled
+                    this.lights[i].enable(); //turn it on
                     this.lightSwitch[i] = true;
                 }
-                else{
-                    this.lights[i].disable();
+                else{//if the xml defines light as disabled
+                    this.lights[i].disable(); //turn of the light
                     this.lightSwitch[i] = false;
                 }
-                this.lights[i].update();
-
-                i++;
+                this.lights[i].update(); //always update the lights used
+                i++; //count cameras defined
             }
         }
     }
 
     //Update Lights upon change on interface
     updateLights() {
-
+        //loop over lightswitch array to know wither to turn the light off or on 
         for(let i =0; i<this.lights.length; i++){
             if(this.lightSwitch[i]){
                 this.lights[i].enable(); 
@@ -150,11 +154,12 @@ class XMLscene extends CGFscene {
             else{
                 this.lights[i].disable();  
             } 
-            this.lights[i].update();
+            this.lights[i].update(); //update current light states
         }
 
          }
-
+    
+    //init textures read on xml storing them on global texture array
     initTextures() {
         this.textures = [];
         for (var key in this.graph.textures) {
@@ -162,7 +167,6 @@ class XMLscene extends CGFscene {
             this.textures.push(texture);
         }
     }
-
     setDefaultAppearance() {
         this.setAmbient(0.2, 0.4, 0.8, 1.0);
         this.setDiffuse(0.2, 0.4, 0.8, 1.0);
@@ -179,31 +183,30 @@ class XMLscene extends CGFscene {
 
         this.setGlobalAmbientLight(this.graph.globals[0], this.graph.globals[1], this.graph.globals[2], this.graph.globals[3]);
 
-        //MANIP test
         this.initCameras();
 
         this.initLights();
 
         this.initTextures();
 
-        //update UI usuing sata structures passed 
+        //update UI usuing data structures passed 
         this.interface.updateInterface();
 
         this.sceneInited = true;
     }
 
     checkKeys() {
-         if (this.gui.isKeyPressed("KeyM") ) { //when key is released
-            if(!this.keysPressed){
+         if (this.gui.isKeyPressed("KeyM") ) { 
+            if(!this.keysPressed){ //when key is pressed at the first time
                 this.graph.updateMaterials();
-                this.keysPressed=true;
+                this.keysPressed=true; //set as true
             }
-            if(this.keysPressed){
+            if(this.keysPressed){ //avoid infinite key press calls
                 return; 
             }
         }
 
-        this.keysPressed = false;
+        this.keysPressed = false; //reset flag when kley is released
         
     }
     /**
@@ -225,11 +228,11 @@ class XMLscene extends CGFscene {
         this.views;
 
         this.pushMatrix();
-        if (this.displayAxis)
+        if (this.displayAxis) //display only if the curent interface state allows
             this.axis.display();
 
         this.checkKeys();
-        this.updateLights();
+        this.updateLights(); //always update light state
 
         for (var i = 0; i < this.lights.length; i++) {
             this.lights[i].setVisible(true);
@@ -248,5 +251,3 @@ class XMLscene extends CGFscene {
         // ---- END Background, camera and axis setup
     }
 }
-
-//TODO textures? 

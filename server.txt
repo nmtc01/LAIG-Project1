@@ -1,3 +1,0 @@
-http://localhost:8000/ win
-
- http://localhost:8069/ macos

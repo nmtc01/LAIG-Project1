@@ -17,6 +17,7 @@ class MyRectangle extends CGFobject {
 	}
 	
 	initBuffers() {
+		//store vertices
 		this.vertices = [
 			this.x1, this.y1, 0,	//0
 			this.x2, this.y1, 0,	//1
@@ -25,6 +26,7 @@ class MyRectangle extends CGFobject {
 		];
 
 		//Counter-clockwise reference of vertices
+		//store indices
 		this.indices = [
 			0, 1, 2,
 			1, 3, 2
@@ -62,7 +64,11 @@ class MyRectangle extends CGFobject {
 	 * @method updateTexCoords
 	 * Updates the list of texture coordinates of the rectangle
 	 * @param {Array} coords - Array of texture coordinates
+	 * @param {int} lg_s- Sacling factor length
+	 * @param {int} lg_s- Sacling factor length
 	 */
+	//TODO CONFIRMA ESTE COMENATARIO PF
+	//all calcules made using slides on moodle 
 	updateTexCoords(lg_s, lg_t) {
         this.texCoords = [
             0, Math.sqrt(Math.pow(this.y2-this.y1,2))/lg_t,

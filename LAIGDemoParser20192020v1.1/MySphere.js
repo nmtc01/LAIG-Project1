@@ -18,19 +18,24 @@ class MySphere extends CGFobject {
 	}
 	
 	initBuffers() {
+		//variation of algle between slices
 		let d_phi = (2*Math.PI)/this.slices;
+		//variation of algle between stacks
 		let d_theta = (Math.PI/2)/this.stacks;
 
-		let theta = Math.PI/2;
+		//angles starting values 
+		let theta = Math.PI/2; //sphere works by drawing 2 semispheres, and we have to consider negative angles
 		let phi = 0;
 
+		//arrays to store primitives data
 		this.vertices = [];
 		this.normals = [];
 		this.indices = [];
 		this.texCoords = [];
 
-		for (let i = 0; i <= 2*this.stacks; i++) {
-			for (let j = 0; j <= this.slices; j++) {
+		//create vertices and normals, again all equation given in theorical classes
+		for (let i = 0; i <= 2*this.stacks; i++) { //secondly process stacks, as height
+			for (let j = 0; j <= this.slices; j++) { //firstly precoss slices, as they are the radius in each stack
 
 				//Normals
 				let nx = Math.cos(theta)*Math.cos(phi);
@@ -66,8 +71,8 @@ class MySphere extends CGFobject {
 				);
 			}
 		}
-
-		//TODO isto nao fara  mais sentido colocar isto dentro do ciclo de cima de vez?
+		//create texcoords
+		//textures are painted like wrapping a sphere with paper, staring on the center of the paper
 		for (let i = 0; i <= 2*this.stacks; i++)
 			for (let j = 0; j <= this.slices; j++) {
 				//Storing texCoords
@@ -82,6 +87,9 @@ class MySphere extends CGFobject {
 	 * @method updateTexCoords
 	 * Updates the list of texture coordinates of the rectangle
 	 * @param {Array} coords - Array of texture coordinates
+	 * @param {Int} lg_s - Sacling factor length
+	 * @param {Int} lg_t - Sacling factor length
+	 * in this case the arguments to nothing
 	 */
 	updateTexCoords(lg_s, lg_t) {
 		this.updateTexCoordsGLBuffers();
