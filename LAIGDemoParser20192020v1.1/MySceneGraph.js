@@ -1376,7 +1376,7 @@ class MySceneGraph {
         }
 
         //Textures
-        if (this.components[child].texture.textureref == 'inherit') { //TODO comenta isto PF
+        if (this.components[child].texture.textureref == 'inherit') { 
             //controll erros if there is no texture, program stop
             if (parent_texture == null)
                 return 'Error - cannot display inhreited texture if there is no texture declared before';

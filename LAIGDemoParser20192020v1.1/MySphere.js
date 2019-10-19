@@ -1,4 +1,4 @@
-/**TODO
+/**
  * MySphere
  * @constructor
  * @param scene - Reference to MyScene object
