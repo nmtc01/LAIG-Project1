@@ -18,10 +18,27 @@
             <from x="30" y="15" z="30" />
             <to x="0" y="0" z="0" />
         </ortho>
-           <perspective id="Fish" near="0.1" far="500" angle="30">
+        <perspective id="Red fish" near="0.1" far="500" angle="30">
             <from x="0" y="-10" z="15" />
             <to x="-5" y="-12" z="-5" />
         </perspective>
+         <perspective id="Blue fish" near="0.1" far="500" angle="30">
+            <from x="15" y="-15" z="15" />
+            <to x="20" y="-17" z="0" />
+        </perspective>
+         <perspective id="Green fish" near="0.1" far="500" angle="30">
+            <from x="0" y="-20" z="30" />
+            <to x="-20" y="-15" z="20" />
+        </perspective>
+        <perspective id="Floater" near="0.1" far="500" angle="30">
+            <from x="10" y="10" z="20" />
+            <to x="0" y="0" z="20" />
+        </perspective>
+        <perspective id="Magikarp" near="0.1" far="500" angle="30">
+            <from x="15" y="-15" z="20" />
+            <to x="10" y="-20" z="0" />
+        </perspective>
+    
     </views>
 
     <globals>
@@ -30,16 +47,16 @@
     </globals>
 
     <lights>
-        <omni id="defaultLight" enabled="1">
+        <omni id="defaultLight" enabled="0">
             <location x="0" y="5" z="70" w="1.0" />
             <ambient r="0.6" g="0.6" b="0.6" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />
         </omni>
-        <omni id="DayLight" enabled="0" >
+        <omni id="DayLight" enabled="1" >
             <location x="0" y="20" z="0" w="0" />
-            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.6" g="0.6" b="0.6" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
            <attenuation constant="1" linear="0" quadratic="0" />
@@ -51,13 +68,13 @@
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />
         </omni>
-        <spot id="spotLight" enabled="0" angle="0" exponent="1">
-            <location x="0" y="0" z="5.0" w="1.0" />
-            <target x="0" y="0" z="3.0" />
+        <spot id="spotLight (floater)" enabled="0" angle="0" exponent="20">
+            <location x="0" y="5.0" z="6.0" w="1.0" />
+            <target x="0" y="0.0" z="20.0" />
             <ambient r="0.0" g="0.0" b="0." a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
-            <attenuation constant="1" linear="0" quadratic="0" />
+            <attenuation constant="1" linear="0" quadratic="1" />
         </spot>
     </lights>
 
@@ -68,6 +85,7 @@
         <texture id="iron" file="scenes/images/iron.png" />
         <texture id="floater" file="scenes/images/floater.png" />
         <texture id="water" file="scenes/images/water.jpg" />
+        <texture id="eye" file="scenes/images/eye.png" />
     </textures>
 
     <materials>
@@ -122,8 +140,8 @@
          <material id="redFloater" shininess="1">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
-            <diffuse r="0.0" g="0.1" b="0.1" a="1.0" />
-            <specular r="0.2" g="0.2" b="0.2" a="1.0" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
+            <specular r="0.5" g="0.5" b="0.5" a="1.0" />
         </material>
         <material id="shinyFloater" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
@@ -143,11 +161,42 @@
             <diffuse r="0.0" g="0.0" b="0.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
         </material>
+        <material id="red" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.83" g="0.34" b="0.22" a="1.0" />
+            <diffuse r="0.83" g="0.34" b="0.22" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+        </material>
+         <material id="lips" shininess="1">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.92" g="0.54" b="0.65" a="1.0" />
+            <diffuse r="0.92" g="0.54" b="0.65" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+         <material id="white" shininess="1">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
+         <material id="yellow" shininess="1">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="1.0" g="0.99" b="0.65" a="1.0" />
+            <diffuse r="1.0" g="0.99" b="0.65.0" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
     </materials>
 
     <transformations>
         <transformation id="translateSuperior">
             <translate x="0" y="0.3" z="0" />
+        </transformation>
+        <transformation id="Surface">
+            <scale x="8" y="1" z="5" />
+            <rotate axis="x" angle="-90" />
+            <scale x="8" y="5" z="1" />
         </transformation>
     </transformations>
 
@@ -194,6 +243,48 @@
         <primitive id="myTorus">
             <torus inner="0.5" outer="1" slices="50" loops="50" />
         </primitive>
+           <primitive id="magikarpBody">
+            <sphere radius="1" slices="50" stacks="50" />
+        </primitive>
+        <primitive id="magikarpEye">
+            <sphere radius="0.65" slices="50" stacks="50" />
+        </primitive>
+          <primitive id="magikarpLips">
+          <torus inner="0.2" outer="0.6" slices="50" loops="50" />
+        </primitive>
+        <primitive id="whisker">
+            <cylinder base="0.05" top="0.05" height="3" slices="20" stacks="4" />
+        </primitive>
+        <primitive id="magikarpTail1">
+           <triangle x1="0" y1="0" z1="0" x2="2" y2="-2.5" z2="0" x3="2" y3="2.5" z3="0"/>
+        </primitive>
+          <primitive id="magikarpTail2">
+           <triangle x1="0" y1="0" z1="0" x2="2" y2="2.5" z2="0" x3="2" y3="-2.5" z3="0"/>
+        </primitive>
+          <primitive id="magikarpFin1">
+           <triangle x1="0" y1="0" z1="0" x2="2" y2="-1" z2="0" x3="2" y3="1" z3="0"/>
+        </primitive>
+        <primitive id="magikarpFin2">
+           <triangle x1="0" y1="0" z1="0" x2="2" y2="1" z2="0" x3="2" y3="-1" z3="0"/>
+        </primitive>
+         <primitive id="magikarpTopFin1">
+           <triangle x1="0" y1="0" z1="1" x2="0" y2="0" z2="-1" x3="0" y3="2.5" z3="0"/>
+        </primitive>
+        <primitive id="magikarpTopFin2">
+            <triangle x1="0" y1="0" z1="-1" x2="0" y2="0" z2="1" x3="0" y3="2.5" z3="0"/>
+        </primitive>
+        <primitive id="magikarpTopFin3">
+           <triangle x1="0" y1="0" z1="0" x2="0" y2="0" z2="-1" x3="0" y3="1.5" z3="-1.2"/>
+        </primitive>
+        <primitive id="magikarpTopFin4">
+           <triangle x1="0" y1="0" z1="0" x2="0" y2="1.5" z2="-1.2" x3="0" y3="0" z3="-1"/>
+        </primitive>
+        <primitive id="magikarpTopFin5">
+            <triangle x1="0" y1="0" z1="0" x2="0" y2="0" z2="1" x3="0" y3="1.5" z3="1.2"/>
+        </primitive>
+        <primitive id="magikarpTopFin6">
+            <triangle x1="0" y1="0" z1="0" x2="0" y2="1.5" z2="1.2" x3="0" y3="0" z3="1"/>
+        </primitive>
 
     </primitives >
 
@@ -229,9 +320,7 @@
 
         <component id="mySurface">
             <transformation>
-                <scale x="8" y="1" z="5" />
-                <rotate axis="x" angle="-90" />
-                <scale x="8" y="5" z="1" />
+               <transformationref id="Surface"/>
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -255,10 +344,11 @@
                 <componentref id="bubbleChain3" />
                 <componentref id="bubbleChain4" />
                 <componentref id="bubbleChain5" />
-
                 <componentref id="cardume1" />
                 <componentref id="cardume2" />
                 <componentref id="cardume3" />
+                <componentref id="magikarp" />
+
             </children>
         </component>
 
@@ -1099,6 +1189,213 @@
             <children>
                 <primitiveref id="myTorus" />
             </children>
-        </component>        
+        </component>     
+
+         <component id="magikarp">
+            <transformation>
+                <translate x="5" y="-10" z="0" />
+                <rotate axis="y" angle="-60" />
+            </transformation>
+            <materials>
+                <material id="red" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="magikarpBody" />
+                <componentref id="magikarpLips" />
+                <componentref id="magikarpEye1" />
+                <componentref id="magikarpEye2" />
+                <componentref id="magikarpWhiskers" />
+                <componentref id="magikarpTail" />
+                <componentref id="magikarpFin1" />
+                <componentref id="magikarpFin2" />
+                <componentref id="magikarpFin3" />
+                <componentref id="magikarpFin4" />
+            </children>
+        </component>
+
+          <component id="magikarpBody">
+            <transformation>
+                <scale  x="1.5" y="1.9" z="2.5"/>
+            </transformation>
+            <materials>
+                <material id="red" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="magikarpBody" />
+            </children>
+        </component>
+         
+        <component id="magikarpLips">
+            <transformation>
+                <translate x="0" y="-0.25" z="2.5"/>
+                <rotate axis="x" angle="15" />
+            </transformation>
+            <materials>
+                <material id="lips" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="magikarpLips" />
+            </children>
+        </component>
+
+        <component id="magikarpEye1">
+            <transformation>
+                <translate x="0.75" y="0.6" z="1.25"/>
+                 <rotate axis="y" angle="-15" />
+                <rotate axis="z" angle="15" />
+            </transformation>
+            <materials>
+                <material id="white" />
+            </materials>
+            <texture id="eye" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="magikarpEye" />
+            </children>
+        </component>
+        
+        <component id="magikarpEye2">
+            <transformation>
+                 <translate x="-0.75" y="0.6" z="1.25"/>
+                 <rotate axis="y" angle="15" />
+                 <rotate axis="z" angle="165" />
+            </transformation>
+            <materials>
+                <material id="white" />
+            </materials>
+            <texture id="eye" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="magikarpEye" />
+            </children>
+        </component>
+
+         <component id="magikarpWhiskers">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="white" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="whisker1" />
+                <componentref id="whisker2" />
+            </children>
+        </component>
+
+        <component id="whisker1">
+            <transformation>
+                <translate x="0.4" y="0" z="2.3"/>
+                <rotate axis="x" angle="45" />
+                <rotate axis="z" angle="-45" />
+                <rotate axis="y" angle="90" />
+            </transformation>
+            <materials>
+                <material id="white" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="whisker" />
+            </children>
+        </component>
+
+        <component id="whisker2">
+            <transformation>
+                 <translate x="-0.4" y="0" z="2.3"/>
+                <rotate axis="x" angle="45" />
+                <rotate axis="z" angle="45" />
+                <rotate axis="y" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="white" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="whisker" />
+            </children>
+        </component>
+
+         <component id="magikarpTail">
+            <transformation>
+                <translate x="0" y="0" z="-2"/>
+                <rotate axis="y" angle="90" />
+            </transformation>
+            <materials>
+                <material id="white" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="magikarpTail1" />
+                <primitiveref id="magikarpTail2" />
+            </children>
+        </component>
+
+         <component id="magikarpFin1">
+            <transformation>
+               <translate x="1.21" y="-0.25" z="1.4"/>
+                <rotate axis="y" angle="70" />
+            </transformation>
+            <materials>
+                <material id="white" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="magikarpFin1" />
+                <primitiveref id="magikarpFin2" />
+            </children>
+        </component>
+          <component id="magikarpFin2">
+            <transformation>
+                <translate x="-1.21" y="-0.25" z="1.4"/>
+                <rotate axis="y" angle="110" />
+            </transformation>
+            <materials>
+                <material id="white" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="magikarpFin1" />
+                <primitiveref id="magikarpFin2" />
+            </children>
+        </component>
+
+        <component id="magikarpFin3">
+            <transformation>
+                <translate x="0" y="1.5" z="0"/>
+            </transformation>
+            <materials>
+                <material id="yellow" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="magikarpTopFin1" />
+                <primitiveref id="magikarpTopFin2" />
+                <primitiveref id="magikarpTopFin3" />
+                <primitiveref id="magikarpTopFin4" />
+                <primitiveref id="magikarpTopFin5" />
+                <primitiveref id="magikarpTopFin6" />
+            </children>
+        </component>
+
+         <component id="magikarpFin4">
+            <transformation>
+                <translate x="0" y="-1.5" z="0"/>
+                <rotate axis="x" angle="180" />
+            </transformation>
+            <materials>
+                <material id="yellow" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="magikarpTopFin1" />
+                <primitiveref id="magikarpTopFin2" />
+                <primitiveref id="magikarpTopFin3" />
+                <primitiveref id="magikarpTopFin4" />
+                <primitiveref id="magikarpTopFin5" />
+                <primitiveref id="magikarpTopFin6" />
+            </children>
+        </component>
+
     </components>
 </lxs>
