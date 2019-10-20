@@ -65,10 +65,9 @@ class MyRectangle extends CGFobject {
 	 * Updates the list of texture coordinates of the rectangle
 	 * @param {Array} coords - Array of texture coordinates
 	 * @param {int} lg_s- Sacling factor length
-	 * @param {int} lg_s- Sacling factor length
+	 * @param {int} lg_s- Scaling factor length
 	 */
-	//TODO CONFIRMA ESTE COMENATARIO PF
-	//all calcules made using slides on moodle 
+	//applying scale factors, dividing rectangle sides lengths by length_s and length_t 
 	updateTexCoords(lg_s, lg_t) {
         this.texCoords = [
             0, Math.sqrt(Math.pow(this.y2-this.y1,2))/lg_t,

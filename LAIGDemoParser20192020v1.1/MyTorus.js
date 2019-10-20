@@ -1,4 +1,4 @@
-/**TODO
+/**
  * MyTorus
  * @constructor
  * @param scene - Reference to MyScene object
